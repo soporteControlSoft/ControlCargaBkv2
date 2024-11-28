@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "Srvcio": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "swagger/index.html",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:50311;http://localhost:50312"
+    }
+  }
+}

@@ -1,0 +1,43 @@
+USE [cc_ventura]
+GO
+
+/****** Object:  View [dbo].[vw_ModuloSituacionPortuaria_ListarSituacionPortuaria]    Script Date: 6/09/2024 2:35:58 p. m. ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE VIEW [dbo].[vw_EstdoHcho_LstarVstaMtnve]
+AS
+
+-----desde aqui
+  SELECT 
+    sp.sp_cdgo_mtnve,
+    sp.sp_rowid,
+    sp.sp_fcha_arrbo,
+    sp.sp_fcha_atrque,
+    sp.sp_fcha_zrpe,
+    sp.sp_fcha_crcion,
+    sp.sp_cdgo_estdo_mtnve,
+    vm.vm_rowid,
+    vm.vm_scncia,
+    vm.vm_dscrpcion,
+    em.em_cdgo,
+    em.em_nmbre
+FROM 
+    [cc_ventura].[dbo].[visita_motonave] vm 
+inner JOIN 
+    [cc_ventura].[dbo].[situacion_portuaria] sp
+    ON   vm.vm_rowid_stcion_prtria = sp.sp_rowid
+JOIN 
+    [cc_ventura].[dbo].[estado_motonave] em 
+    ON sp.sp_cdgo_estdo_mtnve = em.em_cdgo
+
+-----hasta aquí es el código que se remplaza para crear la lista
+GO
+
+
+--------------------------------------------------------------------------------comando para generar modelo de base de datos en #c
+
+ Scaffold-DbContext  "Server=172.30.200.110\MSSQLSERVER,2330;Initial Catalog=cc_ventura;Persist Security Info=False;User ID=sa;Password=V3ntuRAdata.2;Connection Timeout=30;Trusted_Connection=True;TrustServerCertificate=True;Integrated Security=FALSE;"  Microsoft.EntityFrameworkCore.SqlServer -Force

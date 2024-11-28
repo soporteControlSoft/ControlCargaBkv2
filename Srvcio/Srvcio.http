@@ -1,0 +1,13 @@
+@Srvcio_HostAddress = http://localhost:5103
+
+GET {{Srvcio_HostAddress}}/ControlCargaOPP/
+Accept: application/json
+
+@OpenAPIDefinition(
+  servers = {
+    @Server(url = "/myapp/", description = "Default Server URL")
+  }
+)
+
+###
+
