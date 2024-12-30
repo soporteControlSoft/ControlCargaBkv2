@@ -46,7 +46,23 @@ public partial class SolicitudRetiroAutorizacion
     [NotMapped]
     public virtual Tercero? SraRowidTrnsprtdraNavigation { get; set; } = null!;
 
+    public string? Nombretercero { get; set; }
 
     public SolicitudRetiroAutorizacion() { }
+
+
+    public SolicitudRetiroAutorizacion(int? SraRowid, int? SraRowidSlctudRtro, int? SraRowidTrnsprtdra, int? SraAutrzdoKlos, int? SraAutrzdoUnddes, DateTime? SraFcha,
+       string? SraCdgoUsrio, string? Nombretercero)
+    {
+
+        this.SraRowid = SraRowid;
+        this.SraRowidSlctudRtro = SraRowidSlctudRtro;
+        this.SraAutrzdoKlos = SraAutrzdoKlos;
+        this.SraAutrzdoUnddes = SraAutrzdoUnddes;
+        this.SraFcha = SraFcha;
+        this.SraCdgoUsrio = SraCdgoUsrio;
+        this.Nombretercero = Nombretercero;
+
+    }
 
 }

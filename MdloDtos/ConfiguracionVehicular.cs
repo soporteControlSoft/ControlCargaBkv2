@@ -81,4 +81,8 @@ public partial class ConfiguracionVehicular
         this.CompaniaCodigo = CompaniaCodigo;
         this.CompaniaNombre = CompaniaNombre;
     }
+
+    [JsonIgnore]
+    [NotMapped]
+    public virtual ICollection<Orden>? Ordens { get; set; } = new List<Orden>();
 }

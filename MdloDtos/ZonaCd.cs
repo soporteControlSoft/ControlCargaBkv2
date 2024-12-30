@@ -113,4 +113,9 @@ public partial class ZonaCd
     [NotMapped]
     public virtual ICollection<EstadoHecho> EstadoHechoes { get; set; } = new List<EstadoHecho>();
 
+
+    [JsonIgnore]
+    [NotMapped]
+    public virtual ICollection<Orden>? Ordens { get; set; } = new List<Orden>();
+
 }

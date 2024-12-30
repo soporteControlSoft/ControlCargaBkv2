@@ -19,7 +19,7 @@ namespace Srvcio.Controllers
 
         #region Consultar  depositos por visita y por producto
         [HttpGet("listar-deposito-subdeposito")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.WvConsultaDepositosSubdeposito>>> ConsultarDepositosSegunSubDeposito(int Visita, string CodigoProducto)
+        public async Task<ActionResult<IEnumerable<MdloDtos.WvConsultaDepositosSubdeposito>>> ConsultarDepositosSegunSubDeposito(int Visita, string CodigoProducto, string codigoUsuario)
         {
             var ObDeposito = new List<MdloDtos.WvConsultaDepositosSubdeposito>();
             //Tipo de Operacion
@@ -27,7 +27,7 @@ namespace Srvcio.Controllers
             int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             try
             {
-                ObDeposito = await this._dbContex.ConsultarDepositosSegunSubDeposito(Visita, CodigoProducto);
+                ObDeposito = await this._dbContex.ConsultarDepositosSegunSubDeposito(Visita, CodigoProducto, codigoUsuario);
                 if (ObDeposito != null)
                 {
                     validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;

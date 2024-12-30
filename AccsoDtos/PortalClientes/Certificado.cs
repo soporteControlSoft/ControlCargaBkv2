@@ -14,6 +14,9 @@ namespace AccsoDtos.PortalClientes
 {
     public class Certificado : MdloDtos.IModelos.ICertificado
     {
+
+
+
         //consultar Tercero Certificados
       /*  public async Task<List<VwConsultaCertificado>> ConsultarTerceroCertificado()
         {

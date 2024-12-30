@@ -41,6 +41,8 @@ public partial class CcVenturaContext : DbContext
 
     public virtual DbSet<CondicionFacturacion> CondicionFacturacions { get; set; }
 
+    public virtual DbSet<Conductor> Conductors { get; set; }
+
     public virtual DbSet<ConfiguracionIp> ConfiguracionIps { get; set; }
 
     public virtual DbSet<ConfiguracionVehicular> ConfiguracionVehiculars { get; set; }
@@ -66,6 +68,8 @@ public partial class CcVenturaContext : DbContext
     public virtual DbSet<GrupoTercero> GrupoTerceros { get; set; }
 
     public virtual DbSet<Motonave> Motonaves { get; set; }
+
+    public virtual DbSet<Orden> Ordens { get; set; }
 
     public virtual DbSet<Pai> Pais { get; set; }
 
@@ -139,6 +143,8 @@ public partial class CcVenturaContext : DbContext
 
     public virtual DbSet<VisitaMotonaveDocumento> VisitaMotonaveDocumentos { get; set; }
 
+    public virtual DbSet<VwCndctorLstar> VwCndctorLstars { get; set; }
+
     public virtual DbSet<VwConsultarProductosSubdeposito> VwConsultarProductosSubdepositos { get; set; }
 
     public virtual DbSet<VwConsultarSubdeposito> VwConsultarSubdepositos { get; set; }
@@ -163,9 +169,13 @@ public partial class CcVenturaContext : DbContext
 
     public virtual DbSet<VwMdloDpstoLstarVstaMtnve> VwMdloDpstoLstarVstaMtnves { get; set; }
 
+    public virtual DbSet<VwMdloRsrvaLstarVstaMtnve> VwMdloRsrvaLstarVstaMtnves { get; set; }
+
     public virtual DbSet<VwModuloSituacionPortuariaListarSituacionPortuarium> VwModuloSituacionPortuariaListarSituacionPortuaria { get; set; }
 
     public virtual DbSet<VwModuloVisitaMotonaveListarVisitaMotonave> VwModuloVisitaMotonaveListarVisitaMotonaves { get; set; }
+
+    public virtual DbSet<VwPrueba> VwPruebas { get; set; }
 
     public virtual DbSet<VwResumenListadoCliente> VwResumenListadoClientes { get; set; }
 
@@ -667,6 +677,59 @@ public partial class CcVenturaContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("cf_nmbre");
+        });
+
+        modelBuilder.Entity<Conductor>(entity =>
+        {
+            entity.HasKey(e => e.CnIdntfccion);
+
+            entity.ToTable("conductor");
+
+            entity.Property(e => e.CnIdntfccion)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("cn_idntfccion");
+            entity.Property(e => e.CnActvo).HasColumnName("cn_actvo");
+            entity.Property(e => e.CnCdgoUsrioEnrlo)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("cn_cdgo_usrio_enrlo");
+            entity.Property(e => e.CnFchaEnrlmnto)
+                .HasColumnType("smalldatetime")
+                .HasColumnName("cn_fcha_enrlmnto");
+            entity.Property(e => e.CnFchaRgstro)
+                .HasColumnType("smalldatetime")
+                .HasColumnName("cn_fcha_rgstro");
+            entity.Property(e => e.CnFchaVncmntoLcncia)
+                .HasColumnType("smalldatetime")
+                .HasColumnName("cn_fcha_vncmnto_lcncia");
+            entity.Property(e => e.CnFeatures).HasColumnName("cn_features");
+            entity.Property(e => e.CnMvil)
+                .HasMaxLength(30)
+                .IsUnicode(false)
+                .HasColumnName("cn_mvil");
+            entity.Property(e => e.CnNmbre)
+                .HasMaxLength(40)
+                .IsUnicode(false)
+                .HasColumnName("cn_nmbre");
+            entity.Property(e => e.CnNmroLcncia)
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasColumnName("cn_nmro_lcncia");
+            entity.Property(e => e.CnRowidTrnsprtdra).HasColumnName("cn_rowid_trnsprtdra");
+            entity.Property(e => e.CnTpoLcncia)
+                .HasMaxLength(30)
+                .IsUnicode(false)
+                .HasColumnName("cn_tpo_lcncia");
+            entity.Property(e => e.CnUrbno).HasColumnName("cn_urbno");
+            entity.Property(e => e.CnVhclo)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasColumnName("cn_vhclo");
+
+            entity.HasOne(d => d.CnRowidTrnsprtdraNavigation).WithMany(p => p.Conductors)
+                .HasForeignKey(d => d.CnRowidTrnsprtdra)
+                .HasConstraintName("FK_cndctor_rowid_trnsprtdra");
         });
 
         modelBuilder.Entity<ConfiguracionIp>(entity =>
@@ -1221,13 +1284,9 @@ public partial class CcVenturaContext : DbContext
 
             entity.HasOne(d => d.EvCdgoUsrioNavigation).WithMany(p => p.Eventos).HasForeignKey(d => d.EvCdgoUsrio);
 
-            entity.HasOne(d => d.EvRowidClsfccionNavigation).WithMany(p => p.Eventos)
-                .HasForeignKey(d => d.EvRowidClsfccion)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+            entity.HasOne(d => d.EvRowidClsfccionNavigation).WithMany(p => p.Eventos).HasForeignKey(d => d.EvRowidClsfccion);
 
-            entity.HasOne(d => d.EvRowidRspnsbleNavigation).WithMany(p => p.Eventos)
-                .HasForeignKey(d => d.EvRowidRspnsble)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+            entity.HasOne(d => d.EvRowidRspnsbleNavigation).WithMany(p => p.Eventos).HasForeignKey(d => d.EvRowidRspnsble);
         });
 
         modelBuilder.Entity<GrupoTercero>(entity =>
@@ -1280,6 +1339,181 @@ public partial class CcVenturaContext : DbContext
                 .HasColumnName("mo_nmbre");
         });
 
+        modelBuilder.Entity<Orden>(entity =>
+        {
+            entity.HasKey(e => e.OrCdgo);
+
+            entity.ToTable("orden");
+
+            entity.Property(e => e.OrCdgo)
+                .ValueGeneratedNever()
+                .HasColumnName("or_cdgo");
+            entity.Property(e => e.OrActva).HasColumnName("or_actva");
+            entity.Property(e => e.OrArtclo)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("or_artclo");
+            entity.Property(e => e.OrCdgoCsalCnclcion)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("or_cdgo_csal_cnclcion");
+            entity.Property(e => e.OrCdgoUsrioRdccion)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("or_cdgo_usrio_rdccion");
+            entity.Property(e => e.OrCdgoUsrioRsrva)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("or_cdgo_usrio_rsrva");
+            entity.Property(e => e.OrCncpto)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("or_cncpto");
+            entity.Property(e => e.OrCrrgeTrno).HasColumnName("or_crrge_trno");
+            entity.Property(e => e.OrCrrgeTrnoFcha)
+                .HasColumnType("smalldatetime")
+                .HasColumnName("or_crrge_trno_fcha");
+            entity.Property(e => e.OrFchaAnlcion)
+                .HasColumnType("smalldatetime")
+                .HasColumnName("or_fcha_anlcion");
+            entity.Property(e => e.OrFchaEntrdaScdad)
+                .HasColumnType("smalldatetime")
+                .HasColumnName("or_fcha_entrda_scdad");
+            entity.Property(e => e.OrFchaPrmerLlmdo)
+                .HasColumnType("smalldatetime")
+                .HasColumnName("or_fcha_prmer_llmdo");
+            entity.Property(e => e.OrFchaRdccion)
+                .HasColumnType("smalldatetime")
+                .HasColumnName("or_fcha_rdccion");
+            entity.Property(e => e.OrFchaRgstroRsrva)
+                .HasColumnType("smalldatetime")
+                .HasColumnName("or_fcha_rgstro_rsrva");
+            entity.Property(e => e.OrFchaRsrva)
+                .HasColumnType("smalldatetime")
+                .HasColumnName("or_fcha_rsrva");
+            entity.Property(e => e.OrFchaSldaScdad)
+                .HasColumnType("smalldatetime")
+                .HasColumnName("or_fcha_slda_scdad");
+            entity.Property(e => e.OrFchaUltmoLlmdo)
+                .HasColumnType("smalldatetime")
+                .HasColumnName("or_fcha_ultmo_llmdo");
+            entity.Property(e => e.OrIdScdad)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("or_id_scdad");
+            entity.Property(e => e.OrIdntfccionCndctor)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("or_idntfccion_cndctor");
+            entity.Property(e => e.OrIngrsoid2Insde)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasColumnName("or_ingrsoid2_insde");
+            entity.Property(e => e.OrIngrsoidInsde)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasColumnName("or_ingrsoid_insde");
+            entity.Property(e => e.OrIntrfazInsde).HasColumnName("or_intrfaz_insde");
+            entity.Property(e => e.OrIntrfazInsdeCnclda).HasColumnName("or_intrfaz_insde_cnclda");
+            entity.Property(e => e.OrIntrfazInsdeCncldaConError).HasColumnName("or_intrfaz_insde_cnclda_con_error");
+            entity.Property(e => e.OrIntrfazInsdeConError).HasColumnName("or_intrfaz_insde_con_error");
+            entity.Property(e => e.OrLlmda)
+                .HasDefaultValue(false)
+                .HasColumnName("or_llmda");
+            entity.Property(e => e.OrLlmdas).HasColumnName("or_llmdas");
+            entity.Property(e => e.OrMnfsto)
+                .HasMaxLength(30)
+                .IsUnicode(false)
+                .HasColumnName("or_mnfsto");
+            entity.Property(e => e.OrObsrvcnes)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("or_obsrvcnes");
+            entity.Property(e => e.OrObsrvcnesCnclcion)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("or_obsrvcnes_cnclcion");
+            entity.Property(e => e.OrPlca)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("or_plca");
+            entity.Property(e => e.OrPsoACrgar).HasColumnName("or_pso_a_crgar");
+            entity.Property(e => e.OrRdccionHllaVldda)
+                .HasDefaultValue(false)
+                .HasColumnName("or_rdccion_hlla_vldda");
+            entity.Property(e => e.OrRdcda)
+                .HasDefaultValue(false)
+                .HasColumnName("or_rdcda");
+            entity.Property(e => e.OrRmlque)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("or_rmlque");
+            entity.Property(e => e.OrRmsion)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("or_rmsion");
+            entity.Property(e => e.OrRowidCdad).HasColumnName("or_rowid_cdad");
+            entity.Property(e => e.OrRowidCnfgrcionVhclar).HasColumnName("or_rowid_cnfgrcion_vhclar");
+            entity.Property(e => e.OrRowidDpsto).HasColumnName("or_rowid_dpsto");
+            entity.Property(e => e.OrRowidSlctudRtro).HasColumnName("or_rowid_slctud_rtro");
+            entity.Property(e => e.OrRowidTrnsprtdra).HasColumnName("or_rowid_trnsprtdra");
+            entity.Property(e => e.OrRowidZnaCd).HasColumnName("or_rowid_zna_cd");
+            entity.Property(e => e.OrTpo)
+                .HasMaxLength(1)
+                .IsUnicode(false)
+                .HasDefaultValue("D")
+                .HasColumnName("or_tpo");
+            entity.Property(e => e.OrTpoCrrcria)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("or_tpo_crrcria");
+            entity.Property(e => e.OrTrcro)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("or_trcro");
+            entity.Property(e => e.OrTrnoNmro).HasColumnName("or_trno_nmro");
+            entity.Property(e => e.OrTrnoVlddo).HasColumnName("or_trno_vlddo");
+            entity.Property(e => e.OrUbccionRdccion)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasColumnName("or_ubccion_rdccion");
+            entity.Property(e => e.OrUsrioEntrdaScdad)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("or_usrio_entrda_scdad");
+            entity.Property(e => e.OrUsrioSldaScdad)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("or_usrio_slda_scdad");
+            entity.Property(e => e.OrVgnciaTrno).HasColumnName("or_vgncia_trno");
+            entity.Property(e => e.OrVldarVgnciaRdccion).HasColumnName("or_vldar_vgncia_rdccion");
+
+            entity.HasOne(d => d.OrRowidCdadNavigation).WithMany(p => p.Ordens)
+                .HasForeignKey(d => d.OrRowidCdad)
+                .HasConstraintName("FK_orden_rowid_ciudad");
+
+            entity.HasOne(d => d.OrRowidCnfgrcionVhclarNavigation).WithMany(p => p.Ordens)
+                .HasForeignKey(d => d.OrRowidCnfgrcionVhclar)
+                .HasConstraintName("FK_orden_rowid_configuracion_vehicular");
+
+            entity.HasOne(d => d.OrRowidDpstoNavigation).WithMany(p => p.Ordens)
+                .HasForeignKey(d => d.OrRowidDpsto)
+                .HasConstraintName("FK_orden_rowid_deposito");
+
+            entity.HasOne(d => d.OrRowidSlctudRtroNavigation).WithMany(p => p.Ordens)
+                .HasForeignKey(d => d.OrRowidSlctudRtro)
+                .HasConstraintName("FK_orden_rowid_solicitud_retiro");
+
+            entity.HasOne(d => d.OrRowidTrnsprtdraNavigation).WithMany(p => p.Ordens)
+                .HasForeignKey(d => d.OrRowidTrnsprtdra)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_orden_rowid_transportadra");
+
+            entity.HasOne(d => d.OrRowidZnaCdNavigation).WithMany(p => p.Ordens)
+                .HasForeignKey(d => d.OrRowidZnaCd)
+                .HasConstraintName("FK_orden_rowid_zona_cd");
+        });
+
         modelBuilder.Entity<Pai>(entity =>
         {
             entity.HasKey(e => e.PaCdgo);
@@ -1325,6 +1559,7 @@ public partial class CcVenturaContext : DbContext
                 .HasMaxLength(40)
                 .IsUnicode(false)
                 .HasColumnName("pa_emprsa");
+            entity.Property(e => e.PaMntosVgnviaRsrva).HasColumnName("pa_mntos_vgnvia_rsrva");
             entity.Property(e => e.PaNasClave)
                 .HasMaxLength(40)
                 .IsUnicode(false)
@@ -1338,6 +1573,9 @@ public partial class CcVenturaContext : DbContext
                 .HasMaxLength(40)
                 .IsUnicode(false)
                 .HasColumnName("pa_nas_usuario");
+            entity.Property(e => e.PaPsoMxmoACrgar).HasColumnName("pa_pso_mxmo_a_crgar");
+            entity.Property(e => e.PaSldoBjoDpsto).HasColumnName("pa_sldo_bjo_dpsto");
+            entity.Property(e => e.PaSldoBjoSlctudRtro).HasColumnName("pa_sldo_bjo_slctud_rtro");
             entity.Property(e => e.PaUrlPrtalLgstco)
                 .HasMaxLength(300)
                 .IsUnicode(false)
@@ -2592,6 +2830,55 @@ public partial class CcVenturaContext : DbContext
                 .HasConstraintName("FK_visita_motonave_documento_visita_motonave_bl_vmbl_rowid");
         });
 
+        modelBuilder.Entity<VwCndctorLstar>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("vw_Cndctor_Lstar");
+
+            entity.Property(e => e.CnActvo).HasColumnName("cn_actvo");
+            entity.Property(e => e.CnCdgoUsrioEnrlo)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("cn_cdgo_usrio_enrlo");
+            entity.Property(e => e.CnFchaEnrlmnto)
+                .HasColumnType("smalldatetime")
+                .HasColumnName("cn_fcha_enrlmnto");
+            entity.Property(e => e.CnFchaRgstro)
+                .HasColumnType("smalldatetime")
+                .HasColumnName("cn_fcha_rgstro");
+            entity.Property(e => e.CnFchaVncmntoLcncia)
+                .HasColumnType("smalldatetime")
+                .HasColumnName("cn_fcha_vncmnto_lcncia");
+            entity.Property(e => e.CnFeatures).HasColumnName("cn_features");
+            entity.Property(e => e.CnIdntfccion)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("cn_idntfccion");
+            entity.Property(e => e.CnMvil)
+                .HasMaxLength(30)
+                .IsUnicode(false)
+                .HasColumnName("cn_mvil");
+            entity.Property(e => e.CnNmbre)
+                .HasMaxLength(40)
+                .IsUnicode(false)
+                .HasColumnName("cn_nmbre");
+            entity.Property(e => e.CnNmroLcncia)
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasColumnName("cn_nmro_lcncia");
+            entity.Property(e => e.CnRowidTrnsprtdra).HasColumnName("cn_rowid_trnsprtdra");
+            entity.Property(e => e.CnTpoLcncia)
+                .HasMaxLength(30)
+                .IsUnicode(false)
+                .HasColumnName("cn_tpo_lcncia");
+            entity.Property(e => e.CnUrbno).HasColumnName("cn_urbno");
+            entity.Property(e => e.CnVhclo)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasColumnName("cn_vhclo");
+        });
+
         modelBuilder.Entity<VwConsultarProductosSubdeposito>(entity =>
         {
             entity
@@ -2928,6 +3215,28 @@ public partial class CcVenturaContext : DbContext
                 .HasMaxLength(15)
                 .IsUnicode(false)
                 .HasColumnName("us_cdgo");
+            entity.Property(e => e.VmCdgoCia)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("vm_cdgo_cia");
+            entity.Property(e => e.VmMotonaveCdgo)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("vm_motonave_cdgo");
+            entity.Property(e => e.VmMotonaveNmbre)
+                .HasMaxLength(40)
+                .IsUnicode(false)
+                .HasColumnName("vm_motonave_nmbre");
+            entity.Property(e => e.VmRowid).HasColumnName("vm_rowid");
+            entity.Property(e => e.VmScncia).HasColumnName("vm_scncia");
+        });
+
+        modelBuilder.Entity<VwMdloRsrvaLstarVstaMtnve>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("vw_MdloRsrva_LstarVstaMtnve");
+
             entity.Property(e => e.VmCdgoCia)
                 .HasMaxLength(15)
                 .IsUnicode(false)
@@ -3303,6 +3612,26 @@ public partial class CcVenturaContext : DbContext
                 .HasColumnName("vnddor_trcro_idntfccion");
         });
 
+        modelBuilder.Entity<VwPrueba>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("vw_prueba");
+
+            entity.Property(e => e.CiCdgo)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("ci_cdgo");
+            entity.Property(e => e.CiNmbre)
+                .HasMaxLength(60)
+                .IsUnicode(false)
+                .HasColumnName("ci_nmbre");
+            entity.Property(e => e.CiRowid)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("ci_rowid");
+            entity.Property(e => e.CiRowidDprtmnto).HasColumnName("ci_rowid_dprtmnto");
+        });
+
         modelBuilder.Entity<VwResumenListadoCliente>(entity =>
         {
             entity
@@ -3491,7 +3820,8 @@ public partial class CcVenturaContext : DbContext
                 .HasMaxLength(40)
                 .IsUnicode(false)
                 .HasColumnName("NOMBRE_PRODUCTO");
-            entity.Property(e => e.Saldos).HasColumnName("SALDOS");
+            entity.Property(e => e.SaldosKilos).HasColumnName("SALDOS_KILOS");
+            entity.Property(e => e.SaldosUnidades).HasColumnName("SALDOS_UNIDADES");
         });
 
         modelBuilder.Entity<WxConsultaTipoDocumento>(entity =>
@@ -3982,4 +4312,5 @@ public partial class CcVenturaContext : DbContext
 
     */
 }
+
 

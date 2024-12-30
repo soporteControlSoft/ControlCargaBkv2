@@ -8,7 +8,7 @@ namespace MdloDtos.IModelos
 {
     public interface ISubdepositos
     {
-        public Task<List<MdloDtos.WvConsultaDepositosSubdeposito>> ConsultarDepositosSegunSubDeposito(int Visita,string CodigoProducto);
+        public Task<List<MdloDtos.WvConsultaDepositosSubdeposito>> ConsultarDepositosSegunSubDeposito(int Visita, string CodigoProducto, string codigoUsuario);
 
         public Task<List<MdloDtos.VwConsultarProductosSubdeposito>> ConsultarProductoSubDeposito(int idvisita);
 

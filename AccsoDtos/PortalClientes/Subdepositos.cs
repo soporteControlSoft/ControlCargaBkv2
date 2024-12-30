@@ -16,12 +16,12 @@ namespace AccsoDtos.PortalClientes
     public class Subdepositos : MdloDtos.IModelos.ISubdepositos
     {
         //Consultar Depositos segun filtros iniciales
-        public async Task<List<WvConsultaDepositosSubdeposito>> ConsultarDepositosSegunSubDeposito(int Visita, string CodigoProducto)
+        public async Task<List<WvConsultaDepositosSubdeposito>> ConsultarDepositosSegunSubDeposito(int Visita, string CodigoProducto,string codigoUsuario)
         {
             using (CcVenturaContext _dbContex = new CcVenturaContext())
             {
                 var lst = await (from p in _dbContex.WvConsultaDepositosSubdepositos
-                                 where p.IdVisita == Visita && CodigoProducto == p.CodigoProducto
+                                 where p.IdVisita == Visita && p.CodigoProducto==CodigoProducto &&  p.CodigoUsuario== codigoUsuario
                                  select p).ToListAsync();
                 _dbContex.Dispose();
                 return lst;

@@ -215,7 +215,15 @@ public partial class Tercero
         this.GrupoTerceroNombre = GrupoTerceroNombre;
     }
     [NotMapped]
-    public virtual ICollection<SolicitudRetiroAutorizacion> SolicitudRetiroAutorizacions { get; set; } = new List<SolicitudRetiroAutorizacion>();
+    public virtual ICollection<SolicitudRetiroAutorizacion>? SolicitudRetiroAutorizacions { get; set; } = new List<SolicitudRetiroAutorizacion>();
     [NotMapped]
-    public virtual ICollection<SolicitudRetiroTransportadora> SolicitudRetiroTransportadoras { get; set; } = new List<SolicitudRetiroTransportadora>();
+    public virtual ICollection<SolicitudRetiroTransportadora>? SolicitudRetiroTransportadoras { get; set; } = new List<SolicitudRetiroTransportadora>();
+
+    [JsonIgnore]
+    [NotMapped]
+    public virtual ICollection<Conductor> Conductors { get; set; } = new List<Conductor>();
+
+    [JsonIgnore]
+    [NotMapped]
+    public virtual ICollection<Orden>? Ordens { get; set; } = new List<Orden>();
 }

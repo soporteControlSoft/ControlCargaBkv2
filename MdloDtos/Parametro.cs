@@ -55,6 +55,15 @@ public partial class Parametro
 
     [JsonPropertyName("PuertoNas")]
     public int? PaNasPuerto { get; set; }
+
+    public int? PaSldoBjoDpsto { get; set; }
+
+    public int? PaSldoBjoSlctudRtro { get; set; }
+
+    public int? PaPsoMxmoACrgar { get; set; }
+
+    public int? PaMntosVgnviaRsrva { get; set; }
+
     public Parametro() { }
 
     public Parametro(string PaNasRuta, string PaNasUsuario, string PaNasClave, int? PaNasPuerto)
@@ -64,4 +73,6 @@ public partial class Parametro
         this.PaNasClave = PaNasClave;
         this.PaNasPuerto = PaNasPuerto;
     }
+
+
 }

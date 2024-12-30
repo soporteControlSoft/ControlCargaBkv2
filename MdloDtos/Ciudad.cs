@@ -69,4 +69,7 @@ public partial class Ciudad
     }
     [NotMapped]
     public virtual ICollection<SolicitudRetiro> SolicitudRetiros { get; set; } = new List<SolicitudRetiro>();
+
+    [NotMapped]
+    public virtual ICollection<Orden>? Ordens { get; set; } = new List<Orden>();
 }

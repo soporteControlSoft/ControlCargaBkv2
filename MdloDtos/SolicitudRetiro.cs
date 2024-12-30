@@ -82,4 +82,7 @@ public partial class SolicitudRetiro
 
     [NotMapped]
     public virtual Deposito? SrRowidDpstoNavigation { get; set; } = null!;
+
+    [NotMapped]
+    public virtual ICollection<Orden>? Ordens { get; set; } = new List<Orden>();
 }

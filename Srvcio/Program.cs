@@ -3,8 +3,26 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Srvcio.Extensions;
+using Microsoft.OpenApi.Models;
+using AccesoDatos.Extensions;
+using MdloDtos.Utilidades;
+using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<MdloDtos.CcVenturaContext>(options =>
+{
+    if (builder.Environment.IsProduction())
+    {
+        options.UseSqlServer(MdloDtos.Utilidades.Conexiones.CadenaConexion);
+    }
+    else if (builder.Environment.IsDevelopment())
+    {
+        options.UseSqlServer(MdloDtos.Utilidades.Conexiones.CadenaConexion);
+    }
+});
 
 // Add services to the container.
 //ocultar campos nullos dentro del Json.
@@ -16,7 +34,10 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
+builder.Services.AddAutoMapper(config => {
+    config.RegisterApiMappings();
+    config.RegisterAccessMappings();
+});
 
 //aca va la configuracion de los contraladores.
 builder.Services.AddScoped<MdloDtos.IModelos.IGrupoModelo, AccsoDtos.Parametrizacion.GrupoTercero>();
@@ -121,6 +142,11 @@ builder.Services.AddScoped<MdloDtos.IModelos.ISolicitudRetiros, AccsoDtos.Portal
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//Daniel Lopez 30/12/2024
+builder.Services.AddScoped<MdloDtos.IModelos.IConsecutivo, AccsoDtos.ControlPesajes.Consecutivo>();
+
+
 
 
 //configuracion de la seguridad por medio de JWT.
