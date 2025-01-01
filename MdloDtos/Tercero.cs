@@ -90,11 +90,21 @@ public partial class Tercero
 
     [JsonIgnore]
     [NotMapped]
+    public virtual ICollection<Conductor> Conductors { get; set; } = new List<Conductor>();
+
+
+    [JsonIgnore]
+    [NotMapped]
     public virtual ICollection<Deposito>? DepositoDeRowidTrcroFctrcionNavigations { get; set; } = new List<Deposito>();
 
     [JsonIgnore]
     [NotMapped]
     public virtual ICollection<Deposito>? DepositoDeRowidTrcroNavigations { get; set; } = new List<Deposito>();
+
+    [JsonIgnore]
+    [NotMapped]
+    public virtual ICollection<Orden> Ordens { get; set; } = new List<Orden>();
+
 
     [JsonIgnore]
     [NotMapped]
@@ -215,15 +225,7 @@ public partial class Tercero
         this.GrupoTerceroNombre = GrupoTerceroNombre;
     }
     [NotMapped]
-    public virtual ICollection<SolicitudRetiroAutorizacion>? SolicitudRetiroAutorizacions { get; set; } = new List<SolicitudRetiroAutorizacion>();
+    public virtual ICollection<SolicitudRetiroAutorizacion> SolicitudRetiroAutorizacions { get; set; } = new List<SolicitudRetiroAutorizacion>();
     [NotMapped]
-    public virtual ICollection<SolicitudRetiroTransportadora>? SolicitudRetiroTransportadoras { get; set; } = new List<SolicitudRetiroTransportadora>();
-
-    [JsonIgnore]
-    [NotMapped]
-    public virtual ICollection<Conductor> Conductors { get; set; } = new List<Conductor>();
-
-    [JsonIgnore]
-    [NotMapped]
-    public virtual ICollection<Orden>? Ordens { get; set; } = new List<Orden>();
+    public virtual ICollection<SolicitudRetiroTransportadora> SolicitudRetiroTransportadoras { get; set; } = new List<SolicitudRetiroTransportadora>();
 }

@@ -26,8 +26,10 @@ namespace AccsoDtos.Auditoria
                 ObjAuditorium.AuRowidRgstro = _Auditorium.AuRowidRgstro;
                 ObjAuditorium.AuCdgoUsrioAutrza = _Auditorium.AuCdgoUsrioAutrza;
                 ObjAuditorium.AuEqpoAutrza = _Auditorium.AuEqpoAutrza;
-                ObjAuditorium.AuLlve = _Auditorium.AuLlve;
-                ObjAuditorium.AuRzon = _Auditorium.AuRzon;
+                    //ObjAuditorium.AuLlve1 = _Auditorium.AuLlve1;
+                    //ObjAuditorium.AuLlve2 = _Auditorium.AuLlve2;
+                    //ObjAuditorium.AuRowidRgstroAutrza = _Auditorium.AuRowidRgstroAutrza;
+                    ObjAuditorium.AuRzon = _Auditorium.AuRzon;
                 ObjAuditorium.AuObsrvcnes = _Auditorium.AuObsrvcnes;
                 var res = await _dbContex.Auditoria.AddAsync(ObjAuditorium);
                 await _dbContex.SaveChangesAsync();

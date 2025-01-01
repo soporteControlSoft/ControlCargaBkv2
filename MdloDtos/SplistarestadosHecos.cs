@@ -16,6 +16,7 @@ public partial class SpListarEstadosHecho
     public DateTime? eh_fcha_fin { get; set; }
     public int? eh_esctlla { get; set; }
     public int? eh_rowid_evnto { get; set; }
+    public string? eh_tiempo { get; set; }
     public string? ev_nmbre { get; set; }
     public int? eh_rowid_eqpo { get; set; }
     public string? eq_nmbre { get; set; }

@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
-namespace MdloDtos;
+namespace AccsoDtos.DTO;
 
-public partial class Conductor
+public partial class ConductorDTO
 {
     [Key]
     [StringLength(15)]
@@ -15,11 +15,25 @@ public partial class Conductor
 
     [StringLength(40)]
     [JsonPropertyName("Nombre")]
-    public string? CnNmbre { get; set; } = null!;
+    public string CnNmbre { get; set; } = null!;
+
+    //[JsonPropertyName("Imagen")]
+    //public byte[]? CnFeatures { get; set; }
 
     [JsonPropertyName("Imagen")]
-    public byte[]? CnFeatures { get; set; }
-   
+    public string? ImagenBase64 { get; set; }
+
+    [NotMapped]
+    public byte[]? CnFeatures
+    {
+        get
+        {
+            return string.IsNullOrEmpty(ImagenBase64) ? null : Convert.FromBase64String(ImagenBase64);
+        }
+    }
+
+
+
     [StringLength(10)]
     [JsonPropertyName("Vehiculo")]
     public string? CnVhclo { get; set; }
@@ -59,42 +73,5 @@ public partial class Conductor
     public bool? CnUrbno { get; set; }
 
     [NotMapped]
-    [JsonIgnore]
     public virtual MdloDtos.Tercero? CnRowidTrnsprtdraNavigation { get; set; }
-
-
-    /*
-    public string CnIdntfccion { get; set; } = null!;
-
-    public string CnNmbre { get; set; } = null!;
-
-    public byte[]? CnFeatures { get; set; }
-
-    public string? CnVhclo { get; set; }
-
-    public int? CnRowidTrnsprtdra { get; set; }
-
-    public DateTime CnFchaRgstro { get; set; }
-
-    public string? CnCdgoUsrioEnrlo { get; set; }
-
-    public DateTime? CnFchaEnrlmnto { get; set; }
-
-    public string? CnMvil { get; set; }
-
-    public string? CnNmroLcncia { get; set; }
-
-    public string? CnTpoLcncia { get; set; }
-
-    public DateTime? CnFchaVncmntoLcncia { get; set; }
-
-    public bool? CnActvo { get; set; }
-
-    public bool? CnUrbno { get; set; }
-
-    [NotMapped]
-    [JsonIgnore]
-    public virtual Tercero? CnRowidTrnsprtdraNavigation { get; set; }
-
-    */
 }

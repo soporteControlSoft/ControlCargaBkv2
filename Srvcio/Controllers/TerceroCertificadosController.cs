@@ -12,7 +12,7 @@ namespace Srvcio.Controllers
             _dbContex = dbContex;
         }
 
-      /*  #region Consultar  tercero certificados
+        #region Consultar  tercero certificados
         [HttpGet("listar-tercero-certificado")]
         public async Task<ActionResult<IEnumerable<MdloDtos.VwConsultaCertificado>>> ConsultarTerceroCertificado()
         {
@@ -22,7 +22,7 @@ namespace Srvcio.Controllers
             int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             try
             {
-                ObTerceroCertificado = await this._dbContex.ConsultarTerceroCertificado();
+                //ObTerceroCertificado = await this._dbContex.ConsultarTerceroCertificado();
                 if (ObTerceroCertificado != null)
                 {
                     validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
@@ -42,7 +42,7 @@ namespace Srvcio.Controllers
             return ObTerceroCertificado;
         }
         #endregion
-      */
+
 
         #region Ingresar Tercero Certificados
         [HttpPost("ingresar-tercero-certificados")]

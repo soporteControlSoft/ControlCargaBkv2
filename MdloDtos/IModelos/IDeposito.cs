@@ -55,6 +55,10 @@ namespace MdloDtos.IModelos
 
         public Task<MdloDtos.Deposito> ProcesarValoresCif(int rowIdDeposito);
 
+        public Task<List<MdloDtos.SpInvntrioBdgaDpsto>> InventarioBodega(int rowIdDeposito);
+
+        public Task<MdloDtos.Deposito> CerrarDeposito(int rowIdDeposito);
+
     }
         
 }

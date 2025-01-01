@@ -280,6 +280,7 @@ namespace AccsoDtos.PortalClientes
                     ObjDeposito.DeCdgoUsrioCrea = _Deposito.DeCdgoUsrioCrea;
                     ObjDeposito.DeActvo = false;
                     ObjDeposito.DeAprbdo = false;
+                    ObjDeposito.DeCmun = false;
                     ObjDeposito.DeCntdad = 0;
                     ObjDeposito.DeKlos = 0;
                     ObjDeposito.DeEsSubdpsto = false;
@@ -957,6 +958,27 @@ namespace AccsoDtos.PortalClientes
         }
         #endregion
 
+        #region verificar la existencia de un deposito por su rowId
+        public async Task<bool> VerificarDepositoParaCerrar(int RowIdDeposito)
+        {
+            bool respuesta = false;
+            using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
+            {
+                try
+                {
+                    var ObjDeposito = await _dbContex.Depositos.FindAsync(RowIdDeposito);
+                    respuesta = (ObjDeposito == null) ? false : ObjDeposito.DeEstdo.Equals("C") ? false : true;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                _dbContex.Dispose();
+                return respuesta;
+            }
+        }
+        #endregion
+
         #region Ingresa un comentario a la visita motonave documento.
         public async Task<List<MdloDtos.Mensaje>> IngresarComentario(int Codigo, string codigoUsuario, string comentario)
         {
@@ -1596,10 +1618,10 @@ namespace AccsoDtos.PortalClientes
         public async Task<MdloDtos.Deposito> ListarDetalleDepositoAdministracion(int rowIdDeposito)
         {
             MdloDtos.Deposito deposito = null;
-            List<MdloDtos.SpDtlleDpstoAprbcion> listadoDtlleDpstoAprbcion = null;
+            List<MdloDtos.SpDtlleDpstoAdministracion> listadoDtlleDpstoAprbcion = null;
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
-                listadoDtlleDpstoAprbcion = await _dbContex.ListarDetalleDepositoAprobacion(rowIdDeposito);
+                listadoDtlleDpstoAprbcion = await _dbContex.ListarDetalleDepositoAdmnstrcion(rowIdDeposito);
             }
             if (listadoDtlleDpstoAprbcion != null)
             {
@@ -1610,6 +1632,9 @@ namespace AccsoDtos.PortalClientes
                     deposito.DeCdgo = listadoDtlleDpstoAprbcion[0].DeCdgo;
                     deposito.DeEstdo = listadoDtlleDpstoAprbcion[0].DeEstdo;
                     deposito.DeCia = listadoDtlleDpstoAprbcion[0].DeCia;
+                    deposito.DeRowidEmpque = listadoDtlleDpstoAprbcion[0].EmRowid;
+                    deposito.DeCiaFctrcion = listadoDtlleDpstoAprbcion[0].CiaCdgoFacturacion;
+                    deposito.DeRowidTrcro = listadoDtlleDpstoAprbcion[0].TeRowid;
                     deposito.DeCiaNavigation = new MdloDtos.Companium
                     {
                         CiaCdgo = listadoDtlleDpstoAprbcion[0].CiaCdgo,
@@ -1652,6 +1677,13 @@ namespace AccsoDtos.PortalClientes
                     deposito.DeObsrvcnes = listadoDtlleDpstoAprbcion[0].DeObsrvcnes;
                     deposito.DeCmun = listadoDtlleDpstoAprbcion[0].DeCmun;
                     deposito.DeSspnddo = listadoDtlleDpstoAprbcion[0].DeSspnddo;
+
+                    deposito.DeVlorCifUs = listadoDtlleDpstoAprbcion[0].DeVlorCifUs;
+                    deposito.DeVlorCifLo = listadoDtlleDpstoAprbcion[0].DeVlorCifLo;
+                    deposito.DeVlorCifClnte = listadoDtlleDpstoAprbcion[0].DeVlorCifClnte;
+                    deposito.DeRowidVstaMtnve = listadoDtlleDpstoAprbcion[0].VmRowid;
+                    deposito.DeCdgoPrdcto = listadoDtlleDpstoAprbcion[0].PrCdgo;
+
                     deposito.DeRowidTrcroNavigation = new MdloDtos.Tercero
                     {
                         TeRowid = listadoDtlleDpstoAprbcion[0].TeRowid,
@@ -2682,6 +2714,49 @@ namespace AccsoDtos.PortalClientes
         }
         #endregion
 
+        #region retorna una lista entradas y salidas para un deposito en las bodegas mediantes un rowId.
+        public async Task<List<MdloDtos.SpInvntrioBdgaDpsto>> InventarioBodega(int rowIdDeposito)
+        {
+            List<MdloDtos.SpInvntrioBdgaDpsto> ListaInventarioDeposito = null;
+            using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
+            {
+                ListaInventarioDeposito = await _dbContex.DpsitoAdmnstrcion_InvntrioBdga(rowIdDeposito);
+                
+                _dbContex.Dispose();
+            }
+           
+            return ListaInventarioDeposito;
+        }
+        #endregion
 
+        #region actualiza los datos de una entidad Deposito
+        public async Task<MdloDtos.Deposito> CerrarDeposito(int rowIdDeposito)
+        {
+            using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
+            {
+                try
+                {
+                    MdloDtos.Deposito DepositoExiste = await _dbContex.Depositos.FindAsync(rowIdDeposito);
+                    if (DepositoExiste != null)
+                    {
+                        DepositoExiste.DeEstdo = "C";
+                        _dbContex.Entry(DepositoExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                        // Guarda los cambios y valida si se actualizó
+                        int filasAfectadas = await _dbContex.SaveChangesAsync();
+                        if (filasAfectadas <= 0)
+                        {
+                            throw new Exception("No se pudo actualizar el depósito.");
+                        } 
+                    }
+                    _dbContex.Dispose();
+                    return DepositoExiste;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.ToString());
+                }
+            }
+        }
+        #endregion
     }
 }

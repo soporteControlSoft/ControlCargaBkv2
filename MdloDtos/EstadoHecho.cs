@@ -14,7 +14,7 @@ public partial class EstadoHecho
 
     [JsonPropertyName("Observacion")]
     [StringLength(250)]
-    public string? EhObsrvcion { get; set; } = null!;
+    public string? EhObsrvcion { get; set; }
 
     [JsonPropertyName("FechaCreacion")]
     public DateTime EhFchaCrcion { get; set; }
@@ -23,7 +23,7 @@ public partial class EstadoHecho
     public DateTime EhFchaIncio { get; set; }
 
     [JsonPropertyName("FechaFin")]
-    public DateTime EhFchaFin { get; set; }
+    public DateTime? EhFchaFin { get; set; }
 
     [JsonPropertyName("Escootilla")]
     public int? EhEsctlla { get; set; }

@@ -64,6 +64,7 @@ public partial class Parametro
 
     public int? PaMntosVgnviaRsrva { get; set; }
 
+
     public Parametro() { }
 
     public Parametro(string PaNasRuta, string PaNasUsuario, string PaNasClave, int? PaNasPuerto)
@@ -73,6 +74,4 @@ public partial class Parametro
         this.PaNasClave = PaNasClave;
         this.PaNasPuerto = PaNasPuerto;
     }
-
-
 }

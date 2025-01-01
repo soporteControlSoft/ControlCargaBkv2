@@ -32,15 +32,12 @@ namespace AccsoDtos.EstadoHechos
                     }
                     else
                     {
-                        Console.WriteLine($"Valor de EhRowidZnaCd: {_EstadoHecho.EhRowidZnaCd}");
-                        Console.WriteLine($"Valor de EhRowidVstaMtnve: {_EstadoHecho.EhRowidVstaMtnve}");
-
                         DateTime fechaSistema = DateTime.Now;
 
                         ObjEstadoHecho.EhObsrvcion = _EstadoHecho.EhObsrvcion;
                         ObjEstadoHecho.EhFchaCrcion = fechaSistema;
                         ObjEstadoHecho.EhFchaIncio = _EstadoHecho.EhFchaIncio;
-                        ObjEstadoHecho.EhFchaFin = _EstadoHecho.EhFchaFin;
+                        ObjEstadoHecho.EhFchaFin = string.IsNullOrWhiteSpace(_EstadoHecho.EhFchaFin?.ToString())? (DateTime?)null: _EstadoHecho.EhFchaFin;
                         ObjEstadoHecho.EhEsctlla = _EstadoHecho.EhEsctlla;
                         ObjEstadoHecho.EhRowidEvnto = _EstadoHecho.EhRowidEvnto;
                         ObjEstadoHecho.EhRowidEqpo = _EstadoHecho.EhRowidEqpo;
@@ -48,11 +45,8 @@ namespace AccsoDtos.EstadoHechos
                         ObjEstadoHecho.EhRowidZnaCd = _EstadoHecho.EhRowidZnaCd;
                         ObjEstadoHecho.EhRowidVstaMtnve = _EstadoHecho.EhRowidVstaMtnve;
                         ObjEstadoHecho.EhCdgoUsrio = _EstadoHecho.EhCdgoUsrio;
-                        ObjEstadoHecho.EhEstdo = "C";
+                        ObjEstadoHecho.EhEstdo = _EstadoHecho.EhEstdo;
 
-                        // Imprimir los valores en la consola de depuración
-                        Debug.WriteLine($"EhRowidZnaCd: {_EstadoHecho.EhRowidZnaCd}");
-                        Debug.WriteLine($"EhRowidVstaMtnve: {_EstadoHecho.EhRowidVstaMtnve}");
                         var res = await _dbContex.EstadoHechos.AddAsync(ObjEstadoHecho);
 
 
@@ -191,7 +185,7 @@ namespace AccsoDtos.EstadoHechos
         #endregion
 
         #region Modificar EstadoEstadoHecho EstadoHecho Por codigo.
-        public async Task<MdloDtos.EstadoHecho> CerrarEstadoEstadoHecho(MdloDtos.EstadoHecho _EstadoHecho)
+        public async Task<MdloDtos.EstadoHecho> CerrarOcancelarEstadoEstadoHecho(MdloDtos.EstadoHecho _EstadoHecho)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
@@ -203,7 +197,7 @@ namespace AccsoDtos.EstadoHechos
                         DateTime fechaSistema = DateTime.Now;
                         EstadoHechoExiste.EhEstdo = _EstadoHecho.EhEstdo;
                         EstadoHechoExiste.EhFchaFin = fechaSistema;
-                        EstadoHechoExiste.EhEstdo = "C";
+                        EstadoHechoExiste.EhObsrvcion = _EstadoHecho.EhObsrvcion;
 
                         _dbContex.Entry(EstadoHechoExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                         await _dbContex.SaveChangesAsync();
