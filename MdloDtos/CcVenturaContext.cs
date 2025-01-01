@@ -169,13 +169,13 @@ public partial class CcVenturaContext : DbContext
 
     public virtual DbSet<VwMdloDpstoLstarVstaMtnve> VwMdloDpstoLstarVstaMtnves { get; set; }
 
-    public virtual DbSet<VwMdloRsrvaLstarVstaMtnve> VwMdloRsrvaLstarVstaMtnves { get; set; }
+    //public virtual DbSet<VwMdloRsrvaLstarVstaMtnve> VwMdloRsrvaLstarVstaMtnves { get; set; }
 
     public virtual DbSet<VwModuloSituacionPortuariaListarSituacionPortuarium> VwModuloSituacionPortuariaListarSituacionPortuaria { get; set; }
 
     public virtual DbSet<VwModuloVisitaMotonaveListarVisitaMotonave> VwModuloVisitaMotonaveListarVisitaMotonaves { get; set; }
 
-    public virtual DbSet<VwPrueba> VwPruebas { get; set; }
+    //public virtual DbSet<VwPrueba> VwPruebas { get; set; }
 
     public virtual DbSet<VwResumenListadoCliente> VwResumenListadoClientes { get; set; }
 
@@ -3231,7 +3231,7 @@ public partial class CcVenturaContext : DbContext
             entity.Property(e => e.VmScncia).HasColumnName("vm_scncia");
         });
 
-        modelBuilder.Entity<VwMdloRsrvaLstarVstaMtnve>(entity =>
+        /*modelBuilder.Entity<VwMdloRsrvaLstarVstaMtnve>(entity =>
         {
             entity
                 .HasNoKey()
@@ -3251,7 +3251,7 @@ public partial class CcVenturaContext : DbContext
                 .HasColumnName("vm_motonave_nmbre");
             entity.Property(e => e.VmRowid).HasColumnName("vm_rowid");
             entity.Property(e => e.VmScncia).HasColumnName("vm_scncia");
-        });
+        });*/
 
         modelBuilder.Entity<VwModuloSituacionPortuariaListarSituacionPortuarium>(entity =>
         {
@@ -3612,7 +3612,7 @@ public partial class CcVenturaContext : DbContext
                 .HasColumnName("vnddor_trcro_idntfccion");
         });
 
-        modelBuilder.Entity<VwPrueba>(entity =>
+       /* modelBuilder.Entity<VwPrueba>(entity =>
         {
             entity
                 .HasNoKey()
@@ -3631,7 +3631,7 @@ public partial class CcVenturaContext : DbContext
                 .HasColumnName("ci_rowid");
             entity.Property(e => e.CiRowidDprtmnto).HasColumnName("ci_rowid_dprtmnto");
         });
-
+       */
         modelBuilder.Entity<VwResumenListadoCliente>(entity =>
         {
             entity
@@ -3934,6 +3934,8 @@ public partial class CcVenturaContext : DbContext
 
     public DbSet<MdloDtos.SpDtlleDpstoAprbcion> SpDtlleDpstoAprbcion { get; set; }
 
+    public DbSet<MdloDtos.SpDtlleDpstoAdministracion> SpDtlleDpstoAdmnstrcion { get; set; }
+
     public DbSet<MdloDtos.SpListaDocumentosAprobacionCargue> SpListaVisitaMotonaveBlCrearDepositos { get; set; }
 
     public DbSet<MdloDtos.Producto> spMdloDpstoCrcionLstarPrdctos { get; set; }
@@ -3944,7 +3946,7 @@ public partial class CcVenturaContext : DbContext
 
     public DbSet<MdloDtos.SpSubDeposito> spMdloDpstoAdmnstrcion_LstarSubDpstos { get; set; }
 
-
+    public DbSet<MdloDtos.SpInvntrioBdgaDpsto> SpInvntrioBdgaDpsto { get; set; }
 
     public async Task<List<MdloDtos.SpListaDocumentosAprobacionCargue>> ListarDocumentosAprobarPorVisitaMotonave(int rowIdVisitaMotonave)
     {
@@ -4004,6 +4006,24 @@ public partial class CcVenturaContext : DbContext
         return await this.SpListarEstadosHecho.FromSqlRaw("EXEC sp_listarEstadoHechoPorVisitaMotonaveOZona @codigoVMoZC, @Estado", param1, param2).ToListAsync();
     }
 
+    //procedimiento almacenado para traer los eventos segun su estado si es C = Cerrado, NC =no cerrado y I = inactivo, este contiene fultro de busqueda por evento o id
+    public async Task<List<MdloDtos.SpListarEstadosHecho>> SpListarEstadosHechoSegunEstadoZonaEspecifico(int? idEstadohechoVmOZc, string estado, int? busqueda)
+    {
+        var param1 = new SqlParameter("@codigoVMoZC", idEstadohechoVmOZc);
+        var param2 = new SqlParameter("@Estado", estado);
+        var param3 = new SqlParameter("@busqueda", busqueda);
+
+        return await this.SpListarEstadosHecho.FromSqlRaw("EXEC sp_listarEstadoHechoPorVisitaMotonaveOZonaEspecifico @codigoVMoZC, @Estado, @busqueda", param1, param2, param3).ToListAsync();
+    }
+    //procedimiento almacenado para traer los eventos segun su estado si es C = Cerrado, NC =no cerrado y I = inactivo, este contiene fultro de busqueda por evento o id
+    public async Task<List<MdloDtos.SpListarEstadosHecho>> SpListarEstadosHechoSegunEstadoZonaGeneral(int? idEstadohechoVmOZc, string estado, string busqueda)
+    {
+        var param1 = new SqlParameter("@codigoVMoZC", idEstadohechoVmOZc);
+        var param2 = new SqlParameter("@Estado", estado);
+        var param3 = new SqlParameter("@busqueda", busqueda);
+        return await this.SpListarEstadosHecho.FromSqlRaw("EXEC sp_listarEstadoHechoPorVisitaMotonaveOZonaGeneral @codigoVMoZC, @Estado, @busqueda", param1, param2, param3).ToListAsync();
+    }
+
     public async Task<bool> AprobarRechazarDeposito(int rowIdDeposito, bool? fueAprobado)
     {
         // Configuración de parámetros de entrada
@@ -4029,6 +4049,12 @@ public partial class CcVenturaContext : DbContext
     {
         var param1 = new SqlParameter("@rowIdDeposito", rowIdDeposito);
         return await this.SpDtlleDpstoAprbcion.FromSqlRaw("EXEC sp_MdloDpstoAprbcion_DtlleDpsto @rowIdDeposito", param1).ToListAsync();
+    }
+
+    public async Task<List<MdloDtos.SpDtlleDpstoAdministracion>> ListarDetalleDepositoAdmnstrcion(int rowIdDeposito)
+    {
+        var param1 = new SqlParameter("@rowIdDeposito", rowIdDeposito);
+        return await this.SpDtlleDpstoAdmnstrcion.FromSqlRaw("EXEC sp_MdloDpstoAdmnstrcion_DtlleDpsto @rowIdDeposito", param1).ToListAsync();
     }
 
     public async Task<bool> DepositoAprobar(MdloDtos.SpDpstoAprbcion spDpstoAprbcion)
@@ -4311,6 +4337,13 @@ public partial class CcVenturaContext : DbContext
     }
 
     */
+    public async Task<List<MdloDtos.SpInvntrioBdgaDpsto>> DpsitoAdmnstrcion_InvntrioBdga(int IdDeposito)
+    {
+        var param1 = new SqlParameter("@rowDpsto", IdDeposito);
+        return await this.SpInvntrioBdgaDpsto
+                .FromSqlRaw("EXEC sp_MdloDpstoAdmnstrcion_LstarInvntrioBdgas @rowDpsto", param1)
+                .ToListAsync();
+    }
 }
 
 

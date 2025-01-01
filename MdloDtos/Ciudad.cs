@@ -67,9 +67,12 @@ public partial class Ciudad
         this.DepartamentoCodigo = DepartamentoCodigo;
         this.DepartamentoNombre = DepartamentoNombre;
     }
-    [NotMapped]
-    public virtual ICollection<SolicitudRetiro> SolicitudRetiros { get; set; } = new List<SolicitudRetiro>();
 
     [NotMapped]
-    public virtual ICollection<Orden>? Ordens { get; set; } = new List<Orden>();
+    public virtual ICollection<Orden> Ordens { get; set; } = new List<Orden>();
+
+
+
+    [NotMapped]
+    public virtual ICollection<SolicitudRetiro> SolicitudRetiros { get; set; } = new List<SolicitudRetiro>();
 }

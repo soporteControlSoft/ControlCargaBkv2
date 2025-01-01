@@ -14,11 +14,8 @@ namespace AccsoDtos.PortalClientes
 {
     public class Certificado : MdloDtos.IModelos.ICertificado
     {
-
-
-
         //consultar Tercero Certificados
-      /*  public async Task<List<VwConsultaCertificado>> ConsultarTerceroCertificado()
+        /*public async Task<List<VwConsultaCertificado>> ConsultarTerceroCertificado()
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
@@ -27,8 +24,8 @@ namespace AccsoDtos.PortalClientes
                 _dbContex.Dispose();
                 return lst;
             }
-        }
-      */
+        }*/
+
         //Ingresar Tercero Certificados
         public async Task<TerceroCertificado> IngresarCertificado(TerceroCertificado _certificado)
         {

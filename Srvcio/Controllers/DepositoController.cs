@@ -1057,5 +1057,106 @@ namespace Srvcio.Controllers
             return respuesta;
         }
         #endregion
+
+        #region muestra el inventario, entradas y salida de un deposito en particular
+        [HttpGet("inventario-bodega-depositos-administracion")]
+        public async Task<ActionResult<IEnumerable<List<MdloDtos.SpInvntrioBdgaDpsto>>>> InventarioBodega(int IdDeposito)
+        {
+            int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
+            int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
+            int existeDepsto;
+            try
+            {
+                if (IdDeposito > 0)
+                {
+                    MdloDtos.Deposito deposito = new MdloDtos.Deposito { DeRowid = IdDeposito };
+                    existeDepsto = await ObjValidacionDeposito.VerificarExistenciaDeposito(deposito);
+                    if (existeDepsto == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa)
+                    {
+                        List<MdloDtos.SpInvntrioBdgaDpsto> ListaInventarioDeposito = await this._dbContex.InventarioBodega(IdDeposito);
+                        validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
+                        if (ListaInventarioDeposito != null)
+                        {
+                            respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
+                            respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                            respuesta.datos = ListaInventarioDeposito;
+                        }
+                        else
+                        {
+                            respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
+                            respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                            respuesta.datos = null;
+                        }
+                    }
+                    else
+                    {
+                        respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
+                        respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeOperacion(operacion);
+                        respuesta.datos = null;
+                    }
+                }
+                else
+                {
+                    respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
+                    respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                    respuesta.datos = null;
+                }
+                return Ok(respuesta);
+            }
+            catch (Exception ex)
+            {
+                respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
+                respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                respuesta.datos = null;
+                return BadRequest(respuesta);
+            }
+
+        }
+        #endregion
+
+        #region Actualizar Deposito
+        [HttpPut("cerrar-deposito-administracion")]
+        public async Task<ActionResult<dynamic>> CerrarDeposito(int IdDeposito)
+        {
+            int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
+            int validacion = 0;
+            try
+            {
+                validacion = await ObjValidacionDeposito.ValidarDepositoParaCerrar(IdDeposito);
+
+                if (validacion == (int)(MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa)) //si fue exito)
+                {
+                    var ObDeposito = await this._dbContex.CerrarDeposito(IdDeposito);
+                    if (ObDeposito != null)
+                    {
+                        respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
+                        respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                        respuesta.datos = ObDeposito;
+                    }
+                    else
+                    {
+                        validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
+                        respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
+                        respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                        respuesta.datos = IdDeposito;
+                    }
+                }
+                else
+                {
+                    respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
+                    respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                    respuesta.datos = IdDeposito;
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
+                respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                respuesta.datos = IdDeposito;
+                return BadRequest(respuesta);
+            }
+            return respuesta;
+        }
+        #endregion
     }
 }

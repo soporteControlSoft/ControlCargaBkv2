@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Modelosv2\" />
+    <Folder Include="Modelos v2\" />
   </ItemGroup>
 
 </Project>

@@ -58,6 +58,38 @@ namespace AccsoDtos.EstadoHechos
         }
         #endregion
 
+        #region Consultar todos los eventos de un estado de hechos mediante id de la visita motonave o id de la zona bodega o silo o zona de operacion tambien incluiremos el estado para saber si buscamos donde el estado es Cerrado = c, Nocerrado = NC o Inactivo = I., adicional mente este procedimiento almacenado busca por un id especifico
+        public async Task<List<MdloDtos.SpListarEstadosHecho>> ListarEstadoHechosEventosZonaEspecifico(SpListarEstadosHecho spListarEstadosHecho)
+        {
+            List<MdloDtos.SpListarEstadosHecho> listaEstadoHechoEvento = new List<MdloDtos.SpListarEstadosHecho>();
+            using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
+            {
+                var query = await _dbContex.SpListarEstadosHechoSegunEstadoZonaEspecifico(spListarEstadosHecho.eh_rowid_vsta_mtnve, spListarEstadosHecho.eh_estdo, spListarEstadosHecho.eh_rowid);
+
+                listaEstadoHechoEvento = query;
+
+                _dbContex.Dispose();
+                return listaEstadoHechoEvento;
+            }
+        }
+        #endregion
+
+        #region Consultar todos los eventos de un estado de hechos mediante id de la visita motonave o id de la zona bodega o silo o zona de operacion tambien incluiremos el estado para saber si buscamos donde el estado es Cerrado = c, Nocerrado = NC o Inactivo = I., adicional mente este procedimiento almacenado busca por un id y nombre de evento por lo tanto la busqueda es general dependiedo del parametro usado
+        public async Task<List<MdloDtos.SpListarEstadosHecho>> ListarEstadoHechosEventosZonaGeneral(SpListarEstadosHecho spListarEstadosHecho)
+        {
+            List<MdloDtos.SpListarEstadosHecho> listaEstadoHechoEvento = new List<MdloDtos.SpListarEstadosHecho>();
+            using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
+            {
+                var query = await _dbContex.SpListarEstadosHechoSegunEstadoZonaGeneral(spListarEstadosHecho.eh_rowid_vsta_mtnve, spListarEstadosHecho.eh_estdo, spListarEstadosHecho.ev_nmbre);
+
+                listaEstadoHechoEvento = query;
+
+                _dbContex.Dispose();
+                return listaEstadoHechoEvento;
+            }
+        }
+        #endregion
+
         #region Filtrar ListaEstadoHechosGeneral por codigo o descripcion general
         public async Task<List<MdloDtos.VwEstdoHchoLstarVstaMtnve>> FiltrarListarEstadoHechosVisitaMotonaveGeneral(string busqueda)
         {

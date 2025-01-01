@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace MdloDtos;
-
+ 
 public partial class Accione
 {
     public int AcRowid { get; set; }

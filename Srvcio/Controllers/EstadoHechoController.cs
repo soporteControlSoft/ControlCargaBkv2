@@ -296,18 +296,18 @@ namespace Srvcio.Controllers
         }
         #endregion
 
-        #region Cerrar EstadoHecho
-        [HttpPut("Cerrar-estadoHecho")]
-        public async Task<ActionResult<dynamic>> CerrarEstadoHecho([FromBody] MdloDtos.EstadoHecho ObjEstadoHecho)
+        #region Cerrar o cancelar EstadoHecho
+        [HttpPut("cerrar-o-cancelar-estado-hechos")]
+        public async Task<ActionResult<dynamic>> CerrarOcancelarEstadoHecho([FromBody] MdloDtos.EstadoHecho ObjEstadoHecho)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Actualizacion);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
             {
-                validacion = await validacionEstadoHecho.ValidarCerrarEstadoEstadoHecho(ObjEstadoHecho);
+                validacion = await validacionEstadoHecho.ValidarCerrarOcancelarEstadoEstadoHecho(ObjEstadoHecho);
                 if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa) //si fue exito)
                 {
-                    var ObEstadoHecho = await this._dbContex.CerrarEstadoEstadoHecho(ObjEstadoHecho);
+                    var ObEstadoHecho = await this._dbContex.CerrarOcancelarEstadoEstadoHecho(ObjEstadoHecho);
                     if (ObEstadoHecho != null)
                     {
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;

@@ -92,7 +92,7 @@ namespace VldcionDtos
             try
             {
                 //Validar los campos Obligatorios.
-                if (!string.IsNullOrEmpty(ObjDeposito.DeCia) && ObjDeposito.DeRowidTrcro > 0 &&
+                if (!string.IsNullOrEmpty(ObjDeposito.DeCia)  &&
                     !string.IsNullOrEmpty(ObjDeposito.DeCdgoPrdcto) && !string.IsNullOrEmpty(ObjDeposito.DeCdgoUsrioCrea))
                 {
                     //Validar la llave relacional.
@@ -288,6 +288,40 @@ namespace VldcionDtos
             return resultado;
         }
         #endregion
+
+        #region Validacion de viista motonave Documento, metodo Ingreso
+        public async Task<int> ValidarDepositoParaCerrar(int codigo)
+        {
+            int resultado = 0;
+            try
+            {
+                if (codigo > 0)
+                {
+                    bool DepositoAbierto = await _ObjDeposito.VerificarDepositoParaCerrar(codigo);
+                    if (!DepositoAbierto)
+                    {
+                        resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.RelacionNoExiste;
+                    }
+                    else 
+                    {
+                        resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
+                    }
+                }
+                else
+                {
+                    resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
+                }
+            }
+            catch (Exception ex)
+            {
+                //Retorna valor del TipoMensaje: TransaccionIncorrecta
+                resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
+            }
+            return resultado;
+        }
+        #endregion
+
+        
 
         #region valida que un deposito esté en estado de cargado
         public async Task<int> ValidarEstadoDeposito(MdloDtos.Deposito objDeposito)

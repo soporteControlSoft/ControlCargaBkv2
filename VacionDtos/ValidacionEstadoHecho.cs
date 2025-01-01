@@ -116,7 +116,7 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de estadoHechos , metodo Cerrar
-        public async Task<int> ValidarCerrarEstadoEstadoHecho(MdloDtos.EstadoHecho objEstadoHecho)
+        public async Task<int> ValidarCerrarOcancelarEstadoEstadoHecho(MdloDtos.EstadoHecho objEstadoHecho)
         {
 
             int resultado = 0;
@@ -128,7 +128,8 @@ namespace VldcionDtos
                 {
                     //validamos el id para ver si el evento de este estado de hechos exite
                     if (
-                       objEstadoHecho.EhRowid > 0
+                        !string.IsNullOrEmpty(objEstadoHecho.EhEstdo) &&
+                        objEstadoHecho.EhRowid > 0
                         )
                     {
                         resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;

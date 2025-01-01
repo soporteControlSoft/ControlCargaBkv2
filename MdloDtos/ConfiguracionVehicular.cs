@@ -39,6 +39,10 @@ public partial class ConfiguracionVehicular
 
     [JsonIgnore]
     [NotMapped]
+    public virtual ICollection<Orden> Ordens { get; set; } = new List<Orden>();
+
+    [JsonIgnore]
+    [NotMapped]
     public virtual ICollection<Vehiculo> Vehiculos { get; set; } = new List<Vehiculo>();
 
     /// <summary>
@@ -81,8 +85,4 @@ public partial class ConfiguracionVehicular
         this.CompaniaCodigo = CompaniaCodigo;
         this.CompaniaNombre = CompaniaNombre;
     }
-
-    [JsonIgnore]
-    [NotMapped]
-    public virtual ICollection<Orden>? Ordens { get; set; } = new List<Orden>();
 }

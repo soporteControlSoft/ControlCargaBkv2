@@ -329,7 +329,7 @@ public partial class Deposito
 
     [JsonPropertyName("VisitaMotonaveNavegacion")]
     [NotMapped]
-    [JsonIgnore]
+    //[JsonIgnore]
     public virtual VisitaMotonave? DeRowidVstaMtnveNavigation { get; set; }
 
 
@@ -395,9 +395,11 @@ public partial class Deposito
         this.DeCntdad = DeCntdad;
 
     }
-    [NotMapped]
-    public virtual ICollection<SolicitudRetiro> SolicitudRetiros { get; set; } = new List<SolicitudRetiro>();
 
     [NotMapped]
     public virtual ICollection<Orden> Ordens { get; set; } = new List<Orden>();
+
+
+    [NotMapped]
+    public virtual ICollection<SolicitudRetiro> SolicitudRetiros { get; set; } = new List<SolicitudRetiro>();
 }

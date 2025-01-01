@@ -88,20 +88,18 @@ public partial class Companium
     [JsonPropertyName("Logo")]
     public byte[]? CiaLgo { get; set; }
 
+    public virtual ICollection<ConceptoPesaje> ConceptoPesajes { get; set; } = new List<ConceptoPesaje>();
     [JsonIgnore]
     [NotMapped]
-    public virtual ICollection<ConceptoPesaje>? ConceptoPesajes { get; set; } = new List<ConceptoPesaje>();
-    [JsonIgnore]
-    [NotMapped]
-    public virtual ICollection<Auditorium>? Auditoria { get; set; } = new List<Auditorium>();
+    public virtual ICollection<Auditorium> Auditoria { get; set; } = new List<Auditorium>();
 
     [JsonIgnore]
     [NotMapped]
-    public virtual ICollection<Consecutivo>? Consecutivos { get; set; } = new List<Consecutivo>();
+    public virtual ICollection<Consecutivo> Consecutivos { get; set; } = new List<Consecutivo>();
 
     [JsonIgnore]
     [NotMapped]
-    public virtual ICollection<AutorizacionRemotum>? AutorizacionRemota { get; set; } = new List<AutorizacionRemotum>();
+    public virtual ICollection<AutorizacionRemotum> AutorizacionRemota { get; set; } = new List<AutorizacionRemotum>();
 
     [JsonIgnore]
     [NotMapped]

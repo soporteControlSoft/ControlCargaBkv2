@@ -19,7 +19,7 @@ namespace MdloDtos.IModelos
 
         public Task<MdloDtos.EstadoHecho> ModificarEstadoEstadoHecho(MdloDtos.EstadoHecho ObjEstadoHecho);
 
-        public Task<MdloDtos.EstadoHecho> CerrarEstadoEstadoHecho(MdloDtos.EstadoHecho ObjEstadoHecho);
+        public Task<MdloDtos.EstadoHecho> CerrarOcancelarEstadoEstadoHecho(MdloDtos.EstadoHecho ObjEstadoHecho);
 
         public Task<bool> VerificarEstadoHecho(int Codigo);
 

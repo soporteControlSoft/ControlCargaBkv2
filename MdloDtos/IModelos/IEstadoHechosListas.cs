@@ -10,7 +10,13 @@ namespace MdloDtos.IModelos
     {
 
         public Task<List<MdloDtos.VwEstdoHchoLstarVstaMtnve>> ListarEstadoHechosVisitaMotonave();
+
         public Task<List<MdloDtos.SpListarEstadosHecho>> ListarEstadoHechosEventos(SpListarEstadosHecho spListarEstadosHecho);
+
+        public Task<List<MdloDtos.SpListarEstadosHecho>> ListarEstadoHechosEventosZonaEspecifico(SpListarEstadosHecho spListarEstadosHecho);
+
+        public Task<List<MdloDtos.SpListarEstadosHecho>> ListarEstadoHechosEventosZonaGeneral(SpListarEstadosHecho spListarEstadosHecho);
+
         public Task<List<MdloDtos.VwEstdoHchoLstarVstaMtnve>> FiltrarListarEstadoHechosVisitaMotonaveGeneral(string busqueda);
                                                          
 
