@@ -169,7 +169,12 @@ public partial class CcVenturaContext : DbContext
 
     public virtual DbSet<VwMdloDpstoLstarVstaMtnve> VwMdloDpstoLstarVstaMtnves { get; set; }
 
-    //public virtual DbSet<VwMdloRsrvaLstarVstaMtnve> VwMdloRsrvaLstarVstaMtnves { get; set; }
+    public virtual DbSet<VwMdloRsrvaLstarDpsto> VwMdloRsrvaLstarDpstos { get; set; }
+
+    public virtual DbSet<VwMdloRsrvaLstarSlctudRtroMdal> VwMdloRsrvaLstarSlctudRtroMdals { get; set; }
+
+    public virtual DbSet<VwMdloRsrvaLstarVstaMtnve> VwMdloRsrvaLstarVstaMtnves { get; set; }
+
 
     public virtual DbSet<VwModuloSituacionPortuariaListarSituacionPortuarium> VwModuloSituacionPortuariaListarSituacionPortuaria { get; set; }
 
@@ -3231,7 +3236,62 @@ public partial class CcVenturaContext : DbContext
             entity.Property(e => e.VmScncia).HasColumnName("vm_scncia");
         });
 
-        /*modelBuilder.Entity<VwMdloRsrvaLstarVstaMtnve>(entity =>
+        modelBuilder.Entity<VwMdloRsrvaLstarDpsto>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("vw_MdloRsrva_LstarDpsto");
+
+            entity.Property(e => e.DeCdgo)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("De_cdgo");
+            entity.Property(e => e.DeCia)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("De_cia");
+            entity.Property(e => e.DeEsSubdpsto).HasColumnName("De_es_subdpsto");
+            entity.Property(e => e.DeRowid).HasColumnName("De_rowid");
+            entity.Property(e => e.VmRowid).HasColumnName("Vm_rowid");
+        });
+
+        modelBuilder.Entity<VwMdloRsrvaLstarSlctudRtroMdal>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("vw_MdloRsrva_LstarSlctudRtroMdal");
+
+            entity.Property(e => e.DeCdgo)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("de_cdgo");
+            entity.Property(e => e.DeCia)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("de_cia");
+            entity.Property(e => e.DeEstdo)
+                .HasMaxLength(1)
+                .IsUnicode(false)
+                .HasColumnName("de_estdo");
+            entity.Property(e => e.DeRowid).HasColumnName("de_rowid");
+            entity.Property(e => e.SrCdgo)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("sr_cdgo");
+            entity.Property(e => e.SrCia)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("sr_cia");
+            entity.Property(e => e.SrRowid).HasColumnName("sr_rowid");
+            entity.Property(e => e.SrtActva).HasColumnName("srt_actva");
+            entity.Property(e => e.SrtAutrzdoKlos).HasColumnName("srt_autrzdo_klos");
+            entity.Property(e => e.SrtAutrzdoUnddes).HasColumnName("srt_autrzdo_unddes");
+            entity.Property(e => e.SrtDspchdoKlos).HasColumnName("srt_dspchdo_klos");
+            entity.Property(e => e.SrtDspchdoUnddes).HasColumnName("srt_dspchdo_unddes");
+            entity.Property(e => e.SrtRowidTrnsprtdra).HasColumnName("srt_rowid_trnsprtdra");
+        });
+
+        modelBuilder.Entity<VwMdloRsrvaLstarVstaMtnve>(entity =>
         {
             entity
                 .HasNoKey()
@@ -3251,7 +3311,7 @@ public partial class CcVenturaContext : DbContext
                 .HasColumnName("vm_motonave_nmbre");
             entity.Property(e => e.VmRowid).HasColumnName("vm_rowid");
             entity.Property(e => e.VmScncia).HasColumnName("vm_scncia");
-        });*/
+        });
 
         modelBuilder.Entity<VwModuloSituacionPortuariaListarSituacionPortuarium>(entity =>
         {

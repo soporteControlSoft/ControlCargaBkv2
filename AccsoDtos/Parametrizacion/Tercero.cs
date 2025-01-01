@@ -589,8 +589,6 @@ namespace AccsoDtos.Parametrizacion
 
                         respuesta = true;
                     }
-
-                    
                 }
                 catch (Exception ex)
                 {
@@ -679,6 +677,34 @@ namespace AccsoDtos.Parametrizacion
             }
 
         }
+        #endregion
+
+
+        #region verificar Terceros por medio de su Id
+        public async Task<bool> VerificarTerceroPorId(int IdTercero)
+        {
+            bool respuesta = false;
+            using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
+            {
+                try
+                {
+                    var lst = (from p in _dbContex.Terceros
+                               where p.TeRowid == IdTercero
+                               select p).Count();
+
+                    respuesta = (lst == null || lst == 0) ? false : true;  
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                _dbContex.Dispose();
+                return respuesta;
+            }
+
+        }
+
+
         #endregion
     }
 }

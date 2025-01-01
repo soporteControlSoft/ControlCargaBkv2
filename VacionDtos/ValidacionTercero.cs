@@ -205,5 +205,29 @@ namespace VldcionDtos
             return resultado;
         }
         #endregion
+
+        #region verifica que un tercero exista
+        public async Task<int> ValidarExistenciaTercero(int codigo)
+        {
+            try
+            {
+                if (codigo > 0)
+                {
+                    bool TerceroExiste = await ObjTercero.VerificarTerceroPorId(codigo);
+                    return  !TerceroExiste ?
+                                    (int)MdloDtos.Utilidades.Constantes.TipoMensaje.RelacionNoExiste :
+                                    (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
+                }
+                else
+                {
+                    return (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
+                }
+            }
+            catch (Exception ex)
+            {
+                return (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
+            }
+        }
+        #endregion
     }
 }

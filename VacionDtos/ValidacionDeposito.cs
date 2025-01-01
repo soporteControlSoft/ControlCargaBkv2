@@ -254,7 +254,7 @@ namespace VldcionDtos
         }
         #endregion
 
-        #region Validacion de viista motonave Documento, metodo Ingreso
+        #region Validacion de visita motonave Documento, metodo Ingreso
         public async Task<int> ValidarExistenciaDeposito(int codigo)
         {
             int resultado = 0;

@@ -164,6 +164,40 @@ namespace VldcionDtos
             return resultado;
         }
         #endregion
-        
+
+        #region Validacion de visita motonave
+        public async Task<int> ValidarExistenciaVisitaMotonave(int codigo)
+        {
+            int resultado = 0;
+            try
+            {
+                bool validarResultado = false;
+
+                if (codigo > 0)
+                {
+                    bool VstaMtnveExiste = await _ObjVisitaMotonave.VerificarVisita(codigo);
+                    if (!VstaMtnveExiste)
+                    {
+                        resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.RelacionNoExiste;
+                        validarResultado = true;
+                    }
+                    if (!validarResultado)
+                    {
+                        resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
+                    }
+                }
+                else
+                {
+                    resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
+                }
+            }
+            catch (Exception ex)
+            {
+                resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
+            }
+            return resultado;
+        }
+        #endregion
+
     }
 }
