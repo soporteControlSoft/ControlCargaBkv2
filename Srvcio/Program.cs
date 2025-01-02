@@ -149,6 +149,7 @@ builder.Services.AddScoped<MdloDtos.IModelos.IConsecutivo, AccsoDtos.ControlPesa
 
 
 //Wilbert Rivas 30/12/2024
+builder.Services.AddScoped<MdloDtos.IModelos.IConductor, AccsoDtos.Parametrizacion.Conductor>();
 builder.Services.AddScoped<MdloDtos.IModelos.IReserva, AccsoDtos.Reserva.Reserva>();
 
 //configuracion de la seguridad por medio de JWT.
