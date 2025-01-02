@@ -1,4 +1,5 @@
-﻿using MdloDtos.Utilidades;
+﻿using MdloDtos;
+using MdloDtos.Utilidades;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -69,395 +70,271 @@ namespace AccsoDtos.Reserva
             }
         }
         #endregion
-        /*
-        #region Ingresar datos a la entidad Ciudad
-        public async Task<MdloDtos.Ciudad> IngresarCiudad(MdloDtos.Ciudad _Ciudad)
+
+        #region Consultar el detalle de una solicitud de retiro para una solicitud de retiro en particular y una transportadora particular
+        public async Task<List<MdloDtos.SpMdloRsrvaDtlleSlctudRtro>> ListarDetalleSolicitudRetiro(int IdSolicitudRetiro, int idTransportadora)
         {
+            List<MdloDtos.SpMdloRsrvaDtlleSlctudRtro> list = new List<MdloDtos.SpMdloRsrvaDtlleSlctudRtro>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
-                var ObjCiudad = new MdloDtos.Ciudad();
+                list  = await _dbContex.ListarDetalleSolicitudRetiro(IdSolicitudRetiro, idTransportadora);          
+                _dbContex.Dispose();
+
+                return list;
+            }
+        }
+        #endregion
+
+        #region Consultar el detalle de una orden o reserva para una orden en particular a partir de su codigo.
+        public async Task<List<MdloDtos.SpMdloRsrvaDtlleOrden>> ListarDetalleOrden(int cdgoOrden)
+        {
+            List<MdloDtos.SpMdloRsrvaDtlleOrden> list = new List<MdloDtos.SpMdloRsrvaDtlleOrden>();
+            using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
+            {
+                list = await _dbContex.ListarDetalleOrden(cdgoOrden);
+                _dbContex.Dispose();
+
+                return list;
+            }
+        }
+        #endregion
+
+        #region verificar la existencia de una solicitd de retiro por su rowId
+        public async Task<bool> VerificarSolicitudRetiro(int IdSolicitudRetiro)
+        {
+            bool respuesta = false;
+            using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
+            {
                 try
                 {
-                    var CiudadExiste = await this.VerificarCiudad(_Ciudad.CiCdgo);
+                    var ObjSolicitudRetiro = await _dbContex.SolicitudRetiros.FindAsync(IdSolicitudRetiro);
+                    respuesta = ObjSolicitudRetiro != null ? true : false;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                _dbContex.Dispose();
+                return respuesta;
+            }
+        }
+        #endregion
 
-                    if (CiudadExiste == true)
-                    {
-                        throw new Exception(MdloDtos.Utilidades.Mensajes.Error + " al momento de hacer un :" + MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
-                    }
-                    else
-                    {
-                        ObjCiudad.CiCdgo = _Ciudad.CiCdgo;
-                        ObjCiudad.CiNmbre = _Ciudad.CiNmbre;
-                        ObjCiudad.CiRowidDprtmnto = _Ciudad.CiRowidDprtmnto;
-                        var res = await _dbContex.Ciudads.AddAsync(ObjCiudad);
-                        await _dbContex.SaveChangesAsync();
-                    }
+        #region verificar la existencia de una orden por su rowId
+        public async Task<bool> VerificarOrden(int CodigoOrden)
+        {
+            bool respuesta = false;
+            using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
+            {
+                try
+                {
+                    var ObjOrden = await _dbContex.Ordens.FindAsync(CodigoOrden);
+                    respuesta = ObjOrden != null ? true : false;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                _dbContex.Dispose();
+                return respuesta;
+            }
+        }
+        #endregion
 
+        #region Ingresar datos a la entidad Orden
+        public async Task<dynamic> RegistrarOrden(MdloDtos.Orden _Orden)
+        {
+            string retorno = "";
+            using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
+            {
+                retorno = await _dbContex.RegistrarOrden(_Orden);
+                _dbContex.Dispose();
+                return retorno;
+            }
+        }
+        #endregion
+
+        #region verificar una orden en especifico
+        public async Task<int> ConsultarOrdenEspecifica(int IdTransportadora, DateTime FechaReserva, DateTime FechaRegistroReserva, String Placa, String Manifiesto)
+        {
+            int cdgoOrden = -1;
+            using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
+            {
+                try
+                {
+                    var listOrden = await (from orden in _dbContex.Ordens 
+                                            where   orden.OrRowidTrnsprtdra == IdTransportadora && orden.OrFchaRsrva== FechaReserva &&
+                                                    orden.OrFchaRgstroRsrva == FechaRegistroReserva && orden.OrPlca == Placa &&
+                                                    orden.OrMnfsto == Manifiesto
+                                            select new
+                                            {
+                                                orden.OrCdgo
+                                            }).ToListAsync();
+                    if (listOrden.Count > 0)
+                    {
+                        cdgoOrden = listOrden[0].OrCdgo;
+                    }
                     
+                   
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                _dbContex.Dispose();
+                return cdgoOrden;
+            }
+        }
+        #endregion
+
+
+        #region Ingresa una observacion a la orden
+        public async Task<List<MdloDtos.Mensaje>> IngresarObservacion(int CodigoOrden, string CodigoUsuario, string Observaciones)
+        {
+            List<MdloDtos.Mensaje> listaObservaciones = null;
+            using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
+            {
+                try
+                {
+                    var OrdenExiste = await _dbContex.Ordens.FindAsync(CodigoOrden);
+                    if (OrdenExiste != null)
+                    {
+                        DateTime Hoy = DateTime.Now;
+                        Observaciones = Observaciones.Replace("]#&&#[", "").Replace("]#&&[", "").Replace("#&&#", "");//codigo para evitar que se registre un separador dentro del comentario.
+                        if (OrdenExiste.OrObsrvcnes != null)
+                        {
+                            OrdenExiste.OrObsrvcnes = OrdenExiste.OrObsrvcnes + "#&&#[" + Hoy.ToString() + "]#&&[" + CodigoUsuario + "]#&&[" + Observaciones + "]";
+                        }
+                        else
+                        {
+                            OrdenExiste.OrObsrvcnes = "[" + Hoy.ToString() + "]#&&[" + CodigoUsuario + "]#&&[" + Observaciones + "]";
+                        }
+
+                        _dbContex.Ordens.Update(OrdenExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                        await _dbContex.SaveChangesAsync();
+                        if (OrdenExiste.OrObsrvcnes != null)
+                        {
+                            listaObservaciones = new List<Mensaje>();
+                            foreach (var items in OrdenExiste.OrObsrvcnes.Split("#&&#"))
+                            {
+                                var item = items.Split("#&&");
+                                //Intentamos extraer el nombre del usuario que ingresó la observación con el codigo
+                                try
+                                {
+                                    MdloDtos.Usuario usuario = new MdloDtos.Usuario();
+                                    usuario.UsCdgo = item[1].Replace("[", "").Replace("]", "");
+                                    usuario.UsNmbre = null;
+                                    {
+                                        var lstUsuario = await (from usr in _dbContex.Usuarios
+                                                                where (usr.UsCdgo == item[1].Replace("[", "").Replace("]", ""))
+                                                                select new
+                                                                {
+                                                                    usr.UsCdgo,
+                                                                    usr.UsNmbre
+                                                                }).ToListAsync();
+                                        foreach (var itemUsr in lstUsuario)
+                                        {
+                                            usuario = new MdloDtos.Usuario
+                                            {
+                                                UsCdgo = itemUsr.UsCdgo,
+                                                UsNmbre = itemUsr.UsNmbre
+                                            };
+                                        }
+                                    }
+                                    listaObservaciones.Add(
+                                        new MdloDtos.Mensaje
+                                        {
+                                            fechaHoraIngreso = Convert.ToDateTime(item[0].Replace("[", "").Replace("]", "")),
+                                            usuario = usuario,
+                                            comentario = item[2].Replace("[", "").Replace("]", "")
+                                        }
+                                    );
+                                }
+                                catch (Exception e)
+                                {
+
+                                }
+                            }
+                        }
+                    }
+                    _dbContex.Dispose();
+                    return listaObservaciones;
                 }
                 catch (Exception ex)
                 {
                     throw new Exception(ex.ToString());
                 }
-                _dbContex.Dispose();
-                return ObjCiudad;
-            }
-
-        }
-        #endregion
-
-        #region Consultar todos los datos de Ciudad mediante un parametro Codigo de Departamento
-        public async Task<List<MdloDtos.Ciudad>> FiltrarCiudadPorDepartamento(int Codigo)
-        {
-            List<MdloDtos.Ciudad> listCiudad = new List<MdloDtos.Ciudad>();
-            using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
-            {
-
-                var lst = await (from ciudad in _dbContex.Ciudads
-                                 join departamento in _dbContex.Departamentos on ciudad.CiRowidDprtmnto equals departamento.DeRowid into departamentoJoin
-                                 from departamento in departamentoJoin.DefaultIfEmpty()
-
-
-                                 where ciudad.CiRowidDprtmnto == Codigo
-
-                                 select new
-                                 {
-                                     //Atributos Ciudad
-                                     ciudadRowId = ciudad.CiRowid,
-                                     ciudadCodigo = ciudad.CiCdgo,
-                                     ciudadNombre = ciudad.CiNmbre,
-                                     ciudadDepartamentoRowId = ciudad.CiRowidDprtmnto,
-
-                                     //Atributos departamentos
-                                     DepartamentoRowId = departamento.DeRowid,
-                                     DepartamentoCodigo = departamento.DeCdgo,
-                                     DepartamentoNombre = departamento.DeNmbre
-                                 }
-                               ).ToListAsync();
-                _dbContex.Dispose();
-                foreach (var item in lst)
-                {
-                    //Creamos una entidad Ciudad para agregar a la lista
-                    MdloDtos.Ciudad objCiudad = new MdloDtos.Ciudad(
-                                                                    //Atributos ciudad
-                                                                    item.ciudadRowId != null ? item.ciudadRowId : 0,
-                                                                    item.ciudadCodigo != null ? item.ciudadCodigo : String.Empty,
-                                                                    item.ciudadNombre != null ? item.ciudadNombre : String.Empty,
-                                                                    item.ciudadDepartamentoRowId != null ? item.ciudadDepartamentoRowId : 0,
-
-                                                                    //Atributos departamento
-                                                                    item.DepartamentoRowId != null ? item.DepartamentoRowId.ToString() : String.Empty,
-                                                                    item.DepartamentoCodigo != null ? item.DepartamentoCodigo : String.Empty,
-                                                                    item.DepartamentoNombre != null ? item.DepartamentoNombre : String.Empty
-                                                                    );
-
-                    //Agregamnos la ciudad a la lista
-                    listCiudad.Add(objCiudad);
-                }
-
-
-                _dbContex.Dispose();
-                return listCiudad;
-            }
-
-        }
-        #endregion
-
-        #region Listar todos los Ciudad
-        public async Task<List<MdloDtos.Ciudad>> ListarCiudad()
-        {
-            List<MdloDtos.Ciudad> listCiudad = new List<MdloDtos.Ciudad>();
-            using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
-            {
-
-                var lst = await (from ciudad in _dbContex.Ciudads
-                                 join departamento in _dbContex.Departamentos on ciudad.CiRowidDprtmnto equals departamento.DeRowid into departamentoJoin
-                                 from departamento in departamentoJoin.DefaultIfEmpty()
-
-                                 select new
-                                 {
-                                     //Atributos Ciudad
-                                     ciudadRowId = ciudad.CiRowid,
-                                     ciudadCodigo = ciudad.CiCdgo,
-                                     ciudadNombre = ciudad.CiNmbre,
-                                     ciudadDepartamentoRowId = ciudad.CiRowidDprtmnto,
-
-                                     //Atributos departamentos
-                                     DepartamentoRowId = departamento.DeRowid,
-                                     DepartamentoCodigo = departamento.DeCdgo,
-                                     DepartamentoNombre = departamento.DeNmbre
-                                 }
-                               ).ToListAsync();
-                _dbContex.Dispose();
-                foreach (var item in lst)
-                {
-                    //Creamos una entidad Ciudad para agregar a la lista
-                    MdloDtos.Ciudad objCiudad = new MdloDtos.Ciudad(
-                                                                    //Atributos ciudad
-                                                                    item.ciudadRowId != null ? item.ciudadRowId : 0,
-                                                                    item.ciudadCodigo != null ? item.ciudadCodigo : String.Empty,
-                                                                    item.ciudadNombre != null ? item.ciudadNombre : String.Empty,
-                                                                    item.ciudadDepartamentoRowId != null ? item.ciudadDepartamentoRowId : 0,
-
-                                                                    //Atributos departamento
-                                                                    item.DepartamentoRowId != null ? item.DepartamentoRowId.ToString() : String.Empty,
-                                                                    item.DepartamentoCodigo != null ? item.DepartamentoCodigo : String.Empty,
-                                                                    item.DepartamentoNombre != null ? item.DepartamentoNombre : String.Empty
-                                                                    );
-
-                    //Agregamnos la ciudad a la lista
-                    listCiudad.Add(objCiudad);
-                }
-
-
-                _dbContex.Dispose();
-                return listCiudad;
             }
         }
         #endregion
 
-        #region Actualizar departamentos por el objeto _Ciudad
-        public async Task<MdloDtos.Ciudad> EditarCiudad(MdloDtos.Ciudad _Ciudad)
+        #region Consulta las observaciones registradas a una orden en particular
+        public async Task<List<MdloDtos.Mensaje>> ConsultarObservaciones(int CodigoOrden)
         {
+            List<MdloDtos.Mensaje> listaObservaciones = new List<Mensaje>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 try
                 {
-                    MdloDtos.Ciudad CiudadExiste = await _dbContex.Ciudads.FindAsync(_Ciudad.CiRowid);
-                    if (CiudadExiste != null)
+                    var OrdenExiste = await _dbContex.Ordens.FindAsync(CodigoOrden);
+                    if (OrdenExiste != null)
                     {
+                        if (OrdenExiste.OrObsrvcnes != null)
+                        {
+                            foreach (var items in OrdenExiste.OrObsrvcnes.Split("#&&#"))
+                            {
+                                var item = items.Split("#&&");
 
-                        CiudadExiste.CiCdgo = _Ciudad.CiCdgo;
-                        CiudadExiste.CiNmbre = _Ciudad.CiNmbre;
-                        CiudadExiste.CiRowidDprtmnto = _Ciudad.CiRowidDprtmnto;
-                        _dbContex.Entry(CiudadExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                        await _dbContex.SaveChangesAsync();
+                                //Intentamos extraer el nombre del usuario que ingresó la observaciones
+                                try
+                                {
+                                    MdloDtos.Usuario usuario = new MdloDtos.Usuario();
+                                    usuario.UsCdgo = item[1].Replace("[", "").Replace("]", "");
+                                    usuario.UsNmbre = null;
+                                    {
+                                        var lstUsuario = await (from usr in _dbContex.Usuarios
+                                                                where (usr.UsCdgo == item[1].Replace("[", "").Replace("]", ""))
+                                                                select new
+                                                                {
+                                                                    usr.UsCdgo,
+                                                                    usr.UsNmbre
+                                                                }).ToListAsync();
+                                        foreach (var itemUsr in lstUsuario)
+                                        {
+                                            usuario = new MdloDtos.Usuario
+                                            {
+                                                UsCdgo = itemUsr.UsCdgo,
+                                                UsNmbre = itemUsr.UsNmbre
+                                            };
+                                        }
+                                    }
+                                    listaObservaciones.Add(
+                                        new MdloDtos.Mensaje
+                                        {
+                                            fechaHoraIngreso = Convert.ToDateTime(item[0].Replace("[", "").Replace("]", "")),
+                                            usuario = usuario,
+                                            comentario = item[2].Replace("[", "").Replace("]", "")
+                                        }
+                                    );
+                                }
+                                catch (Exception e)
+                                {
 
+                                }
+                            }
+                        }
                     }
                     _dbContex.Dispose();
-                    return CiudadExiste;
+                    return listaObservaciones;
                 }
                 catch (Exception ex)
                 {
                     throw new Exception(ex.ToString());
                 }
-               
-            }
-            
-        }
-        #endregion
-
-        #region Filtrar Ciudad por codigo general
-        public async Task<List<MdloDtos.Ciudad>> FiltrarCiudadGeneral(string Codigo)
-        {
-            List<MdloDtos.Ciudad> listCiudad = new List<MdloDtos.Ciudad>();
-            using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
-            {
-
-                var lst = await (from ciudad in _dbContex.Ciudads
-                                 join departamento in _dbContex.Departamentos on ciudad.CiRowidDprtmnto equals departamento.DeRowid into departamentoJoin
-                                 from departamento in departamentoJoin.DefaultIfEmpty()
-
-                                 where ciudad.CiCdgo.Contains(Codigo) || ciudad.CiNmbre.Contains(Codigo)
-                                 select new
-                                 {
-                                     //Atributos Ciudad
-                                     ciudadRowId = ciudad.CiRowid,
-                                     ciudadCodigo = ciudad.CiCdgo,
-                                     ciudadNombre = ciudad.CiNmbre,
-                                     ciudadDepartamentoRowId = ciudad.CiRowidDprtmnto,
-
-                                     //Atributos departamentos
-                                     DepartamentoRowId = departamento.DeRowid,
-                                     DepartamentoCodigo = departamento.DeCdgo,
-                                     DepartamentoNombre = departamento.DeNmbre
-                                 }
-                               ).ToListAsync();
-                _dbContex.Dispose();
-                foreach (var item in lst)
-                {
-                    //Creamos una entidad Ciudad para agregar a la lista
-                    MdloDtos.Ciudad objCiudad = new MdloDtos.Ciudad(
-                                                                    //Atributos ciudad
-                                                                    item.ciudadRowId != null ? item.ciudadRowId : 0,
-                                                                    item.ciudadCodigo != null ? item.ciudadCodigo : String.Empty,
-                                                                    item.ciudadNombre != null ? item.ciudadNombre : String.Empty,
-                                                                    item.ciudadDepartamentoRowId != null ? item.ciudadDepartamentoRowId : 0,
-
-                                                                    //Atributos departamento
-                                                                    item.DepartamentoRowId != null ? item.DepartamentoRowId.ToString() : String.Empty,
-                                                                    item.DepartamentoCodigo != null ? item.DepartamentoCodigo : String.Empty,
-                                                                    item.DepartamentoNombre != null ? item.DepartamentoNombre : String.Empty
-                                                                    );
-
-                    //Agregamnos la ciudad a la lista
-                    listCiudad.Add(objCiudad);
-                }
-
-
-                _dbContex.Dispose();
-                return listCiudad;
             }
         }
         #endregion
 
-        #region Filtrar Ciudad por codigo Especifico Ciudad
-        public async Task<List<MdloDtos.Ciudad>> FiltrarCiudadEspecifico(string Codigo)
-        {
-            List<MdloDtos.Ciudad> listCiudad = new List<MdloDtos.Ciudad>();
-            using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
-            {
-
-                var lst = await (from ciudad in _dbContex.Ciudads
-                                 join departamento in _dbContex.Departamentos on ciudad.CiRowidDprtmnto equals departamento.DeRowid into departamentoJoin
-                                 from departamento in departamentoJoin.DefaultIfEmpty()
-
-                                 where ciudad.CiCdgo == Codigo
-                                 select new
-                                 {
-                                     //Atributos Ciudad
-                                     ciudadRowId = ciudad.CiRowid,
-                                     ciudadCodigo = ciudad.CiCdgo,
-                                     ciudadNombre = ciudad.CiNmbre,
-                                     ciudadDepartamentoRowId = ciudad.CiRowidDprtmnto,
-
-                                     //Atributos departamentos
-                                     DepartamentoRowId = departamento.DeRowid,
-                                     DepartamentoCodigo = departamento.DeCdgo,
-                                     DepartamentoNombre = departamento.DeNmbre
-                                 }
-                               ).ToListAsync();
-                _dbContex.Dispose();
-                foreach (var item in lst)
-                {
-                    //Creamos una entidad Ciudad para agregar a la lista
-                    MdloDtos.Ciudad objCiudad = new MdloDtos.Ciudad(
-                                                                    //Atributos ciudad
-                                                                    item.ciudadRowId != null ? item.ciudadRowId : 0,
-                                                                    item.ciudadCodigo != null ? item.ciudadCodigo : String.Empty,
-                                                                    item.ciudadNombre != null ? item.ciudadNombre : String.Empty,
-                                                                    item.ciudadDepartamentoRowId != null ? item.ciudadDepartamentoRowId : 0,
-
-                                                                    //Atributos departamento
-                                                                    item.DepartamentoRowId != null ? item.DepartamentoRowId.ToString() : String.Empty,
-                                                                    item.DepartamentoCodigo != null ? item.DepartamentoCodigo : String.Empty,
-                                                                    item.DepartamentoNombre != null ? item.DepartamentoNombre : String.Empty
-                                                                    );
-
-                    //Agregamnos la ciudad a la lista
-                    listCiudad.Add(objCiudad);
-                }
-
-
-                _dbContex.Dispose();
-                return listCiudad;
-            }
-        }
-        #endregion
-
-        #region Eliminar Ciudad Por codigo.
-        public async Task<MdloDtos.Ciudad> EliminarCiudad(string Codigo)
-        {
-            using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
-            {
-                try
-                {
-                    int id = Convert.ToInt32(Codigo);
-                    var CiudadExiste = await _dbContex.Ciudads.FindAsync(id);
-                    if (CiudadExiste == null)
-                    {
-                        throw new DllNotFoundException();
-                    }
-                    else
-                    {
-                        _dbContex.Remove(CiudadExiste);
-                        await _dbContex.SaveChangesAsync();
-                    }
-
-                    _dbContex.Dispose();
-                    return CiudadExiste;
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message);
-
-                }
-                
-            }
-        }
-        #endregion
-
-        #region verificar Ciudad por codigo.
-        public async Task<bool> VerificarCiudad(string Codigo)
-        {
-            bool respuesta = false;
-            using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
-            {
-                try
-                {
-                    var lst = (from p in _dbContex.Ciudads
-                               where p.CiCdgo == Codigo
-                               select p).Count();
-
-                    var ObjCiudad = lst;
-                    if (ObjCiudad == null || ObjCiudad == 0)
-                    {
-
-                        respuesta = false;
-                    }
-                    else
-                    {
-
-                         respuesta = true;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message);
-                }
-                _dbContex.Dispose();
-                return respuesta;
-            }
-
-        }
-        #endregion
-
-        #region verificar Ciudad por RowId.
-        public async Task<bool> VerificarCiudadPorRowId(int RowId)
-        {
-            bool respuesta = false;
-            using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
-            {
-                try
-                {
-                    var lst = (from p in _dbContex.Ciudads
-                               where p.CiRowid == RowId
-                               select p).Count();
-
-                    var ObjCiudad = lst;
-                    if (ObjCiudad == null || ObjCiudad == 0)
-                    {
-
-                        respuesta = false;
-                    }
-                    else
-                    {
-
-                        respuesta = true;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message);
-                }
-                _dbContex.Dispose();
-                return respuesta;
-            }
-
-        }
-
-        #endregion
-        */
-
+       
     }
 }

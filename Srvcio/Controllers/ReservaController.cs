@@ -1,5 +1,8 @@
 ﻿using AccsoDtos.AccesoSistema;
+using Azure;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Numerics;
 using System.Security.Claims;
 using VldcionDtos;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
@@ -22,7 +25,7 @@ namespace Srvcio.Controllers
         VldcionDtos.ValidacionDeposito validacionDeposito= new VldcionDtos.ValidacionDeposito();
         VldcionDtos.ValidacionTercero validacionTercero = new VldcionDtos.ValidacionTercero();
         VldcionDtos.ValidacionVisitaMotonave validacionVisitaMotonave = new VldcionDtos.ValidacionVisitaMotonave();
-
+        VldcionDtos.ValidacionReserva validacionReserva = new VldcionDtos.ValidacionReserva();
 
         public ReservaController(MdloDtos.IModelos.IReserva dbContex)
         {
@@ -177,333 +180,267 @@ namespace Srvcio.Controllers
             return lista;
         }
         #endregion
-        /*
-        #region Consultar ciudad
-        [HttpGet("listar-ciudad")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Ciudad>>> ListarCiudad()
+
+        #region consultar todas las solicitudes de retiro que pertenecen a un deposito particula y una transportadora particular.
+        [HttpGet("listar-detalle-solicitud-retiro-reserva")]
+        public async Task<ActionResult<IEnumerable<MdloDtos.SpMdloRsrvaDtlleSlctudRtro>>> ListarDetalleSolicitudRetiro(int IdSolicitudRetiro, int idTransportadora)
         {
-           
-            var ObCiudad = new List<MdloDtos.Ciudad>();
+            var lista = new List<MdloDtos.SpMdloRsrvaDtlleSlctudRtro>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
-            int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
+            int validacion = 0;
             try
             {
-                ObCiudad = await this._dbContex.ListarCiudad();
-                if (ObCiudad != null)
-                {
-                    validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
-                    respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
-                    respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                    respuesta.datos = ObCiudad;
-                }
-            }
-            catch (Exception ex)
-            {
-                respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
-                respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                respuesta.datos = ObCiudad;
-                return BadRequest(respuesta);
-            }
+                validacion = await validacionReserva.ValidarExistenciaSolicitudRetiro(IdSolicitudRetiro);
 
-            return ObCiudad;
-        }
-        #endregion
-
-        #region Filtrar ciudad por codigo
-        [HttpGet("filtrar-ciudad-general")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Ciudad>>> FiltrarCiudadGeneral(string FiltroBusqueda)
-        {
-            var ObCiudad = new List<MdloDtos.Ciudad>();
-            int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
-            int validacion = 0; // para sacar el mensaje de la operacion del crud.
-            try
-            {
-                string? Codigo = FiltroBusqueda;
-                validacion = await validacionCiudad.ValidarFiltroBusquedas(Codigo);
-                if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa) //si fue exito)
-                {
-                    ObCiudad = await this._dbContex.FiltrarCiudadGeneral(FiltroBusqueda);
-                    if (ObCiudad != null)
-                    {
-                        //exito.
-                        respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
-                        respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                        respuesta.datos = ObCiudad;
-                    }
-                    else
-                    {
-                        //Error en la transaccion.
-                        validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
-                        respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
-                        respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                        respuesta.datos = ObCiudad;
-                    }
-                }
-                else
-                {
-                    //regresa el error, dentro del servicio de validacion
-                    respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
-                    respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                    respuesta.datos = ObCiudad;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
-                respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                respuesta.datos = ObCiudad;
-                return BadRequest(respuesta);
-            }
-            return ObCiudad;
-        }
-        #endregion
-
-        #region Filtrar ciudad por departamento
-        [HttpGet("filtrar-ciudad-especifico")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Ciudad>>> FiltrarCiudadEspecifico(string CodigoBusqueda)
-        {
-            var ObCiudad = new List<MdloDtos.Ciudad>();
-            int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
-            int validacion = 0; // para sacar el mensaje de la operacion del crud.
-            try
-            {
-                string? Codigo = CodigoBusqueda;
-                validacion = await validacionCiudad.ValidarFiltroBusquedas(Codigo);
-                if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa) //si fue exito)
-                {
-                    ObCiudad = await this._dbContex.FiltrarCiudadEspecifico(CodigoBusqueda);
-                    if (ObCiudad != null)
-                    {
-                        //exito.
-                        respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
-                        respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                        respuesta.datos = ObCiudad;
-                    }
-                    else
-                    {
-                        //Error en la transaccion.
-                        validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
-                        respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
-                        respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                        respuesta.datos = ObCiudad;
-                    }
-                }
-                else
-                {
-                    //regresa el error
-                    respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
-                    respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                    respuesta.datos = ObCiudad;
-                }
-            }
-            catch (Exception ex)
-            {
-                respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
-                respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                respuesta.datos = ObCiudad;
-                return BadRequest(respuesta);
-            }
-            return ObCiudad;
-
-        }
-        #endregion
-
-        #region Filtrar ciudad por Id departamento
-        [HttpGet("filtrar-ciudad-departamento")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Ciudad>>> FiltrarCiudadPorDepartamento(int IdDepartamento)
-        {
-            var ObCiudad = new List<MdloDtos.Ciudad>();
-            int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
-            int validacion = 0; // para sacar el mensaje de la operacion del crud.
-            try
-            {
-                int Codigo = IdDepartamento;
-                validacion = await validacionCiudad.ValidarFiltroBusquedasPorIdDepartamento(Codigo);
-                if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa) //si fue exito)
-                {
-                    ObCiudad = await this._dbContex.FiltrarCiudadPorDepartamento(IdDepartamento);
-                    if (ObCiudad != null)
-                    {
-                        //exito.
-                        respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
-                        respuesta.mensaje =  MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                        respuesta.datos = ObCiudad;
-                    }
-                    else
-                    {
-                        //Error en la transaccion.
-                        validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
-                        respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
-                        respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                        respuesta.datos = ObCiudad;
-                    }
-                }
-                else
-                {
-                    //regresa el error
-                    respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
-                    respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                    respuesta.datos = ObCiudad;
-                }
-            }
-            catch (Exception ex)
-            {
-                respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
-                respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                respuesta.datos = ObCiudad;
-                return BadRequest(respuesta);
-            }
-            return ObCiudad;
-        }
-        #endregion
-
-        #region Ingresar ciudad
-        [HttpPost("ingresar-ciudad")]
-        public async Task<ActionResult<dynamic>> IngresarCiudad([FromBody] MdloDtos.Ciudad objCiudad)
-        {
-            int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
-            int validacion = 0; // para sacar el mensaje de la operacion del crud.
-            try
-            {
-                validacion = await validacionCiudad.ValidarIngreso(objCiudad);
-                if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa) //si fue exito)
-                {
-                    var ObCiudad = await this._dbContex.IngresarCiudad(objCiudad);
-                    if (ObCiudad != null)
-                    {
-                        respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
-                        respuesta.mensaje =MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                        respuesta.datos = ObCiudad;
-                    }
-                    else
-                    {
-                        //Error en la transaccion.
-                        validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
-                        respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
-                        respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                        respuesta.datos = objCiudad;
-                    }
-                }
-                else
-                {
-                    //regresa el error
-                    respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
-                    respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                    respuesta.datos = objCiudad;
-                }
-            }
-            catch (Exception ex)
-            {
-                respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
-                respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                respuesta.datos = objCiudad;
-                return BadRequest(respuesta);
-            }
-            return respuesta;
-        }
-        #endregion
-
-        #region Actualizar ciudad
-        [HttpPut("actualizar-ciudad")]
-        public async Task<ActionResult<dynamic>> EditarCiudad([FromBody] MdloDtos.Ciudad objCiudad)
-        {
-            int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Actualizacion);
-            int validacion = 0; // para sacar el mensaje de la operacion del crud.
-            try
-            {
-                validacion = await validacionCiudad.ValidarActualizacion(objCiudad);
-                if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa) //si fue exito)
-                {
-                    var ObCiudad = await this._dbContex.EditarCiudad(objCiudad);
-                    if (ObCiudad != null)
-                    {
-                        respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
-                        respuesta.mensaje =MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                        respuesta.datos = ObCiudad;
-                    }
-                    else
-                    {
-                        //Error en la transaccion.
-                        validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
-                        respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
-                        respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                        respuesta.datos = objCiudad;
-                    }
-                }
-                else
-                {
-                    //regresa el error
-                    respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
-                    respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                    respuesta.datos = objCiudad;
-                }
-            }
-            catch (Exception ex)
-            {
-                respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
-                respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                respuesta.datos = objCiudad;
-                return BadRequest(respuesta);
-            }
-            return respuesta;
-        }
-        #endregion
-
-        #region Eliminar ciudad
-        [HttpDelete("eliminar-ciudad")]
-        public async Task<ActionResult<dynamic>> EliminarCiudad([FromBody] MdloDtos.Ciudad objCiudad)
-        {
-            int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Eliminacion);
-            int validacion = 0; // para sacar el mensaje de la operacion del crud.
-            try
-            {
-                validacion = await validacionCiudad.ValidarEliminar(objCiudad);
-                if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa) //si fue exito)
-                {
-                    var ObCiudad = await _dbContex.EliminarCiudad(objCiudad.CiRowid.ToString());
-                    if (ObCiudad != null)
-                    {
-                        respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
-                        respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                        respuesta.datos = ObCiudad;
-                    }
-                    else
-                    {
-                        //Error en la transaccion.
-                        validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
-                        respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
-                        respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                        respuesta.datos = objCiudad;
-                    }
-                }
-                else
-                {
-                    //regresa el error
-                    respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
-                    respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                    respuesta.datos = objCiudad;
-                }
-            }
-            catch (Exception ex)
-            {
                 if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa)
                 {
-                    respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
-                    respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeOperacion((int)MdloDtos.Utilidades.Constantes.TipoMensaje.HayRelacionesForaneas);
-                    respuesta.datos = objCiudad;
+                    validacion = 0;
+                    validacion = await validacionTercero.ValidarExistenciaTercero(idTransportadora);
+                    if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa)
+                    {
+                        lista = await this._dbContex.ListarDetalleSolicitudRetiro(IdSolicitudRetiro, idTransportadora);
+                        if (lista != null)
+                        {
+                            respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
+                            respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                            respuesta.datos = lista;
+                        }
+                        else
+                        {
+                            validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
+                            respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
+                            respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                            respuesta.datos = lista;
+                        }
+                    }
+                    else
+                    {
+                        respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
+                        respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                        respuesta.datos = lista;
+                    }
                 }
                 else
                 {
                     respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
-                    respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeOperacion((int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta);
-                    respuesta.datos = objCiudad;
-                    return BadRequest(respuesta);
-                } 
+                    respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                    respuesta.datos = lista;
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
+                respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                respuesta.datos = lista;
+                return BadRequest(respuesta);
+            }
+            return lista;
+        }
+        #endregion
+
+        #region consultar todas las solicitudes de retiro que pertenecen a un deposito particula y una transportadora particular.
+        [HttpGet("listar-detalle-orden-reserva")]
+        public async Task<ActionResult<IEnumerable<MdloDtos.SpMdloRsrvaDtlleOrden>>> ListarDetalleOrden(int CodigoOrden)
+        {
+            var lista = new List<MdloDtos.SpMdloRsrvaDtlleOrden>();
+            int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
+            int validacion = 0;
+            try
+            {
+                validacion = await validacionReserva.ValidarExistenciaOrden(CodigoOrden);
+
+                if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa)
+                {
+                    lista = await this._dbContex.ListarDetalleOrden(CodigoOrden);
+                    if (lista != null)
+                    {
+                        respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
+                        respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                        respuesta.datos = lista;
+                    }
+                    else
+                    {
+                        validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
+                        respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
+                        respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                        respuesta.datos = lista;
+                    }
+                }
+                else
+                {
+                    respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
+                    respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                    respuesta.datos = lista;
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
+                respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                respuesta.datos = lista;
+                return BadRequest(respuesta);
+            }
+            return lista;
+        }
+        #endregion
+        #region Ingresa una reserva
+        [HttpPost("ingresar-reserva")]
+        public async Task<ActionResult<dynamic>> RegistrarOrden([FromBody] MdloDtos.Orden _Orden)
+        {
+            int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
+            int validacion = 0;
+            try
+            {
+                String respuestaValidacionManifiesto = await validacionReserva.ValidarManifiesto(_Orden);
+                if (respuestaValidacionManifiesto.Equals("OK"))
+                {
+                    validacion = await validacionTercero.ValidarExistenciaTercero(_Orden.OrRowidTrnsprtdra);
+
+                    if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa)
+                    {
+                        DateTime hoy = DateTime.Now;
+                        _Orden.OrFchaRsrva = hoy;
+                        _Orden.OrFchaRgstroRsrva = hoy;
+                        _Orden.OrObsrvcnes = null;
+                        string response = await this._dbContex.RegistrarOrden(_Orden);
+                        if (response.Equals("OK"))
+                        {
+                            int codigoOrden = await _dbContex.ConsultarOrdenEspecifica(_Orden.OrRowidTrnsprtdra, (DateTime)_Orden.OrFchaRsrva, (DateTime)_Orden.OrFchaRgstroRsrva, _Orden.OrPlca, _Orden.OrMnfsto);
+                            if (codigoOrden != -1)
+                            {
+                                List<MdloDtos.SpMdloRsrvaDtlleOrden> detalleOrden = await _dbContex.ListarDetalleOrden(codigoOrden);
+                                respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
+                                respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                                respuesta.datos = detalleOrden;
+                            }
+                            else
+                            {
+                                respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
+                                respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                                respuesta.datos = null;
+                            }
+                        }
+                        else
+                        {
+                            validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
+                            respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
+                            respuesta.mensaje = response;// MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                            respuesta.datos = null;
+                        }
+                    }
+                    else
+                    {
+                        respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
+                        respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                        respuesta.datos = null;
+                    }
+                }
+                else 
+                {
+                    validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
+                    respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
+                    respuesta.mensaje = respuestaValidacionManifiesto;
+                    respuesta.datos = null;
+                }  
+            }
+            catch (Exception ex)
+            {
+                respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
+                respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                respuesta.datos = null;
+                return BadRequest(respuesta);
             }
             return respuesta;
         }
+        #endregion
 
-        #endregion*/
+        #region Ingresar una observación a una orden en particular
+        [HttpPost("ingresar-observacion-orden")]
+        public async Task<ActionResult<dynamic>> IngresarObservacion([FromBody] MdloDtos.Mensaje ObjMensaje)
+        {
+            int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
+            int validacion = 0;
+            try
+            {
+                validacion = await validacionReserva.ValidarIngresoObservacion(ObjMensaje.Codigo, ObjMensaje.codigoUsuario, ObjMensaje.comentario);
+                if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa) //si fue exito)
+                {
+                    var ObListaObservacion = await this._dbContex.IngresarObservacion((int)ObjMensaje.Codigo, ObjMensaje.codigoUsuario, ObjMensaje.comentario);
+                    if (ObListaObservacion != null)
+                    {
+                        respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
+                        respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                        respuesta.datos = ObListaObservacion;
+                    }
+                    else
+                    {
+                        validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
+                        respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
+                        respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                        respuesta.datos = null;
+                    }
+                }
+                else
+                {
+                    respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
+                    respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                    respuesta.datos = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
+                respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                respuesta.datos = null;
+                return BadRequest(respuesta);
+            }
+            return respuesta;
+        }
+        #endregion
+
+        #region Consultar las observaciones ingresadas a una orden en particular
+        [HttpGet("consultar-observaciones-orden")]
+        public async Task<ActionResult<dynamic>> ConsultarObservaciones(int CodigoOrden)
+        {
+            int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
+            int validacion = 0;
+            try
+            {
+
+                validacion = await validacionReserva.ValidarExistenciaOrden(CodigoOrden);
+                if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa)
+                {
+                    var ListaObservaciones = await this._dbContex.ConsultarObservaciones(CodigoOrden);
+                    if (ListaObservaciones != null)
+                    {
+                        respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
+                        respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                        respuesta.datos = ListaObservaciones;
+                    }
+                    else
+                    {
+                        validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
+                        respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
+                        respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                        respuesta.datos = null;
+                    }
+                }
+                else
+                {
+                    respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
+                    respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                    respuesta.datos = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
+                respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                respuesta.datos = null;
+                return BadRequest(respuesta);
+            }
+            return respuesta;
+        }
+        #endregion
     }
 }

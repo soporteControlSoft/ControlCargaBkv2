@@ -265,6 +265,7 @@ namespace VldcionDtos
                 if (codigo > 0)
                 {
                     bool DepositoExiste = await _ObjDeposito.VerificarDeposito(codigo);
+                  
                     if (!DepositoExiste)
                     {
                         resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.RelacionNoExiste;

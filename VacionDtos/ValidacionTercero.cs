@@ -229,5 +229,21 @@ namespace VldcionDtos
             }
         }
         #endregion
+
+        #region verifica que un tercero exista
+        public async Task<MdloDtos.Tercero> ConsultarTerceroPorId(int IdTercero)
+        {
+            try
+            {
+                List<MdloDtos.Tercero> lista= await ObjTercero.FiltrarTerceroEspecificoPorId(IdTercero);
+                return (lista != null && lista.Count() > 0) ? 
+                      lista.First() : null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        #endregion
     }
 }

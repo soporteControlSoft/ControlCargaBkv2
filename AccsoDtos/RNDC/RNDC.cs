@@ -1,23 +1,22 @@
-﻿using System;
+﻿using MdloDtos.RNDC;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccsoDtos.ImplementacionRNDC
+namespace AccsoDtos.RNDC
 {
     public class RNDC : MdloDtos.IModelos.IRNDC
     {
-        public async Task<String> validarManifiesto(string idManifiesto, string nitEmpresaTransporte) {
+        public async Task<MdloDtos.RNDC.ConsultaManifiestoRespuesta> validarManifiesto(string idManifiesto, string nitEmpresaTransporte) {
 
             // Credenciales de acceso
             string usuario = "WEB_SERVICEINSIDE@6155";
             string clave = "Web_Services23";
-            string errorCode = "";
-            string errorText = "";
 
             // Respuesta del manifiesto
-            ConsultaManifiestoRespuesta manifiesto_Respuesta = new ConsultaManifiestoRespuesta();
+            MdloDtos.RNDC.ConsultaManifiestoRespuesta manifiesto_Respuesta = new MdloDtos.RNDC.ConsultaManifiestoRespuesta();
 
             // Configuración de acceso
             Acceso acceso = new Acceso()
@@ -52,9 +51,8 @@ namespace AccsoDtos.ImplementacionRNDC
             rNDC.URL = "https://rndcws2.mintransporte.gov.co/rest/";
 
             // Ejecución de la consulta
-            return rNDC.ConsultarManifiesto(cmanifiesto, ref manifiesto_Respuesta, ref errorCode, ref errorText) 
-                    ? manifiesto_Respuesta.estado.ToString() 
-                    : $"Consulta Error: {errorCode} : {errorText}";
+            ConsultaManifiestoRespuesta consultaManifiestoRespuesta = rNDC.ConsultarManifiesto(cmanifiesto, manifiesto_Respuesta);
+            return consultaManifiestoRespuesta;
         }
     }
 }

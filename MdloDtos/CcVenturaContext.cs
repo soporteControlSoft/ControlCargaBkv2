@@ -4008,6 +4008,10 @@ public partial class CcVenturaContext : DbContext
 
     public DbSet<MdloDtos.SpInvntrioBdgaDpsto> SpInvntrioBdgaDpsto { get; set; }
 
+    public DbSet<MdloDtos.SpMdloRsrvaDtlleSlctudRtro> SpMdloRsrvaDtlleSlctudRtro { get; set; }
+
+    public DbSet<MdloDtos.SpMdloRsrvaDtlleOrden> SpMdloRsrvaDtlleOrden { get; set; }
+
     public async Task<List<MdloDtos.SpListaDocumentosAprobacionCargue>> ListarDocumentosAprobarPorVisitaMotonave(int rowIdVisitaMotonave)
     {
         try
@@ -4403,6 +4407,135 @@ public partial class CcVenturaContext : DbContext
         return await this.SpInvntrioBdgaDpsto
                 .FromSqlRaw("EXEC sp_MdloDpstoAdmnstrcion_LstarInvntrioBdgas @rowDpsto", param1)
                 .ToListAsync();
+    }
+
+    public async Task<List<MdloDtos.SpMdloRsrvaDtlleSlctudRtro>> ListarDetalleSolicitudRetiro(int IdSolicitudRetiro, int idTransportadora)
+    {
+        try
+        {
+            var param1 = new SqlParameter("@rowIdSlctudRtro", IdSolicitudRetiro);
+            var param2 = new SqlParameter("@rowIdTrnsprtdra", idTransportadora);
+            
+            return await this.SpMdloRsrvaDtlleSlctudRtro
+                    .FromSqlRaw("EXEC sp_MdloRsrva_DtlleSlctudRtro @rowIdSlctudRtro, @rowIdTrnsprtdra", param1, param2)
+                    .ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.StackTrace.ToString());
+            return null;
+        }
+    }
+    public async Task<List<MdloDtos.SpMdloRsrvaDtlleOrden>> ListarDetalleOrden(int cdgoOrden)
+    {
+        try
+        {
+            var param1 = new SqlParameter("@cdgoOrden", cdgoOrden);
+
+            return await this.SpMdloRsrvaDtlleOrden
+                    .FromSqlRaw("EXEC sp_MdloRsrva_DtlleOrden @cdgoOrden", param1)
+                    .ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.StackTrace.ToString());
+            return null;
+        }
+    }
+
+    public async Task<string> RegistrarOrden(MdloDtos.Orden orden)
+    {
+        try
+        {
+            // Configuración de parámetros de entrada
+            var param1 = new SqlParameter("@or_rowid_trnsprtdra", orden.OrRowidTrnsprtdra);
+            var param2 = new SqlParameter("@or_actva", orden.OrActva);
+            var param3 = new SqlParameter("@or_fcha_rsrva", orden.OrFchaRsrva);
+            var param4 = new SqlParameter("@or_fcha_rgstro_rsrva", orden.OrFchaRgstroRsrva);
+            var param5 = new SqlParameter("@or_cdgo_usrio_rsrva", orden.OrCdgoUsrioRsrva);
+            var param6 = new SqlParameter("@or_plca", orden.OrPlca);
+            var param7 = new SqlParameter("@or_rmlque", orden.OrRmlque);
+            var param8 = new SqlParameter("@or_mnfsto", orden.OrMnfsto);
+            var param9 = new SqlParameter("@or_rmsion", orden.OrMnfsto);
+            var param10 = new SqlParameter("@or_idntfccion_cndctor", orden.OrIdntfccionCndctor);
+
+            var param11 = new SqlParameter("@or_llmda", orden.OrLlmda);
+            var param12 = new SqlParameter("@or_rdcda", orden.OrRdcda);
+            var param13 = new SqlParameter("@or_fcha_rdccion", orden.OrFchaRdccion);
+            var param14 = new SqlParameter("@or_rowid_dpsto", orden.OrRowidDpsto);
+            var param15 = new SqlParameter("@or_rowid_slctud_rtro", orden.OrRowidSlctudRtro);
+            var param16 = new SqlParameter("@or_rowid_cnfgrcion_vhclar", orden.OrRowidCnfgrcionVhclar);
+            var param17 = new SqlParameter("@or_rowid_cdad", orden.OrRowidCdad);
+            var param18 = new SqlParameter("@or_rowid_zna_cd", orden.OrRowidZnaCd);
+            var param19 = new SqlParameter("@or_rdccion_hlla_vldda", orden.OrRdccionHllaVldda);
+            var param20 = new SqlParameter("@or_cdgo_usrio_rdccion", orden.OrCdgoUsrioRdccion);
+
+            var param21 = new SqlParameter("@or_llmdas", orden.OrLlmdas);
+            var param22= new SqlParameter("@or_fcha_anlcion", orden.OrFchaAnlcion);
+            var param23 = new SqlParameter("@or_id_scdad", orden.OrIdScdad);
+            var param24 = new SqlParameter("@or_vgncia_trno", orden.OrVgnciaTrno);
+            var param25 = new SqlParameter("@or_trno_vlddo", orden.OrTrnoVlddo);
+            var param26 = new SqlParameter("@or_pso_a_crgar", orden.OrPsoACrgar);
+            var param27 = new SqlParameter("@or_cncpto", orden.OrCncpto);
+            var param28 = new SqlParameter("@or_crrge_trno", orden.OrCrrgeTrno);
+            var param29 = new SqlParameter("@or_crrge_trno_fcha", orden.OrCrrgeTrnoFcha);
+            var param30 = new SqlParameter("@or_vldar_vgncia_rdccion", orden.OrVldarVgnciaRdccion);
+
+            var param31 = new SqlParameter("@or_fcha_entrda_scdad", orden.OrFchaEntrdaScdad);
+            var param32 = new SqlParameter("@or_usrio_entrda_scdad", orden.OrUsrioEntrdaScdad);
+            var param33 = new SqlParameter("@or_fcha_prmer_llmdo", orden.OrFchaPrmerLlmdo);
+            var param34 = new SqlParameter("@or_fcha_ultmo_llmdo", orden.OrFchaUltmoLlmdo);
+            var param35 = new SqlParameter("@or_tpo", orden.OrTpo);
+            var param36 = new SqlParameter("@or_trcro", orden.OrTrcro);
+            var param37 = new SqlParameter("@or_trno_nmro", orden.OrTrnoNmro);
+            var param38 = new SqlParameter("@or_obsrvcnes", orden.OrObsrvcnes);
+            var param39 = new SqlParameter("@or_artclo", orden.OrArtclo);
+            var param40 = new SqlParameter("@or_fcha_slda_scdad", orden.OrFchaSldaScdad);
+
+            var param41 = new SqlParameter("@or_usrio_slda_scdad", orden.OrUsrioSldaScdad);
+            var param42 = new SqlParameter("@or_ubccion_rdccion", orden.OrUbccionRdccion);
+            var param43 = new SqlParameter("@or_tpo_crrcria", orden.OrTpoCrrcria);
+            var param44 = new SqlParameter("@or_intrfaz_insde", orden.OrIntrfazInsde);
+            var param45 = new SqlParameter("@or_intrfaz_insde_cnclda", orden.OrIntrfazInsdeCnclda);
+            var param46 = new SqlParameter("@or_cdgo_csal_cnclcion", orden.OrCdgoCsalCnclcion);
+            var param47 = new SqlParameter("@or_obsrvcnes_cnclcion", orden.OrObsrvcnesCnclcion);
+            var param48 = new SqlParameter("@or_intrfaz_insde_con_error", orden.OrIntrfazInsdeConError);
+            var param49 = new SqlParameter("@or_intrfaz_insde_cnclda_con_error", orden.OrIntrfazInsdeCncldaConError);
+            var param50 = new SqlParameter("@or_ingrsoid_insde", orden.OrIngrsoidInsde);
+
+            var param51 = new SqlParameter("@or_ingrsoid2_insde", orden.OrIngrsoid2Insde);
+
+            // Configuración de parámetro de salida
+            var paramResultado = new SqlParameter("@rtrno", SqlDbType.VarChar)
+            {
+                Size = 255, // Especifica el tamaño máximo del valor esperado
+                Direction = ParameterDirection.Output
+            };
+
+            // Ejecutar el procedimiento almacenado
+            await this.SpReturnAprbrRchzarDpsto.FromSqlRaw(
+                "EXEC sp_MdloRsrva_RgstrarRsrva @or_rowid_trnsprtdra,@or_actva,@or_fcha_rsrva,@or_fcha_rgstro_rsrva,@or_cdgo_usrio_rsrva ,@or_plca ,@or_rmlque,@or_mnfsto , @or_rmsion ," +
+                "@or_idntfccion_cndctor, @or_llmda, @or_rdcda, @or_fcha_rdccion, @or_rowid_dpsto, @or_rowid_slctud_rtro, @or_rowid_cnfgrcion_vhclar, @or_rowid_cdad," +
+                "@or_rowid_zna_cd, @or_rdccion_hlla_vldda, @or_cdgo_usrio_rdccion, @or_llmdas, @or_fcha_anlcion, @or_id_scdad, @or_vgncia_trno, @or_trno_vlddo, @or_pso_a_crgar, @or_cncpto," +
+                "@or_crrge_trno, @or_crrge_trno_fcha, @or_vldar_vgncia_rdccion, @or_fcha_entrda_scdad, @or_usrio_entrda_scdad, @or_fcha_prmer_llmdo, @or_fcha_ultmo_llmdo, @or_tpo, " +
+                "@or_trcro, @or_trno_nmro, @or_obsrvcnes, @or_artclo, @or_fcha_slda_scdad, @or_usrio_slda_scdad, @or_ubccion_rdccion, @or_tpo_crrcria, @or_intrfaz_insde, @or_intrfaz_insde_cnclda," +
+                "@or_cdgo_csal_cnclcion, @or_obsrvcnes_cnclcion, @or_intrfaz_insde_con_error, @or_intrfaz_insde_cnclda_con_error, @or_ingrsoid_insde, @or_ingrsoid2_insde,@rtrno OUTPUT",
+                param1, param2, param3, param4, param5, param6, param7, param8, param9, param10,
+                param11, param12, param13, param14, param15, param16, param17, param18, param19, param20,
+                param21, param22, param23, param24, param25, param26, param27, param28, param29, param30,
+                param31, param32, param33, param34, param35, param36, param37, param38, param39, param40,
+                param41, param42, param43, param44, param45, param46, param47, param48, param49, param50,
+                 param51, paramResultado).ToListAsync();
+
+                // Obtener el valor del parámetro de salida
+                return (String)paramResultado.Value;
+                     
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.StackTrace.ToString());
+            return "Error al registrar";
+        }
     }
 }
 

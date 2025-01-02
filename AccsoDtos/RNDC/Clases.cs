@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccsoDtos.ImplementacionRNDC
+namespace AccsoDtos.RNDC
 {
     // Constantes relacionadas con las operaciones del RNDC
     public class TipoOperacionRNDC
@@ -28,18 +28,6 @@ namespace AccsoDtos.ImplementacionRNDC
         public Acceso acceso { get; set; } = new Acceso();
         public Solicitud solicitud { get; set; } = new Solicitud();
         public Documento documento { get; set; } = new Documento();
-    }
-
-    // Respuesta de la consulta de manifiestos
-    public class ConsultaManifiestoRespuesta
-    {
-        public string placa { get; set; } = "";
-        public string id_Conductor { get; set; } = "";
-        public string id_Conductor2 { get; set; } = "";
-        public string estado { get; set; } = "";
-        // AC : Activo, Manifiesto de carga corresponde a un viaje en proceso
-        // CE : Cerrado, Manifiesto de carga corresponde a un viaje terminado, ya se entregó la mercancía.
-        // AN : Anulado, Manifiesto de carga no es válido porque se anuló.
     }
 
     // Datos de acceso

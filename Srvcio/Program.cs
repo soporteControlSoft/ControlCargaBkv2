@@ -144,6 +144,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //Daniel Lopez 30/12/2024
+builder.Services.AddScoped<MdloDtos.IModelos.IRNDC, AccsoDtos.RNDC.RNDC>();
 builder.Services.AddScoped<MdloDtos.IModelos.IConsecutivo, AccsoDtos.ControlPesajes.Consecutivo>();
 
 
