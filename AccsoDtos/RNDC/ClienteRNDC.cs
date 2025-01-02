@@ -5,8 +5,9 @@ using System.Text;
 using System.Text.Json.Nodes;
 using System.Text.Json;
 using System.Threading.Tasks;
+using MdloDtos.RNDC;
 
-namespace AccsoDtos.ImplementacionRNDC
+namespace AccsoDtos.RNDC
 {
     public class ClienteRNDC
     {
@@ -17,18 +18,15 @@ namespace AccsoDtos.ImplementacionRNDC
         /// </summary>
         /// <param name="consulta">Los datos de la consulta a enviar.</param>
         /// <param name="respuesta_Manifiesto">Referencia para almacenar la respuesta del manifiesto.</param>
-        /// <param name="errorCode">Código de error en caso de fallo.</param>
-        /// <param name="errorText">Texto descriptivo del error en caso de fallo.</param>
-        /// <returns>True si la consulta es exitosa, de lo contrario False.</returns>
-        public bool ConsultarManifiesto(
+        /// <returns>ConsultaManifiestoRespuesta</returns>
+        public MdloDtos.RNDC.ConsultaManifiestoRespuesta ConsultarManifiesto(
             ConsultaManifiesto consulta,
-            ref ConsultaManifiestoRespuesta respuesta_Manifiesto,
-            ref string errorCode,
-            ref string errorText)
+            ConsultaManifiestoRespuesta respuesta_Manifiesto
+            )
         {
             // Serializar el objeto de consulta a JSON
             string cadenaJson = JsonSerializer.Serialize(consulta);
-            Console.WriteLine(cadenaJson);
+            
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(URL);
@@ -45,7 +43,7 @@ namespace AccsoDtos.ImplementacionRNDC
                 // Procesar la respuesta de la solicitud
                 if (result.IsSuccessStatusCode)
                 {
-                    var readTask = result.Content.ReadAsStringAsync(); 
+                    var readTask = result.Content.ReadAsStringAsync();
                     readTask.Wait();
 
                     JsonDocument doc = JsonDocument.Parse(readTask.Result);
@@ -57,23 +55,26 @@ namespace AccsoDtos.ImplementacionRNDC
 
                     if (datos.Count == 0)
                     {
-                        errorCode = "-1";
-                        errorText = "No Encontrado";
-                        return false;
+                        respuesta_Manifiesto.errorCode = "-1";
+                        respuesta_Manifiesto.errorText = "No Encontrado";
+                        respuesta_Manifiesto.transaccionExitosa = false;
                     }
-
-                    // Mapear los datos al objeto respuesta
-                    respuesta_Manifiesto.placa = (string)datos[0]["NUMPLACA"];
-                    respuesta_Manifiesto.id_Conductor = (string)datos[0]["NUMIDCONDUCTOR"];
-                    respuesta_Manifiesto.id_Conductor2 = (string)datos[0]["NUMIDCONDUCTOR2"];
-                    respuesta_Manifiesto.estado = (string)datos[0]["ESTADO"];
-                    return true;
+                    else
+                    {
+                        respuesta_Manifiesto.placa = (string)datos[0]["NUMPLACA"];
+                        respuesta_Manifiesto.id_Conductor = (string)datos[0]["NUMIDCONDUCTOR"];
+                        respuesta_Manifiesto.id_Conductor2 = (string)datos[0]["NUMIDCONDUCTOR2"];
+                        respuesta_Manifiesto.estado = (string)datos[0]["ESTADO"];
+                        respuesta_Manifiesto.transaccionExitosa = true;
+                    }
                 }
-
-                // Manejo de error si la solicitud falla
-                errorCode = "-1";
-                errorText = "Error al procesar la solicitud";
-                return false;
+                else 
+                {
+                    respuesta_Manifiesto.errorCode = "-1";
+                    respuesta_Manifiesto.errorText = "Error al procesar la solicitud";
+                    respuesta_Manifiesto.transaccionExitosa = false;
+                }
+                return respuesta_Manifiesto;
             }
         }
     }

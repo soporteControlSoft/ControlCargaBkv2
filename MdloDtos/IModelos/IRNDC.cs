@@ -8,6 +8,6 @@ namespace MdloDtos.IModelos
 {
     public interface IRNDC
     {
-        public Task<String> validarManifiesto(string idManifiesto, string nitEmpresaTransporte);
+        public Task<MdloDtos.RNDC.ConsultaManifiestoRespuesta> validarManifiesto(string idManifiesto, string nitEmpresaTransporte);
     }
 }

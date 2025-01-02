@@ -21,5 +21,7 @@ namespace MdloDtos.IModelos
         public Task<MdloDtos.Tercero> EliminarTercero(int Codigo);
 
         public Task<List<MdloDtos.Tercero>> FiltrarTerceroPorTipo(int Codigo);
+
+        public Task<List<MdloDtos.Tercero>> FiltrarTerceroEspecificoPorId(int IdTercero);
     }
 }

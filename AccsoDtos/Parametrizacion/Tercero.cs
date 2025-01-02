@@ -577,20 +577,15 @@ namespace AccsoDtos.Parametrizacion
                     var lst = (from p in _dbContex.Terceros
                                where p.TeCdgo == Codigo
                                select p).Count();
-
                     var ObjTercero = lst;
                     if (ObjTercero == null || ObjTercero == 0)
                     {
-
                         respuesta = false;
                     }
                     else
                     {
-
                         respuesta = true;
                     }
-
-                    
                 }
                 catch (Exception ex)
                 {
@@ -599,7 +594,6 @@ namespace AccsoDtos.Parametrizacion
                 _dbContex.Dispose();
                 return respuesta;
             }
-
         }
 
 
@@ -616,20 +610,15 @@ namespace AccsoDtos.Parametrizacion
                     var lst = (from p in _dbContex.Terceros
                                where p.TeRowid == Id
                                select p).Count();
-
                     var ObjTercero = lst;
                     if (ObjTercero == null || ObjTercero == 0)
                     {
-
                         respuesta = false;
                     }
                     else
                     {
-
                         respuesta = true;
                     }
-
-
                 }
                 catch (Exception ex)
                 {
@@ -638,9 +627,7 @@ namespace AccsoDtos.Parametrizacion
                 _dbContex.Dispose();
                 return respuesta;
             }
-
         }
-
 
         #endregion
 
@@ -655,20 +642,15 @@ namespace AccsoDtos.Parametrizacion
                     var lst = (from p in _dbContex.Terceros
                                where p.TeRowid == Id && p.TeAgnciaAdna == true
                                select p).Count();
-
                     var ObjTercero = lst;
                     if (ObjTercero == null || ObjTercero == 0)
                     {
-
                         respuesta = false;
                     }
                     else
                     {
-
                         respuesta = true;
                     }
-
-
                 }
                 catch (Exception ex)
                 {
@@ -676,6 +658,121 @@ namespace AccsoDtos.Parametrizacion
                 }
                 _dbContex.Dispose();
                 return respuesta;
+            }
+
+        }
+        #endregion
+
+
+        #region verificar Terceros por medio de su Id
+        public async Task<bool> VerificarTerceroPorId(int IdTercero)
+        {
+            bool respuesta = false;
+            using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
+            {
+                try
+                {
+                    var lst = (from p in _dbContex.Terceros
+                               where p.TeRowid == IdTercero
+                               select p).Count();
+
+                    respuesta = (lst == null || lst == 0) ? false : true;  
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+                _dbContex.Dispose();
+                return respuesta;
+            }
+
+        }
+
+
+        #endregion
+
+        #region Consultar todos los datos de Tercero mediante un parametro Codigo especifico
+        public async Task<List<MdloDtos.Tercero>> FiltrarTerceroEspecificoPorId(int IdTercero)
+        {
+            List<MdloDtos.Tercero> listadoTercero = new List<MdloDtos.Tercero>();
+            using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
+            {
+                var lst = await (from tercero in _dbContex.Terceros
+                                 join grupoTercero in _dbContex.GrupoTerceros on tercero.TeCdgoGrpoTrcro equals grupoTercero.GtCdgo into grupoTerceroJoin
+                                 from grupoTercero in grupoTerceroJoin.DefaultIfEmpty()
+
+                                 where tercero.TeRowid == IdTercero
+
+                                 select new
+                                 {
+                                     //Atributos Tercero
+                                     tercero.TeRowid,
+                                     tercero.TeCdgoCia,
+                                     tercero.TeCdgo,
+                                     tercero.TeNmbre,
+                                     tercero.TeIdntfccion,
+                                     tercero.TeTpoIdntfccion,
+                                     tercero.TeDv,
+                                     tercero.TeDrccion,
+                                     tercero.TeTlfno,
+                                     tercero.TeEmail,
+                                     tercero.TeActvo,
+                                     tercero.TeClnte,
+                                     tercero.TePrtclar,
+                                     tercero.TeFncnrio,
+                                     tercero.TeTrnsprtdra,
+                                     tercero.TeAgnteMrtmo,
+                                     tercero.TeVnddor,
+                                     tercero.TeOprdorPrtrio,
+                                     tercero.TeMnjoPrpio,
+                                     tercero.TeNmbreCntcto,
+                                     tercero.TeCdgoGrpoTrcro,
+                                     tercero.TeAgnciaAdna,
+                                     tercero.TeOprdorScndrio,
+
+                                     //Atributos GrupoTercero
+                                     grupoTercero.GtCdgo,
+                                     grupoTercero.GtDscrpcion
+                                 }
+                           ).ToListAsync();
+                _dbContex.Dispose();
+                foreach (var item in lst)
+                {
+                    //Creamos una entidad Tercero para agregar a la lista
+                    MdloDtos.Tercero objTercero = new MdloDtos.Tercero(
+                                                                    //Atributos Tercero
+                                                                    item.TeRowid != null ? item.TeRowid : 0,
+                                                                    item.TeCdgoCia != null ? item.TeCdgoCia : String.Empty,
+                                                                    item.TeCdgo != null ? item.TeCdgo : String.Empty,
+                                                                    item.TeNmbre != null ? item.TeNmbre : String.Empty,
+                                                                    item.TeIdntfccion != null ? item.TeIdntfccion : String.Empty,
+                                                                    item.TeTpoIdntfccion != null ? item.TeTpoIdntfccion : String.Empty,
+                                                                    item.TeDv != null ? item.TeDv : String.Empty,
+                                                                    item.TeDrccion != null ? item.TeDrccion : String.Empty,
+                                                                    item.TeTlfno != null ? item.TeTlfno : String.Empty,
+                                                                    item.TeEmail != null ? item.TeEmail : String.Empty,
+                                                                    item.TeActvo,
+                                                                    item.TeClnte,
+                                                                    item.TePrtclar,
+                                                                    item.TeFncnrio,
+                                                                    item.TeTrnsprtdra,
+                                                                    item.TeAgnteMrtmo,
+                                                                    item.TeVnddor,
+                                                                    item.TeOprdorPrtrio,
+                                                                    item.TeMnjoPrpio,
+                                                                    item.TeNmbreCntcto != null ? item.TeNmbreCntcto : String.Empty,
+                                                                    item.TeCdgoGrpoTrcro != null ? item.TeCdgoGrpoTrcro : String.Empty,
+                                                                    item.TeAgnciaAdna,
+                                                                    item.TeOprdorScndrio,
+                                                                    //Atributos GrupoTercero
+                                                                    item.GtCdgo != null ? item.GtCdgo : String.Empty,
+                                                                    item.GtDscrpcion != null ? item.GtDscrpcion : String.Empty
+                                                               );
+                    //Agregamnos a la lista
+                    listadoTercero.Add(objTercero);
+                }
+                _dbContex.Dispose();
+                return listadoTercero;
             }
 
         }
