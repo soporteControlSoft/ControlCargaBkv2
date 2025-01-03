@@ -25,7 +25,29 @@ namespace AccsoDtos.Mappings
                 .ForMember(dest => dest.Codigo, opt => opt.MapFrom((src, _) => src.CoCdgo))
                 .ForMember(dest => dest.Nombre, opt => opt.MapFrom((src, _) => src.CoNmbre))
                 .ForMember(dest => dest.Contador, opt => opt.MapFrom((src, _) => src.CoCntdor));
-               
+
+            CreateMap<Parametro, ParametroDTO>()
+               .ForMember(dest => dest.Id, opt => opt.MapFrom((src, _) => src.PaId))
+               .ForMember(dest => dest.Empresa, opt => opt.MapFrom((src, _) => src.PaEmprsa))
+               .ForMember(dest => dest.DiasVigenciaClaveInternos, opt => opt.MapFrom((src, _) => src.PaDiasVgnciaClveIntrnos))
+               .ForMember(dest => dest.DiasVigenciaClaveExternos, opt => opt.MapFrom((src, _) => src.PaDiasVgnciaClveExtrnos))
+               .ForMember(dest => dest.ClavesAnteriores, opt => opt.MapFrom((src, _) => src.PaClvesAntrres))
+               .ForMember(dest => dest.DiasExternos, opt => opt.MapFrom((src, _) => src.PaDiasInctvcionExtrnos))
+                .ForMember(dest => dest.ServidorCorreo, opt => opt.MapFrom((src, _) => src.PaCrreoSrvdor))
+               .ForMember(dest => dest.CorreoUsuario, opt => opt.MapFrom((src, _) => src.PaCrreoUsrio))
+                .ForMember(dest => dest.CorreoClave, opt => opt.MapFrom((src, _) => src.PaCrreoClve))
+               .ForMember(dest => dest.CorreoPuerto, opt => opt.MapFrom((src, _) => src.PaCrreoPrto))
+                .ForMember(dest => dest.CorreoConexionSegura, opt => opt.MapFrom((src, _) => src.PaCrreoCnxionSgra))
+               .ForMember(dest => dest.URL, opt => opt.MapFrom((src, _) => src.PaUrlPrtalLgstco))
+                .ForMember(dest => dest.RutaNas, opt => opt.MapFrom((src, _) => src.PaNasRuta))
+               .ForMember(dest => dest.UsuarioNas, opt => opt.MapFrom((src, _) => src.PaNasUsuario))
+                .ForMember(dest => dest.ClaveNas, opt => opt.MapFrom((src, _) => src.PaNasClave))
+               .ForMember(dest => dest.PuertoNas, opt => opt.MapFrom((src, _) => src.PaNasPuerto))
+                .ForMember(dest => dest.SaldoBajoDeposito, opt => opt.MapFrom((src, _) => src.PaSldoBjoDpsto))
+               .ForMember(dest => dest.SaldoBajoSolicitudRetiro, opt => opt.MapFrom((src, _) => src.PaSldoBjoSlctudRtro))
+                .ForMember(dest => dest.PesoMaximoCargar, opt => opt.MapFrom((src, _) => src.PaPsoMxmoACrgar))
+               .ForMember(dest => dest.MinutosVigenciaReserva, opt => opt.MapFrom((src, _) => src.PaMntosVgnviaRsrva)).ReverseMap(); ; 
+            
         }
     }
 }
