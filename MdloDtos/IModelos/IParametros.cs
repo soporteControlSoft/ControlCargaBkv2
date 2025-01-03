@@ -8,6 +8,12 @@ namespace MdloDtos.IModelos
 {
     public interface IParametros
     {
-        public Task<List<MdloDtos.Parametro>> ListarParametro();
+        public Task<List<MdloDtos.DTO.ParametroDTO>> ListarParametro();
+
+        public Task<List<MdloDtos.DTO.ParametroDTO>> ListarParametroTodos();
+
+        public Task<MdloDtos.DTO.ParametroDTO> EditarParametro(MdloDtos.DTO.ParametroDTO ParametroDTO);
+
+        public Task<bool> VerificarParametroExiste(int IdParametro);
     }
 }
