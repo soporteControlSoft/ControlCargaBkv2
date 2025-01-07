@@ -20,7 +20,10 @@ namespace AccsoDtos.ControlPesajes;
 
 public class Consecutivo : MdloDtos.IModelos.IConsecutivo
 {
-
+    /// <summary>
+    /// Acceso a Datos Tabla consecutivos
+    /// Daniel Alejandro Lopez.
+    /// </summary>
     private readonly CcVenturaContext _dbContext;
     private readonly IMapper _mapper;
 

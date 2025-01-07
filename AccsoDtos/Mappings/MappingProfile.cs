@@ -25,6 +25,10 @@ namespace AccsoDtos.Mappings
                 .ForMember(dest => dest.Codigo, opt => opt.MapFrom((src, _) => src.CoCdgo))
                 .ForMember(dest => dest.Nombre, opt => opt.MapFrom((src, _) => src.CoNmbre))
                 .ForMember(dest => dest.Contador, opt => opt.MapFrom((src, _) => src.CoCntdor));
+
+            ///otro modelo
+            ///
+
                
         }
     }
