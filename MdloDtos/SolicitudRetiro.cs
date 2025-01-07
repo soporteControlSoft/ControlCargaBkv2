@@ -23,7 +23,7 @@ public partial class SolicitudRetiro
     public int? SrRowidDpsto { get; set; }
 
 
-    [JsonPropertyName("RowCantidad")]
+    [JsonPropertyName("IdCiudad")]
     public int? SrRowidCdad { get; set; }
 
     [JsonPropertyName("IDplantaDestino")]

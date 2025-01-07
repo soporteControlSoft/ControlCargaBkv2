@@ -369,11 +369,48 @@ namespace AccsoDtos.PortalClientes
         {
             using (CcVenturaContext _dbContex = new CcVenturaContext())
             {
+                List<MdloDtos.SolicitudRetiroTransportadora> listado = new List<MdloDtos.SolicitudRetiroTransportadora>();
                 var lst = await (from p in _dbContex.SolicitudRetiroTransportadoras
-                                 where (p.SrtRowidSlctudRtro == IdSolicitudRetiro)
-                                 select p).ToListAsync();
+                                 join r in _dbContex.Terceros on p.SrtRowidTrnsprtdra equals r.TeRowid
+                                 where (p.SrtRowidSlctudRtro == IdSolicitudRetiro && r.TeTrnsprtdra==true)
+                                 select new
+                                 {
+
+                                     p.SrtRowid,
+                                     p.SrtRowidSlctudRtro,
+                                     p.SrtRowidTrnsprtdra,
+                                     p.SrtAutrzdoKlos,
+                                     p.SrtAutrzdoUnddes,
+                                     p.SrtActva,
+                                     r.TeCdgo,
+                                     r.TeNmbre,
+                                     r.TeIdntfccion,
+                                     p.SrtDspchdoKlos,
+                                     p.SrtDspchdoUnddes,
+
+                                 }).ToListAsync();
+                foreach (var item in lst)
+                {
+                    //Creamos una entidad Sede para agregar a la lista
+                    MdloDtos.SolicitudRetiroTransportadora objSolicitudRetiroTrasmportadora = new MdloDtos.SolicitudRetiroTransportadora(
+                                                                item.SrtRowid != null ? item.SrtRowid : 0,
+                                                                item.SrtRowidSlctudRtro != null ? item.SrtRowidSlctudRtro : 0,
+                                                                item.SrtRowidTrnsprtdra != null ? item.SrtRowidTrnsprtdra : 0,
+                                                                item.SrtAutrzdoKlos != null ? item.SrtAutrzdoKlos : 0,
+                                                                item.SrtAutrzdoUnddes != null ? item.SrtAutrzdoUnddes : 0,
+                                                                item.SrtActva,
+                                                                item.TeCdgo != null ? item.TeCdgo : String.Empty,
+                                                                item.TeNmbre != null ? item.TeNmbre : String.Empty,
+                                                                item.TeIdntfccion != null ? item.TeIdntfccion.ToString() : String.Empty,
+                                                                item.SrtDspchdoKlos != null ? item.SrtDspchdoKlos : 0,
+                                                                item.SrtDspchdoUnddes != null ? item.SrtDspchdoUnddes : 0
+
+                                                               );
+                    //Agregamnos la Sede a la lista
+                    listado.Add(objSolicitudRetiroTrasmportadora);
+                }
                 _dbContex.Dispose();
-                return lst;
+                return listado;
             }
 
         }
@@ -384,11 +421,49 @@ namespace AccsoDtos.PortalClientes
         {
             using (CcVenturaContext _dbContex = new CcVenturaContext())
             {
+                List<MdloDtos.SolicitudRetiroTransportadora> listado = new List<MdloDtos.SolicitudRetiroTransportadora>();
                 var lst = await (from p in _dbContex.SolicitudRetiroTransportadoras
-                                 where (p.SrtRowid == IdSolicitudRetiroTrasnportadora)
-                                 select p).ToListAsync();
+                                 join r in _dbContex.Terceros on p.SrtRowidTrnsprtdra equals r.TeRowid
+                                 where (p.SrtRowid == IdSolicitudRetiroTrasnportadora && r.TeTrnsprtdra == true)
+                                 select new
+                                 {
+
+                                     p.SrtRowid,
+                                     p.SrtRowidSlctudRtro,
+                                     p.SrtRowidTrnsprtdra,
+                                     p.SrtAutrzdoKlos,
+                                     p.SrtAutrzdoUnddes,
+                                     p.SrtActva,
+                                     r.TeCdgo,
+                                     r.TeNmbre,
+                                     r.TeIdntfccion,
+                                     p.SrtDspchdoKlos,
+                                     p.SrtDspchdoUnddes,
+
+                                 }).ToListAsync();
+                foreach (var item in lst)
+                {
+                    //Creamos una entidad Sede para agregar a la lista
+                    MdloDtos.SolicitudRetiroTransportadora objSolicitudRetiroTrasmportadora = new MdloDtos.SolicitudRetiroTransportadora(
+                                                                item.SrtRowid != null ? item.SrtRowid : 0,
+                                                                item.SrtRowidSlctudRtro != null ? item.SrtRowidSlctudRtro : 0,
+                                                                item.SrtRowidTrnsprtdra != null ? item.SrtRowidTrnsprtdra : 0,
+                                                                item.SrtAutrzdoKlos != null ? item.SrtAutrzdoKlos : 0,
+                                                                item.SrtAutrzdoUnddes != null ? item.SrtAutrzdoUnddes : 0,
+                                                                item.SrtActva,
+                                                                item.TeCdgo != null ? item.TeCdgo : String.Empty,
+                                                                item.TeNmbre != null ? item.TeNmbre : String.Empty,
+                                                                item.TeIdntfccion != null ? item.TeIdntfccion.ToString() : String.Empty,
+                                                                item.SrtDspchdoKlos != null ? item.SrtDspchdoKlos : 0,
+                                                                item.SrtDspchdoUnddes != null ? item.SrtDspchdoUnddes : 0
+
+                                                               );
+                    //Agregamnos la Sede a la lista
+                    listado.Add(objSolicitudRetiroTrasmportadora);
+                    
+                }
                 _dbContex.Dispose();
-                return lst;
+                return listado;
             }
 
         }

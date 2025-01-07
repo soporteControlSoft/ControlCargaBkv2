@@ -44,4 +44,32 @@ public partial class SolicitudRetiroTransportadora
     [JsonIgnore]
     [NotMapped]
     public virtual Tercero? SrtRowidTrnsprtdraNavigation { get; set; } = null!;
+
+
+    public string? TeCdgo { get; set; }
+    public string? TeNmbre { get; set; }
+    public string? TeIdntfccion { get; set; }
+
+    public SolicitudRetiroTransportadora() { }
+
+    public SolicitudRetiroTransportadora(int? SrtRowid, int? SrtRowidSlctudRtro,
+        int? SrtRowidTrnsprtdra, int? SrtAutrzdoKlos, int? SrtAutrzdoUnddes, bool? SrtActva, string? TeCdgo, string? TeNmbre, string? TeIdntfccion,
+        int? SrtDspchdoKlos,
+        int? SrtDspchdoUnddes) {
+
+        this.SrtRowid = SrtRowid;
+        this.SrtRowidSlctudRtro = SrtRowidSlctudRtro;
+        this.SrtRowidTrnsprtdra = SrtRowidTrnsprtdra;
+        this.SrtAutrzdoKlos = SrtAutrzdoKlos;
+        this.SrtAutrzdoUnddes = SrtAutrzdoUnddes;
+    
+        this.SrtActva = SrtActva;
+        this.TeCdgo = TeCdgo;
+        this.TeNmbre = TeNmbre;
+        this.TeIdntfccion = TeIdntfccion;
+        this.SrtDspchdoKlos = SrtDspchdoKlos;
+        this.SrtDspchdoUnddes = SrtDspchdoUnddes;
+
+
+    }
 }

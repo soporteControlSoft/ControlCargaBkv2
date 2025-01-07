@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MdloDtos
 {
-    public class Sp_IngresarSolicitudRetiro
+    public class Sp_IngresarSolicitudRetiro_
     {
         [Key]
         public int eh_rowid { get; set; }
