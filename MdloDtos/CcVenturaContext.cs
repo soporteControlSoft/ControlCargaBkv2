@@ -9,7 +9,7 @@ namespace MdloDtos;
 public partial class CcVenturaContext : DbContext
 {
     public CcVenturaContext()
-    {
+    { 
     }
 
     public CcVenturaContext(DbContextOptions<CcVenturaContext> options)
@@ -4349,59 +4349,57 @@ public partial class CcVenturaContext : DbContext
         return await this.Sp_IngresarSubdepositos.FromSqlRaw("EXEC Sp_IngresarSubdepositos @CodigoCompania ,@Cantidad,@Kilos,@IdTercero,@IdSede,@CodigoPadre,@CodigoProducto,@UsuarioCreador", param1, param2, param3, param4, param5, param6, param7, param8).ToListAsync();
     }
 
-    public DbSet<MdloDtos.Sp_IngresarSolicitudRetiro> sp_Ingresar_SolicitudRetiro { get; set; }
-    public async Task<List<MdloDtos.Sp_IngresarSolicitudRetiro>> Ingresar_SolicitudRetiro(string? sr_cia, string? sr_cdgo,
-        int? sr_rowid_dpsto, int? sr_rowid_cdad, string? sr_plnta_dstno, DateTime? sr_fcha_aprtra, int? sr_autrzdo_klos, int? sr_autrzdo_cntdad,
-        int? sr_dspchdo_klos, int? sr_dspchdo_cntdad, bool? sr_actva, bool? sr_abrta, bool? sr_entrga_sspndda, string? sr_obsrvcnes, string? sr_cmpo_prsnlzdo1, string? sr_cmpo_prsnlzdo2, string? sr_cmpo_prsnlzdo3, int? sr_rowid_zna_cd,
-       bool? sr_entrgar_pso_excto)
+public DbSet<MdloDtos.Sp_IngresarSolicitudRetiro_> Sp_IngresarSolicitudRetiro_ { get; set; }
+public async Task<List<MdloDtos.Sp_IngresarSolicitudRetiro_>> Ingresar_SolicitudRetiro(string? sr_cia, string? sr_cdgo,
+    int? sr_rowid_dpsto, int? sr_rowid_cdad, string? sr_plnta_dstno, DateTime? sr_fcha_aprtra, int? sr_autrzdo_klos, int? sr_autrzdo_cntdad,
+    int? sr_dspchdo_klos, int? sr_dspchdo_cntdad, bool? sr_actva, bool? sr_abrta, bool? sr_entrga_sspndda, string? sr_obsrvcnes, string? sr_cmpo_prsnlzdo1, string? sr_cmpo_prsnlzdo2, string? sr_cmpo_prsnlzdo3, int? sr_rowid_zna_cd,
+   bool? sr_entrgar_pso_excto)
+{
+    var param1 = new SqlParameter("@sr_cia", sr_cia);
+    var param2 = new SqlParameter("@sr_cdgo", sr_cdgo);
+    var param3 = new SqlParameter("@sr_rowid_dpsto", sr_rowid_dpsto);
+    var param4 = new SqlParameter("@sr_rowid_cdad", sr_rowid_cdad);
+    var param5 = new SqlParameter("@sr_plnta_dstno", sr_plnta_dstno);
+    var param6 = new SqlParameter("@sr_fcha_aprtra", sr_fcha_aprtra);
+    var param7 = new SqlParameter("@sr_autrzdo_klos", sr_autrzdo_klos);
+    var param8 = new SqlParameter("@sr_autrzdo_cntdad", sr_autrzdo_cntdad);
+    var param9 = new SqlParameter("@sr_dspchdo_klos", sr_dspchdo_klos);
+    var param10 = new SqlParameter("@sr_dspchdo_cntdad", sr_dspchdo_cntdad);
+    var param11 = new SqlParameter("@sr_actva", sr_actva);
+    var param12 = new SqlParameter("@sr_abrta", sr_abrta);
+    var param13 = new SqlParameter("@sr_entrga_sspndda", sr_entrga_sspndda);
+    var param14 = new SqlParameter("@sr_obsrvcnes", sr_obsrvcnes);
+    var param15 = new SqlParameter("@sr_cmpo_prsnlzdo1", sr_cmpo_prsnlzdo1);
+    var param16 = new SqlParameter("@sr_cmpo_prsnlzdo2", sr_cmpo_prsnlzdo2);
+    var param17 = new SqlParameter("@sr_cmpo_prsnlzdo3", sr_cmpo_prsnlzdo3);
+    var param18 = new SqlParameter("@sr_rowid_zna_cd", sr_rowid_zna_cd);
+    var param19 = new SqlParameter("@sr_entrgar_pso_excto", sr_entrgar_pso_excto);
+    return await this.Sp_IngresarSolicitudRetiro_.FromSqlRaw("EXEC sp_Ingresar_SolicitudRetiro @sr_cia ,@sr_cdgo,@sr_rowid_dpsto,@sr_rowid_cdad,@sr_plnta_dstno,@sr_fcha_aprtra,@sr_autrzdo_klos,@sr_autrzdo_cntdad,@sr_dspchdo_klos,@sr_dspchdo_cntdad,@sr_actva,@sr_abrta,@sr_entrga_sspndda,@sr_obsrvcnes,@sr_cmpo_prsnlzdo1,@sr_cmpo_prsnlzdo2,@sr_cmpo_prsnlzdo3,@sr_rowid_zna_cd,@sr_entrgar_pso_excto", param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11, param12, param13, param14, param15, param16, param17, param18, param19).ToListAsync();
+}
+public DbSet<MdloDtos.sp_Cerrar_SolicitudRetiro> sp_Cerrar_SolicitudRetiro { get; set; }
+public async Task<List<MdloDtos.sp_Cerrar_SolicitudRetiro>> Cerrar_SolicitudRetiro(int sr_rowid)
+{
+    var param1 = new SqlParameter("@sr_rowid", sr_rowid);
+    return await this.sp_Cerrar_SolicitudRetiro.FromSqlRaw("EXEC sp_Cerrar_SolicitudRetiro sr_rowid", param1).ToListAsync();
+}
+/*public async Task<List<MdloDtos.SpListaDocumentosAprobacionCargue>> DspstoAdmnstrcion_LstarBls(int rowidDeposito)
+{
+    try
     {
-        var param1 = new SqlParameter("@sr_cia", sr_cia);
-        var param2 = new SqlParameter("@sr_cdgo", sr_cdgo);
-        var param3 = new SqlParameter("@sr_rowid_dpsto", sr_rowid_dpsto);
-        var param4 = new SqlParameter("@sr_rowid_cdad", sr_rowid_cdad);
-        var param5 = new SqlParameter("@sr_plnta_dstno", sr_plnta_dstno);
-        var param6 = new SqlParameter("@sr_fcha_aprtra", sr_fcha_aprtra);
-        var param7 = new SqlParameter("@sr_autrzdo_klos", sr_autrzdo_klos);
-        var param8 = new SqlParameter("@sr_autrzdo_cntdad", sr_autrzdo_cntdad);
-        var param9 = new SqlParameter("@sr_dspchdo_klos", sr_dspchdo_klos);
-        var param10 = new SqlParameter("@sr_dspchdo_cntdad", sr_dspchdo_cntdad);
-        var param11 = new SqlParameter("@sr_actva", sr_actva);
-        var param12 = new SqlParameter("@sr_abrta", sr_abrta);
-        var param13 = new SqlParameter("@sr_entrga_sspndda", sr_entrga_sspndda);
-        var param14 = new SqlParameter("@sr_obsrvcnes", sr_obsrvcnes);
-        var param15 = new SqlParameter("@sr_cmpo_prsnlzdo1", sr_cmpo_prsnlzdo1);
-        var param16 = new SqlParameter("@sr_cmpo_prsnlzdo2", sr_cmpo_prsnlzdo2);
-        var param17 = new SqlParameter("@sr_cmpo_prsnlzdo3", sr_cmpo_prsnlzdo3);
-        var param18 = new SqlParameter("@sr_rowid_zna_cd", sr_rowid_zna_cd);
-        var param19 = new SqlParameter("@sr_entrgar_pso_excto", sr_entrgar_pso_excto);
-        return await this.sp_Ingresar_SolicitudRetiro.FromSqlRaw("EXEC Sp_IngresarSolicitudRetiro @sr_cia ,@sr_cdgo,@sr_rowid_dpsto,@sr_rowid_cdad,@sr_plnta_dstno,@sr_fcha_aprtra,@sr_autrzdo_klos,@sr_autrzdo_cntdad,@sr_dspchdo_klos,@sr_dspchdo_cntdad,@sr_actva,@sr_abrta,@sr_entrga_sspndda,@sr_obsrvcnes,@sr_cmpo_prsnlzdo1,@sr_cmpo_prsnlzdo2,@sr_cmpo_prsnlzdo3,@sr_rowid_zna_cd,@sr_entrgar_pso_excto", param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11, param12, param13, param14, param15, param16, param17, param18, param19).ToListAsync();
+        var param1 = new SqlParameter("@de_rowid", rowidDeposito);
+
+        return await this.SpListaVisitaMotonaveBlCrearDepositos.FromSqlRaw("EXEC sp_MdloDpstoCrcion_LstarBls @de_rowid", param1).ToListAsync();
+
     }
-    public DbSet<MdloDtos.sp_Cerrar_SolicitudRetiro> sp_Cerrar_SolicitudRetiro { get; set; }
-    public async Task<List<MdloDtos.sp_Cerrar_SolicitudRetiro>> Cerrar_SolicitudRetiro(int sr_rowid)
+    catch (Exception ex)
     {
-        var param1 = new SqlParameter("@sr_rowid", sr_rowid);
-        return await this.sp_Cerrar_SolicitudRetiro.FromSqlRaw("EXEC sp_Cerrar_SolicitudRetiro sr_rowid", param1).ToListAsync();
+        Console.WriteLine(ex.StackTrace.ToString());
+        return null;
     }
+}
 
-
-    /*public async Task<List<MdloDtos.SpListaDocumentosAprobacionCargue>> DspstoAdmnstrcion_LstarBls(int rowidDeposito)
-    {
-        try
-        {
-            var param1 = new SqlParameter("@de_rowid", rowidDeposito);
-
-            return await this.SpListaVisitaMotonaveBlCrearDepositos.FromSqlRaw("EXEC sp_MdloDpstoCrcion_LstarBls @de_rowid", param1).ToListAsync();
-
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.StackTrace.ToString());
-            return null;
-        }
-    }
-
-    */
-    public async Task<List<MdloDtos.SpInvntrioBdgaDpsto>> DpsitoAdmnstrcion_InvntrioBdga(int IdDeposito)
+*/
+public async Task<List<MdloDtos.SpInvntrioBdgaDpsto>> DpsitoAdmnstrcion_InvntrioBdga(int IdDeposito)
     {
         var param1 = new SqlParameter("@rowDpsto", IdDeposito);
         return await this.SpInvntrioBdgaDpsto

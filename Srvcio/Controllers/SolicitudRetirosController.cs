@@ -345,7 +345,7 @@ namespace Srvcio.Controllers
         }
         #endregion
 
-        #region Consultar solicitud de retiros Trasnportadora  por ID retiros Trasnportadora.
+        #region Consultar solicitud de retiros Trasnportadora  por ID retiros
         [HttpGet("listar-solicitudRetiro-trasnportadora-IdRetiro")]
         public async Task<ActionResult<IEnumerable<MdloDtos.SolicitudRetiroTransportadora>>> ConsultarSolicitudRetiroIdRetiroTrasnportadora(int IdSolicitudRetiro)
         {
