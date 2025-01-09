@@ -11,7 +11,7 @@ namespace VldcionDtos
     {
         AccsoDtos.VisitaMotonave.VisitaMotonave _ObjVisitaMotonave = new AccsoDtos.VisitaMotonave.VisitaMotonave();
         AccsoDtos.Parametrizacion.Compania _ObjCompania = new AccsoDtos.Parametrizacion.Compania();
-        AccsoDtos.Parametrizacion.Motonave _ObjMotonave = new AccsoDtos.Parametrizacion.Motonave();
+        AccsoDtos.Parametrizacion.Motonave _ObjMotonave = new AccsoDtos.Parametrizacion.Motonave(null);
         AccsoDtos.Parametrizacion.Tercero _ObjTercero = new AccsoDtos.Parametrizacion.Tercero();
         AccsoDtos.Parametrizacion.PuertoOrigen _ObjPuertoOrigen = new AccsoDtos.Parametrizacion.PuertoOrigen();
         AccsoDtos.Parametrizacion.TerminalMaritimo _ObjTerminalMaritimo = new AccsoDtos.Parametrizacion.TerminalMaritimo();
