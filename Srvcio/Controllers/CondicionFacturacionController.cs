@@ -31,10 +31,9 @@ namespace Srvcio.Controllers
 
         #region Consultar condiciones de facturación
         [HttpGet("listar-condicionFacturacion")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.CondicionFacturacion>>> ListarCondicionFacturacion()
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.CondicionFacturacionDTO>>> ListarCondicionFacturacion()
         { 
-           
-            var ObjCondicionFacturacion = new List<MdloDtos.CondicionFacturacion>();
+            var ObjCondicionFacturacion = new List<MdloDtos.DTO.CondicionFacturacionDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             try
@@ -62,9 +61,9 @@ namespace Srvcio.Controllers
 
         #region Filtrar condicion facturacion por codigo General
         [HttpGet("filtrar-condicionFacturacion-general")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.CondicionFacturacion>>> FiltrarCondicionFacturacionGeneral(string FiltroBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.CondicionFacturacionDTO>>> FiltrarCondicionFacturacionGeneral(string FiltroBusqueda)
         {   
-            var ObjCondicionFacturacionExiste = new List<MdloDtos.CondicionFacturacion>();
+            var ObjCondicionFacturacionExiste = new List<MdloDtos.DTO.CondicionFacturacionDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -84,7 +83,6 @@ namespace Srvcio.Controllers
                     {
                         validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
-                        //Error en la transaccion.
                         respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
                         respuesta.datos = ObjCondicionFacturacionExiste;
                     }
@@ -109,11 +107,11 @@ namespace Srvcio.Controllers
 
         #region Filtrar condicion facturacion por codigo Condicion Facturacion.
         [HttpGet("filtrar-condicionFacturacion-especifico")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.CondicionFacturacion>>> FiltrarCondicionFacturacionEspecifico(string CodigoBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.CondicionFacturacionDTO>>> FiltrarCondicionFacturacionEspecifico(string CodigoBusqueda)
         {
-            var ObjCondicionFacturacionExiste = new List<MdloDtos.CondicionFacturacion>();
+            var ObjCondicionFacturacionExiste = new List<MdloDtos.DTO.CondicionFacturacionDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
-            int validacion = 0; // para sacar el mensaje de la operacion del crud.
+            int validacion = 0;
             try
             {
                 string? Codigo = CodigoBusqueda;
@@ -123,13 +121,11 @@ namespace Srvcio.Controllers
                     ObjCondicionFacturacionExiste = await this._dbContext.FiltrarCondicionFacturacionEspecifico(CodigoBusqueda);
                     if (ObjCondicionFacturacionExiste != null)
                     {
-                        //exito.
                         respuesta.mensaje = MdloDtos.Utilidades.Mensajes.Exito + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
                         respuesta.datos = ObjCondicionFacturacionExiste;
                     }
                     else
                     {
-                        //Error en la transaccion.
                         validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                         respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
@@ -138,7 +134,6 @@ namespace Srvcio.Controllers
                 }
                 else
                 {
-                    //regresa el error
                     respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                     respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
                     respuesta.datos = ObjCondicionFacturacionExiste;
@@ -158,10 +153,10 @@ namespace Srvcio.Controllers
 
         #region Ingresa Condicion Facturacion
         [HttpPost("ingresar-condicionFacturacion")]
-        public async Task<ActionResult<dynamic>> IngresarCondicionFacturacion([FromBody] MdloDtos.CondicionFacturacion ObjCondicionFacturacion)
+        public async Task<ActionResult<dynamic>> IngresarCondicionFacturacion([FromBody] MdloDtos.DTO.CondicionFacturacionDTO ObjCondicionFacturacion)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
-            int validacion = 0; // para sacar el mensaje de la operacion del crud.
+            int validacion = 0; 
             try
             {
                 validacion = await validacionCondicionFacturacion.ValidarIngreso(ObjCondicionFacturacion);
@@ -176,7 +171,6 @@ namespace Srvcio.Controllers
                     }
                     else
                     {
-                        //Error en la transaccion.
                         validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                         respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
@@ -185,7 +179,6 @@ namespace Srvcio.Controllers
                 }
                 else
                 {
-                    //regresa el error
                     respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                     respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
                     respuesta.datos = ObjCondicionFacturacion;
@@ -205,7 +198,7 @@ namespace Srvcio.Controllers
 
         #region Actualizar Condicion Facturacion
         [HttpPut("actualizar-condicionFacturacion")]
-        public async Task<ActionResult<dynamic>> EditarCondicionFacturacion([FromBody] MdloDtos.CondicionFacturacion ObjCondicionFacturacion)
+        public async Task<ActionResult<dynamic>> EditarCondicionFacturacion([FromBody] MdloDtos.DTO.CondicionFacturacionDTO ObjCondicionFacturacion)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Actualizacion);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -224,9 +217,7 @@ namespace Srvcio.Controllers
                     }
                     else
                     {
-                        //Error en la transaccion.
                         validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
-
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                         respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
                         respuesta.datos = ObjCondicionFacturacion;
@@ -234,7 +225,6 @@ namespace Srvcio.Controllers
                 }
                 else
                 {
-                    //regresa el error
                     respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                     respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
                     respuesta.datos = ObjCondicionFacturacion;
@@ -243,7 +233,6 @@ namespace Srvcio.Controllers
             }
             catch (Exception ex)
             {
-
                 respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                 respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
                 respuesta.datos = ObjCondicionFacturacion;
@@ -257,7 +246,7 @@ namespace Srvcio.Controllers
 
         #region Eliminar Condicion Facturacion
         [HttpDelete("eliminar-condicionFacturacion")]
-        public async Task<ActionResult<dynamic>> EliminarCondicionFacturacion([FromBody] MdloDtos.CondicionFacturacion ObjCondicionFacturacion)
+        public async Task<ActionResult<dynamic>> EliminarCondicionFacturacion([FromBody] MdloDtos.DTO.CondicionFacturacionDTO ObjCondicionFacturacion)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Eliminacion);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -266,7 +255,7 @@ namespace Srvcio.Controllers
                 validacion = await validacionCondicionFacturacion.ValidarEliminar(ObjCondicionFacturacion);
                 if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa) //si fue exito)
                 {
-                    var ObAuditoriaModulo = await _dbContext.EliminarCondicionFacturacion(ObjCondicionFacturacion.CfCdgo);
+                    var ObAuditoriaModulo = await _dbContext.EliminarCondicionFacturacion(ObjCondicionFacturacion.Codigo);
                     if (ObAuditoriaModulo != null)
                     {
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
@@ -275,7 +264,6 @@ namespace Srvcio.Controllers
                     }
                     else
                     {
-                        //Error en la transaccion.
                         validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                         respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
@@ -284,7 +272,6 @@ namespace Srvcio.Controllers
                 }
                 else
                 {
-                    //regresa el error
                     respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                     respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
                     respuesta.datos = ObjCondicionFacturacion;
@@ -305,7 +292,6 @@ namespace Srvcio.Controllers
                     respuesta.datos = ObjCondicionFacturacion;
                     return BadRequest(respuesta);
                 }
-
             }
             return respuesta;
         }

@@ -11,19 +11,19 @@ namespace VldcionDtos
     /// </summary>
     public class ValidacionCondicionFacturacion
     {
-        AccsoDtos.Parametrizacion.CondicionFacturacion ObjCondicionFacturacion = new AccsoDtos.Parametrizacion.CondicionFacturacion();
+        AccsoDtos.Parametrizacion.CondicionFacturacion ObjCondicionFacturacion = new AccsoDtos.Parametrizacion.CondicionFacturacion(null);
 
         #region Validacion de CondicionFacturacion , metodo Ingreso
-        public async Task<int> ValidarIngreso(MdloDtos.CondicionFacturacion objCondicionFacturacion)
+        public async Task<int> ValidarIngreso(MdloDtos.DTO.CondicionFacturacionDTO objCondicionFacturacion)
         {
             int resultado = 0;
             try
             {
                 //Validar los campos Obligatorios.
-                if (!string.IsNullOrEmpty(objCondicionFacturacion.CfCdgo) && (!string.IsNullOrEmpty(objCondicionFacturacion.CfNmbre)))
+                if (!string.IsNullOrEmpty(objCondicionFacturacion.Codigo) && (!string.IsNullOrEmpty(objCondicionFacturacion.Nombre)))
                 {
                     //Validar que el codigo/Llave  No exista.
-                    var CondicionFacturacionExiste = await ObjCondicionFacturacion.VerificarCondicionFacturacion(objCondicionFacturacion.CfCdgo);
+                    var CondicionFacturacionExiste = await ObjCondicionFacturacion.VerificarCondicionFacturacion(objCondicionFacturacion.Codigo);
                     if (CondicionFacturacionExiste == true)
                     {
                         //Retorna valor del TipoMensaje: CodigoExiste
@@ -51,15 +51,15 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de CondicionFacturacion , metodo Eliminar
-        public async Task<int> ValidarEliminar(MdloDtos.CondicionFacturacion objCondicionFacturacion_)
+        public async Task<int> ValidarEliminar(MdloDtos.DTO.CondicionFacturacionDTO objCondicionFacturacion_)
         {
             int resultado = 0;
             try
             {
-                if(!string.IsNullOrEmpty(objCondicionFacturacion_.CfCdgo))
+                if(!string.IsNullOrEmpty(objCondicionFacturacion_.Codigo))
                 {
                     //Validar que el codigo/Llave exista.
-                    var CondicionFacturacionExiste = await ObjCondicionFacturacion.VerificarCondicionFacturacion(objCondicionFacturacion_.CfCdgo);
+                    var CondicionFacturacionExiste = await ObjCondicionFacturacion.VerificarCondicionFacturacion(objCondicionFacturacion_.Codigo);
                     if (CondicionFacturacionExiste == false)
                     {
                         //Retorna valor del TipoMensaje: RelacionNoExiste
@@ -87,16 +87,16 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de CondicionFacturacion , metodo Actualizar
-        public async Task<int> ValidarActualizacion(MdloDtos.CondicionFacturacion objCondicionFacturacion)
+        public async Task<int> ValidarActualizacion(MdloDtos.DTO.CondicionFacturacionDTO objCondicionFacturacion)
         {
             int resultado = 0;
             try
             {
                 //Validar los campos Obligatorios.
-                if ((!string.IsNullOrEmpty(objCondicionFacturacion.CfCdgo)) && (!string.IsNullOrEmpty(objCondicionFacturacion.CfNmbre)))
+                if ((!string.IsNullOrEmpty(objCondicionFacturacion.Codigo)) && (!string.IsNullOrEmpty(objCondicionFacturacion.Nombre)))
                 {
                     //Validar que el codigo/Llave No exista.
-                    var CondicionFacturacionExiste = await ObjCondicionFacturacion.VerificarCondicionFacturacion(objCondicionFacturacion.CfCdgo);
+                    var CondicionFacturacionExiste = await ObjCondicionFacturacion.VerificarCondicionFacturacion(objCondicionFacturacion.Codigo);
                     if (CondicionFacturacionExiste == false)
                     {
                         //Retorna valor del TipoMensaje: RelacionNoExiste
