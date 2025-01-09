@@ -1,4 +1,5 @@
-﻿using MdloDtos.Utilidades;
+﻿using AutoMapper;
+using MdloDtos.Utilidades;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,18 +12,26 @@ namespace AccsoDtos.Parametrizacion
     /// <summary>
     /// Clase para el acceso a datos de la clase configuracion vehicular.
     /// Daniel Alejandro Lopez
+    /// Ajustes DTO: Wilbert Rivas Granados
     /// </summary>
     public class ConfiguracionVehicular: MdloDtos.IModelos.IConfiguracionVehicular
     {
+        private readonly IMapper _mapper;
+
+        public ConfiguracionVehicular(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
         #region Ingresar datos a la Configuracion Vehicular
-        public async Task<MdloDtos.ConfiguracionVehicular> IngresarConfiguracionVehicular(MdloDtos.ConfiguracionVehicular _ConfiguracionVehicular)
+        public async Task<dynamic> IngresarConfiguracionVehicular(MdloDtos.DTO.ConfiguracionVehicularDTO _ConfiguracionVehicular)
         {
             var ObjConfiguracionVehicular = new MdloDtos.ConfiguracionVehicular();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 try
                 {
-                    var ConfiguracionVehicularExiste = await this.VerificarConfiguracionVehicular(_ConfiguracionVehicular.CvCdgo);
+                    var ConfiguracionVehicularExiste = await this.VerificarConfiguracionVehicular(_ConfiguracionVehicular.Codigo);
 
                     if (ConfiguracionVehicularExiste == true)
                     {
@@ -30,17 +39,15 @@ namespace AccsoDtos.Parametrizacion
                     }
                     else
                     {
-                        ObjConfiguracionVehicular.CvCdgo = _ConfiguracionVehicular.CvCdgo;
-                        ObjConfiguracionVehicular.CvNmbre = _ConfiguracionVehicular.CvNmbre;
-                        ObjConfiguracionVehicular.CvPsoMxmo = _ConfiguracionVehicular.CvPsoMxmo;
-                        ObjConfiguracionVehicular.CvTlrncia = _ConfiguracionVehicular.CvTlrncia;
-                        ObjConfiguracionVehicular.CvCdgoCia = _ConfiguracionVehicular.CvCdgoCia;
-                        ObjConfiguracionVehicular.CvActvo = _ConfiguracionVehicular.CvActvo;
+                        ObjConfiguracionVehicular.CvCdgo = _ConfiguracionVehicular.Codigo;
+                        ObjConfiguracionVehicular.CvNmbre = _ConfiguracionVehicular.Nombre;
+                        ObjConfiguracionVehicular.CvPsoMxmo = _ConfiguracionVehicular.PesoMaximo;
+                        ObjConfiguracionVehicular.CvTlrncia = _ConfiguracionVehicular.Tolerancia;
+                        ObjConfiguracionVehicular.CvCdgoCia = _ConfiguracionVehicular.CodigoCompania;
+                        ObjConfiguracionVehicular.CvActvo = _ConfiguracionVehicular.Estado;
                         var res = await _dbContex.ConfiguracionVehiculars.AddAsync(ObjConfiguracionVehicular);
                         await _dbContex.SaveChangesAsync();
                     }
-
-                   
                 }
                 catch (Exception ex)
                 {
@@ -49,14 +56,13 @@ namespace AccsoDtos.Parametrizacion
                 _dbContex.Dispose();
                 return ObjConfiguracionVehicular;
             }
-
         }
         #endregion
 
         #region Consultar todos los datos de Configuracion Vehicular mediante un parametro Codigo general
-        public async Task<List<MdloDtos.ConfiguracionVehicular>> FiltrarConfiguracionVehicularGeneral(String Codigo)
+        public async Task<List<MdloDtos.DTO.ConfiguracionVehicularDTO>> FiltrarConfiguracionVehicularGeneral(String Codigo)
         {
-            List<MdloDtos.ConfiguracionVehicular> listadoConfiguracionVehicular = new List<MdloDtos.ConfiguracionVehicular>();
+            List<MdloDtos.DTO.ConfiguracionVehicularDTO> listadoConfiguracionVehicular = new List<MdloDtos.DTO.ConfiguracionVehicularDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
 
@@ -86,7 +92,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Configuración Vehicular para agregar a la lista
-                    MdloDtos.ConfiguracionVehicular objConfiguracionVehicular = new MdloDtos.ConfiguracionVehicular(
+                    MdloDtos.DTO.ConfiguracionVehicularDTO objConfiguracionVehicular = new MdloDtos.DTO.ConfiguracionVehicularDTO(
                                                                 //Atributos Configuracion Vehícular
                                                                 item.CvRowid != null ? item.CvRowid : 0,
                                                                 item.CvCdgo != null ? item.CvCdgo : String.Empty,
@@ -111,18 +117,16 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Consultar todos los datos de Configuracion Vehicular mediante un parametro Codigo Configuracion vehicular
-        public async Task<List<MdloDtos.ConfiguracionVehicular>> FiltrarConfiguracionVehicularEspecifico(String Codigo)
+        public async Task<List<MdloDtos.DTO.ConfiguracionVehicularDTO>> FiltrarConfiguracionVehicularEspecifico(String Codigo)
         {
-            List<MdloDtos.ConfiguracionVehicular> listadoConfiguracionVehicular = new List<MdloDtos.ConfiguracionVehicular>();
+            List<MdloDtos.DTO.ConfiguracionVehicularDTO> listadoConfiguracionVehicular = new List<MdloDtos.DTO.ConfiguracionVehicularDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
-
                 var lst = await (from configuracionVehicular in _dbContex.ConfiguracionVehiculars
                                  join compania in _dbContex.Compania on configuracionVehicular.CvCdgoCia equals compania.CiaCdgo into companiaJoin
                                  from compania in companiaJoin.DefaultIfEmpty()
 
                                  where configuracionVehicular.CvCdgo == Codigo
-
                                  select new
                                  {
                                      //Atributos Configuracion Vehícular
@@ -143,7 +147,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Configuración Vehicular para agregar a la lista
-                    MdloDtos.ConfiguracionVehicular objConfiguracionVehicular = new MdloDtos.ConfiguracionVehicular(
+                    MdloDtos.DTO.ConfiguracionVehicularDTO objConfiguracionVehicular = new MdloDtos.DTO.ConfiguracionVehicularDTO(
                                                                 //Atributos Configuracion Vehícular
                                                                 item.CvRowid != null ? item.CvRowid : 0,
                                                                 item.CvCdgo != null ? item.CvCdgo : String.Empty,
@@ -168,9 +172,9 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Consultar todos los datos de Configuracion Vehicular mediante un parametro Id Configuracion vehicular
-        public async Task<List<MdloDtos.ConfiguracionVehicular>> FiltrarConfiguracionVehicularId(int? IdConfiguracion)
+        public async Task<List<MdloDtos.DTO.ConfiguracionVehicularDTO>> FiltrarConfiguracionVehicularId(int? IdConfiguracion)
         {
-            List<MdloDtos.ConfiguracionVehicular> listadoConfiguracionVehicular = new List<MdloDtos.ConfiguracionVehicular>();
+            List<MdloDtos.DTO.ConfiguracionVehicularDTO> listadoConfiguracionVehicular = new List<MdloDtos.DTO.ConfiguracionVehicularDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
 
@@ -200,7 +204,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Configuración Vehicular para agregar a la lista
-                    MdloDtos.ConfiguracionVehicular objConfiguracionVehicular = new MdloDtos.ConfiguracionVehicular(
+                    MdloDtos.DTO.ConfiguracionVehicularDTO objConfiguracionVehicular = new MdloDtos.DTO.ConfiguracionVehicularDTO(
                                                                 //Atributos Configuracion Vehícular
                                                                 item.CvRowid != null ? item.CvRowid : 0,
                                                                 item.CvCdgo != null ? item.CvCdgo : String.Empty,
@@ -225,43 +229,39 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Actualizar Configuracion Vehicular pasando el objeto _ConfiguracionVehicular
-        public async Task<MdloDtos.ConfiguracionVehicular> EditarConfiguracionVehicular(MdloDtos.ConfiguracionVehicular _ConfiguracionVehicular)
+        public async Task<MdloDtos.DTO.ConfiguracionVehicularDTO> EditarConfiguracionVehicular(MdloDtos.DTO.ConfiguracionVehicularDTO _ConfiguracionVehicular)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 try
                 {
-                    MdloDtos.ConfiguracionVehicular ConfiguracionVehicularExiste = await _dbContex.ConfiguracionVehiculars.FindAsync(_ConfiguracionVehicular.CvRowid);
+                    MdloDtos.ConfiguracionVehicular ConfiguracionVehicularExiste = await _dbContex.ConfiguracionVehiculars.FindAsync(_ConfiguracionVehicular.Codigo);
                     if (ConfiguracionVehicularExiste != null)
                     {
-
-                        ConfiguracionVehicularExiste.CvCdgo = _ConfiguracionVehicular.CvCdgo;
-                        ConfiguracionVehicularExiste.CvNmbre = _ConfiguracionVehicular.CvNmbre;
-                        ConfiguracionVehicularExiste.CvPsoMxmo = _ConfiguracionVehicular.CvPsoMxmo;
-                        ConfiguracionVehicularExiste.CvTlrncia = _ConfiguracionVehicular.CvTlrncia;
-                        ConfiguracionVehicularExiste.CvCdgoCia = _ConfiguracionVehicular.CvCdgoCia;
-                        ConfiguracionVehicularExiste.CvActvo = _ConfiguracionVehicular.CvActvo;
+                        ConfiguracionVehicularExiste.CvCdgo = _ConfiguracionVehicular.Codigo;
+                        ConfiguracionVehicularExiste.CvNmbre = _ConfiguracionVehicular.Nombre;
+                        ConfiguracionVehicularExiste.CvPsoMxmo = _ConfiguracionVehicular.PesoMaximo;
+                        ConfiguracionVehicularExiste.CvTlrncia = _ConfiguracionVehicular.Tolerancia;
+                        ConfiguracionVehicularExiste.CvCdgoCia = _ConfiguracionVehicular.CodigoCompania;
+                        ConfiguracionVehicularExiste.CvActvo = _ConfiguracionVehicular.Estado;
                         _dbContex.Entry(ConfiguracionVehicularExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                         await _dbContex.SaveChangesAsync();
-
                     }
                     _dbContex.Dispose();
-                    return ConfiguracionVehicularExiste;
+                    return _ConfiguracionVehicular;
                 }
                 catch (Exception ex)
                 {
                     throw new Exception(ex.Message);
-
                 }  
             }
         }
-
         #endregion
 
         #region Consultar todos los datos de Configuracion Vehicular
-        public async Task<List<MdloDtos.ConfiguracionVehicular>> ListarConfiguracionVehicular()
+        public async Task<List<MdloDtos.DTO.ConfiguracionVehicularDTO>> ListarConfiguracionVehicular()
         {
-            List<MdloDtos.ConfiguracionVehicular> listadoConfiguracionVehicular = new List<MdloDtos.ConfiguracionVehicular>();
+            List<MdloDtos.DTO.ConfiguracionVehicularDTO> listadoConfiguracionVehicular = new List<MdloDtos.DTO.ConfiguracionVehicularDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
 
@@ -289,7 +289,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Configuración Vehicular para agregar a la lista
-                    MdloDtos.ConfiguracionVehicular objConfiguracionVehicular = new MdloDtos.ConfiguracionVehicular(
+                    MdloDtos.DTO.ConfiguracionVehicularDTO objConfiguracionVehicular = new MdloDtos.DTO.ConfiguracionVehicularDTO(
                                                                 //Atributos Configuracion Vehícular
                                                                 item.CvRowid != null ? item.CvRowid : 0,
                                                                 item.CvCdgo != null ? item.CvCdgo : String.Empty,
@@ -310,11 +310,10 @@ namespace AccsoDtos.Parametrizacion
                 return listadoConfiguracionVehicular;
             }
         }
-
         #endregion
 
         #region Eliminar Configuracion Vehicular
-        public async Task<MdloDtos.ConfiguracionVehicular> EliminarConfiguracionVehicular(int Codigo)
+        public async Task<dynamic> EliminarConfiguracionVehicular(int Codigo)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
@@ -327,7 +326,6 @@ namespace AccsoDtos.Parametrizacion
                     }
                     else
                     {
-
                         _dbContex.Remove(ConfiguracionVehicularlExiste);
                         await _dbContex.SaveChangesAsync();
                     }
@@ -337,14 +335,9 @@ namespace AccsoDtos.Parametrizacion
                 catch (Exception ex)
                 {
                     throw new Exception(ex.Message);
-
                 }
-                
             }
-
-
         }
-
         #endregion
 
         #region verificar Configuracion Vehicular por Codigo
@@ -358,20 +351,8 @@ namespace AccsoDtos.Parametrizacion
                     var lst = (from p in _dbContex.ConfiguracionVehiculars
                                where p.CvCdgo == Codigo
                                select p).Count();
-
                     var ObjConfiguracionVehicular = lst;
-
-                    if (ObjConfiguracionVehicular == null || ObjConfiguracionVehicular == 0)
-                    {
-
-                        respuesta = false;
-                    }
-                    else
-                    {
-
-                         respuesta = true;
-                    }
-
+                    respuesta = (ObjConfiguracionVehicular == 0) ? false : true;
                 }
                 catch (Exception ex)
                 {
@@ -380,10 +361,7 @@ namespace AccsoDtos.Parametrizacion
                 _dbContex.Dispose();
                 return respuesta;
             }
-
         }
-
-
         #endregion
 
         #region verificar Configuracion Vehicular por RowId
@@ -397,20 +375,8 @@ namespace AccsoDtos.Parametrizacion
                     var lst = (from p in _dbContex.ConfiguracionVehiculars
                                where p.CvRowid == RowId
                                select p).Count();
-
                     var ObjConfiguracionVehicular = lst;
-
-                    if (ObjConfiguracionVehicular == null || ObjConfiguracionVehicular == 0)
-                    {
-
-                        respuesta = false;
-                    }
-                    else
-                    {
-
-                        respuesta = true;
-                    }
-
+                    respuesta = (ObjConfiguracionVehicular == 0) ? false : true;
                 }
                 catch (Exception ex)
                 {
@@ -419,10 +385,7 @@ namespace AccsoDtos.Parametrizacion
                 _dbContex.Dispose();
                 return respuesta;
             }
-
         }
-
-
         #endregion
     }
 }

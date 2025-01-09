@@ -29,9 +29,9 @@ namespace Srvcio.Controllers
 
         #region Consultar Configuracion Vehicular
         [HttpGet("listar-configuracionVehicular")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.ConfiguracionVehicular>>> ListarConfiguracionVehicular()
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.ConfiguracionVehicularDTO>>> ListarConfiguracionVehicular()
         {
-            var ObConfiguracionVehicular = new List<MdloDtos.ConfiguracionVehicular>();
+            var ObConfiguracionVehicular = new List<MdloDtos.DTO.ConfiguracionVehicularDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             try
@@ -59,9 +59,9 @@ namespace Srvcio.Controllers
 
         #region Filtrar Configuracion Vehicular por codigo
         [HttpGet("filtrar-configuracionVehicular-general")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.ConfiguracionVehicular>>> FiltrarConfiguracionVehicularGeneral( string FiltroBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.ConfiguracionVehicularDTO>>> FiltrarConfiguracionVehicularGeneral( string FiltroBusqueda)
         {
-            var ObConfiguracionVehicular = new List<MdloDtos.ConfiguracionVehicular>();
+            var ObConfiguracionVehicular = new List<MdloDtos.DTO.ConfiguracionVehicularDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -108,9 +108,9 @@ namespace Srvcio.Controllers
 
         #region Filtrar Configuracion Vehicular por codigo
         [HttpGet("filtrar-configuracionVehicular-especifico")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.ConfiguracionVehicular>>> FiltrarConfiguracionVehicularEspecifico( string CodigoBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.ConfiguracionVehicularDTO>>> FiltrarConfiguracionVehicularEspecifico( string CodigoBusqueda)
         {
-            var ObConfiguracionVehicular = new List<MdloDtos.ConfiguracionVehicular>();
+            var ObConfiguracionVehicular = new List<MdloDtos.DTO.ConfiguracionVehicularDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -156,7 +156,7 @@ namespace Srvcio.Controllers
 
         #region Ingresar Configuracion Vehicular
         [HttpPost("ingresar-configuracionVehicular")]
-        public async Task<ActionResult<dynamic>> IngresarConfiguracionVehicular( [FromBody] MdloDtos.ConfiguracionVehicular objConfiguracionVehicular)
+        public async Task<ActionResult<dynamic>> IngresarConfiguracionVehicular( [FromBody] MdloDtos.DTO.ConfiguracionVehicularDTO objConfiguracionVehicular)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -205,7 +205,7 @@ namespace Srvcio.Controllers
 
         #region Actualizar Configuracion Vehicular
         [HttpPut("actualizar-configuracionVehicular")]
-        public async Task<ActionResult<dynamic>> EditarConfiguracionVehicular([FromBody] MdloDtos.ConfiguracionVehicular objConfiguracionVehicular)
+        public async Task<ActionResult<dynamic>> EditarConfiguracionVehicular([FromBody] MdloDtos.DTO.ConfiguracionVehicularDTO objConfiguracionVehicular)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Actualizacion);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -255,7 +255,7 @@ namespace Srvcio.Controllers
 
         #region Eliminar Configuracion Vehicular
         [HttpDelete("eliminar-configuracionVehicular")]
-        public async Task<ActionResult<dynamic>> EliminarConfiguracionVehicular([FromBody] MdloDtos.ConfiguracionVehicular objConfiguracionVehicular)
+        public async Task<ActionResult<dynamic>> EliminarConfiguracionVehicular([FromBody] MdloDtos.DTO.ConfiguracionVehicularDTO objConfiguracionVehicular)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Eliminacion);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -264,7 +264,7 @@ namespace Srvcio.Controllers
                 validacion = await validacionConfiguracionVehicular.ValidarEliminar(objConfiguracionVehicular);
                 if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa) //si fue exito)
                 {
-                    int Id = (int)objConfiguracionVehicular.CvRowid;
+                    int Id = (int)objConfiguracionVehicular.IdConfiguracionVehicular;
                     var ObAuditoriaModulo = await _dbContex.EliminarConfiguracionVehicular(Id);
                     if (ObAuditoriaModulo != null)
                     {

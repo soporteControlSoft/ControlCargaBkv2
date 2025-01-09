@@ -74,6 +74,20 @@ namespace AccsoDtos.Mappings
                 .ForMember(dest => dest.Base, opt => opt.MapFrom((src, _) => src.CfFchaBse))
                 .ForMember(dest => dest.Depositos, opt => opt.MapFrom((src, _) => src.Depositos));
 
+            CreateMap<ConfiguracionVehicular, ConfiguracionVehicularDTO>()
+                .ForMember(dest => dest.IdConfiguracionVehicular, opt => opt.MapFrom((src, _) => src.CvRowid))
+                .ForMember(dest => dest.Codigo, opt => opt.MapFrom((src, _) => src.CvCdgo))
+                .ForMember(dest => dest.Nombre, opt => opt.MapFrom((src, _) => src.CvNmbre))
+                .ForMember(dest => dest.PesoMaximo, opt => opt.MapFrom((src, _) => src.CvPsoMxmo))
+                .ForMember(dest => dest.Tolerancia, opt => opt.MapFrom((src, _) => src.CvTlrncia))
+                .ForMember(dest => dest.CodigoCompania, opt => opt.MapFrom((src, _) => src.CvCdgoCia))
+                .ForMember(dest => dest.Estado, opt => opt.MapFrom((src, _) => src.CvActvo))
+                .ForMember(dest => dest.CvCdgoCiaNavigation, opt => opt.MapFrom((src, _) => src.CvCdgoCiaNavigation))
+                .ForMember(dest => dest.Ordens, opt => opt.MapFrom((src, _) => src.Ordens))
+                .ForMember(dest => dest.Vehiculos, opt => opt.MapFrom((src, _) => src.Vehiculos))
+                .ForMember(dest => dest.CompaniaCodigo, opt => opt.MapFrom((src, _) => src.CvCdgoCiaNavigation.CiaCdgo))
+                .ForMember(dest => dest.CompaniaNombre, opt => opt.MapFrom((src, _) => src.CvCdgoCiaNavigation.CiaNmbre));
+
         }
     }
 }
