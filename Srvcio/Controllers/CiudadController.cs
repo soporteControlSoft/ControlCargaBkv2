@@ -7,7 +7,7 @@ namespace Srvcio.Controllers
 {
     /// <summary>
     ///   API para las ciudades
-    ///   Daniel Alejandro Lopez
+    ///   Wilbert Rivas Granados
     /// </summary>
     [ApiController]
     public class CiudadController : Controller
@@ -29,10 +29,10 @@ namespace Srvcio.Controllers
 
         #region Consultar ciudad
         [HttpGet("listar-ciudad")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Ciudad>>> ListarCiudad()
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.CiudadDTO>>> ListarCiudad()
         {
            
-            var ObCiudad = new List<MdloDtos.Ciudad>();
+            var ObCiudad = new List<MdloDtos.DTO.CiudadDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             try
@@ -60,9 +60,9 @@ namespace Srvcio.Controllers
 
         #region Filtrar ciudad por codigo
         [HttpGet("filtrar-ciudad-general")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Ciudad>>> FiltrarCiudadGeneral(string FiltroBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.CiudadDTO>>> FiltrarCiudadGeneral(string FiltroBusqueda)
         {
-            var ObCiudad = new List<MdloDtos.Ciudad>();
+            var ObCiudad = new List<MdloDtos.DTO.CiudadDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -74,14 +74,12 @@ namespace Srvcio.Controllers
                     ObCiudad = await this._dbContex.FiltrarCiudadGeneral(FiltroBusqueda);
                     if (ObCiudad != null)
                     {
-                        //exito.
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
                         respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
                         respuesta.datos = ObCiudad;
                     }
                     else
                     {
-                        //Error en la transaccion.
                         validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                         respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
@@ -90,7 +88,6 @@ namespace Srvcio.Controllers
                 }
                 else
                 {
-                    //regresa el error, dentro del servicio de validacion
                     respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                     respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
                     respuesta.datos = ObCiudad;
@@ -110,9 +107,9 @@ namespace Srvcio.Controllers
 
         #region Filtrar ciudad por departamento
         [HttpGet("filtrar-ciudad-especifico")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Ciudad>>> FiltrarCiudadEspecifico(string CodigoBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.CiudadDTO>>> FiltrarCiudadEspecifico(string CodigoBusqueda)
         {
-            var ObCiudad = new List<MdloDtos.Ciudad>();
+            var ObCiudad = new List<MdloDtos.DTO.CiudadDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -124,14 +121,12 @@ namespace Srvcio.Controllers
                     ObCiudad = await this._dbContex.FiltrarCiudadEspecifico(CodigoBusqueda);
                     if (ObCiudad != null)
                     {
-                        //exito.
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
                         respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
                         respuesta.datos = ObCiudad;
                     }
                     else
                     {
-                        //Error en la transaccion.
                         validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                         respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
@@ -140,7 +135,6 @@ namespace Srvcio.Controllers
                 }
                 else
                 {
-                    //regresa el error
                     respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                     respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
                     respuesta.datos = ObCiudad;
@@ -160,28 +154,26 @@ namespace Srvcio.Controllers
 
         #region Filtrar ciudad por Id departamento
         [HttpGet("filtrar-ciudad-departamento")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Ciudad>>> FiltrarCiudadPorDepartamento(int IdDepartamento)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.CiudadDTO>>> FiltrarCiudadPorDepartamento(int IdDepartamento)
         {
-            var ObCiudad = new List<MdloDtos.Ciudad>();
+            var ObCiudad = new List<MdloDtos.DTO.CiudadDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
-            int validacion = 0; // para sacar el mensaje de la operacion del crud.
+            int validacion = 0;
             try
             {
                 int Codigo = IdDepartamento;
                 validacion = await validacionCiudad.ValidarFiltroBusquedasPorIdDepartamento(Codigo);
-                if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa) //si fue exito)
+                if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa)
                 {
                     ObCiudad = await this._dbContex.FiltrarCiudadPorDepartamento(IdDepartamento);
                     if (ObCiudad != null)
                     {
-                        //exito.
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
                         respuesta.mensaje =  MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
                         respuesta.datos = ObCiudad;
                     }
                     else
                     {
-                        //Error en la transaccion.
                         validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                         respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
@@ -190,7 +182,6 @@ namespace Srvcio.Controllers
                 }
                 else
                 {
-                    //regresa el error
                     respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                     respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
                     respuesta.datos = ObCiudad;
@@ -209,10 +200,10 @@ namespace Srvcio.Controllers
 
         #region Ingresar ciudad
         [HttpPost("ingresar-ciudad")]
-        public async Task<ActionResult<dynamic>> IngresarCiudad([FromBody] MdloDtos.Ciudad objCiudad)
+        public async Task<ActionResult<dynamic>> IngresarCiudad([FromBody] MdloDtos.DTO.CiudadDTO objCiudad)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
-            int validacion = 0; // para sacar el mensaje de la operacion del crud.
+            int validacion = 0; 
             try
             {
                 validacion = await validacionCiudad.ValidarIngreso(objCiudad);
@@ -227,7 +218,6 @@ namespace Srvcio.Controllers
                     }
                     else
                     {
-                        //Error en la transaccion.
                         validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                         respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
@@ -236,7 +226,6 @@ namespace Srvcio.Controllers
                 }
                 else
                 {
-                    //regresa el error
                     respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                     respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
                     respuesta.datos = objCiudad;
@@ -255,14 +244,14 @@ namespace Srvcio.Controllers
 
         #region Actualizar ciudad
         [HttpPut("actualizar-ciudad")]
-        public async Task<ActionResult<dynamic>> EditarCiudad([FromBody] MdloDtos.Ciudad objCiudad)
+        public async Task<ActionResult<dynamic>> EditarCiudad([FromBody] MdloDtos.DTO.CiudadDTO objCiudad)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Actualizacion);
-            int validacion = 0; // para sacar el mensaje de la operacion del crud.
+            int validacion = 0;
             try
             {
                 validacion = await validacionCiudad.ValidarActualizacion(objCiudad);
-                if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa) //si fue exito)
+                if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa)
                 {
                     var ObCiudad = await this._dbContex.EditarCiudad(objCiudad);
                     if (ObCiudad != null)
@@ -273,7 +262,6 @@ namespace Srvcio.Controllers
                     }
                     else
                     {
-                        //Error en la transaccion.
                         validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                         respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
@@ -282,7 +270,6 @@ namespace Srvcio.Controllers
                 }
                 else
                 {
-                    //regresa el error
                     respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                     respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
                     respuesta.datos = objCiudad;
@@ -301,7 +288,7 @@ namespace Srvcio.Controllers
 
         #region Eliminar ciudad
         [HttpDelete("eliminar-ciudad")]
-        public async Task<ActionResult<dynamic>> EliminarCiudad([FromBody] MdloDtos.Ciudad objCiudad)
+        public async Task<ActionResult<dynamic>> EliminarCiudad([FromBody] MdloDtos.DTO.CiudadDTO objCiudad)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Eliminacion);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -310,7 +297,7 @@ namespace Srvcio.Controllers
                 validacion = await validacionCiudad.ValidarEliminar(objCiudad);
                 if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa) //si fue exito)
                 {
-                    var ObCiudad = await _dbContex.EliminarCiudad(objCiudad.CiRowid.ToString());
+                    var ObCiudad = await _dbContex.EliminarCiudad(objCiudad.IdCiudad.ToString());
                     if (ObCiudad != null)
                     {
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
@@ -319,7 +306,6 @@ namespace Srvcio.Controllers
                     }
                     else
                     {
-                        //Error en la transaccion.
                         validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                         respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
@@ -328,7 +314,6 @@ namespace Srvcio.Controllers
                 }
                 else
                 {
-                    //regresa el error
                     respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                     respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
                     respuesta.datos = objCiudad;

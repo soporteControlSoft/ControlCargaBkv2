@@ -12,28 +12,28 @@ public partial class MotonaveDTO
     [Required(ErrorMessage = "Codigo de la motonave es requerido")]
     [StringLength(15)]
     [JsonPropertyName("Codigo")]
-    public string MoCdgo { get; set; } = null!;
+    public string Codigo { get; set; } = null!;
 
     [StringLength(40)]
     [JsonPropertyName("Nombre")]
-    public string? MoNmbre { get; set; }
+    public string? Nombre { get; set; }
 
     [JsonPropertyName("Eslra")]
-    public decimal? MoEslra { get; set; }
+    public decimal? Eslra { get; set; }
 
     [StringLength(10)]
     [JsonPropertyName("Mtrcla")]
-    public string? MoMtrcla { get; set; }
+    public string? Mtrcla { get; set; }
 
-    [JsonPropertyName("MoBndra")]
     [StringLength(20)]
+    [JsonPropertyName("MoBndra")]
     public string? MoBndra { get; set; }
 
     [JsonPropertyName("CantidadEscotillas")]
-    public short? MoCntdadEsctllas { get; set; }
+    public short? CantidadEscotillas { get; set; }
 
     [JsonPropertyName("Calado")]
-    public decimal? MoCldo { get; set; }
+    public decimal? Calado { get; set; }
 
     [JsonIgnore]
     [NotMapped]

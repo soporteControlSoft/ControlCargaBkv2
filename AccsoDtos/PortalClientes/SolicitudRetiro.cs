@@ -236,7 +236,7 @@ namespace AccsoDtos.PortalClientes
                 var lst = await (from p in _dbContex.SolicitudRetiroAutorizacions
                                  join r in _dbContex.SolicitudRetiros on p.SraRowidSlctudRtro equals r.SrRowid
                                  join s in _dbContex.Terceros on p.SraRowidTrnsprtdra equals s.TeRowid
-                                 where (p.SraRowidSlctudRtro == IdSolicitudRetiro)
+                                 where (p.SraRowidSlctudRtro == IdSolicitudRetiro && s.TeTrnsprtdra == true)
                                  select new { 
                                  
                                      p.SraRowid,
@@ -308,16 +308,47 @@ namespace AccsoDtos.PortalClientes
         }
         #endregion
 
-        #region Consultar solicitud de retiros autorizacion Historial por ID retiros Autorizacion.
+        #region Consultar solicitud de retiros autorizacion  por ID retiros Autorizacion.
         public async Task<List<MdloDtos.SolicitudRetiroAutorizacion>> ConsultarSolicitudRetiroAutorizacionHistorialIdRetiro(int IdSolicitudRetiroAutorizacion)
         {
+            List<MdloDtos.SolicitudRetiroAutorizacion> listado = new List<MdloDtos.SolicitudRetiroAutorizacion>();
             using (CcVenturaContext _dbContex = new CcVenturaContext())
             {
                 var lst = await (from p in _dbContex.SolicitudRetiroAutorizacions
-                                 where (p.SraRowid == IdSolicitudRetiroAutorizacion)
-                                 select p).ToListAsync();
+                                 join r in _dbContex.Terceros on p.SraRowidTrnsprtdra equals r.TeRowid
+                                 where (p.SraRowid == IdSolicitudRetiroAutorizacion && r.TeTrnsprtdra == true)
+                                 select new
+                                 {
+
+                                     p.SraRowid,
+                                     p.SraRowidSlctudRtro,
+                                     p.SraRowidTrnsprtdra,
+                                     p.SraAutrzdoKlos,
+                                     p.SraAutrzdoUnddes,
+                                     p.SraFcha,
+                                     p.SraCdgoUsrio,
+                                     r.TeNmbre
+
+                                 }).ToListAsync();
+                foreach (var item in lst)
+                {
+                    //Creamos una entidad Sede para agregar a la lista
+                    MdloDtos.SolicitudRetiroAutorizacion objSolicitudRetiroTrasmportadora = new MdloDtos.SolicitudRetiroAutorizacion(
+                                                                item.SraRowid != null ? item.SraRowid : 0,
+                                                                item.SraRowidSlctudRtro != null ? item.SraRowidSlctudRtro : 0,
+                                                                item.SraRowidTrnsprtdra != null ? item.SraRowidTrnsprtdra : 0,
+                                                                item.SraAutrzdoKlos != null ? item.SraAutrzdoKlos : 0,
+                                                                item.SraAutrzdoUnddes != null ? item.SraAutrzdoUnddes : 0,
+                                                                item.SraFcha,
+                                                                item.SraCdgoUsrio != null ? item.SraCdgoUsrio : String.Empty,
+                                                                item.TeNmbre != null ? item.TeNmbre : String.Empty
+
+                                                               );
+                    //Agregamnos la Sede a la lista
+                    listado.Add(objSolicitudRetiroTrasmportadora);
+                }
                 _dbContex.Dispose();
-                return lst;
+                return listado;
             }
 
         }

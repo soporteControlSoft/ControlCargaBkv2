@@ -8,17 +8,17 @@ namespace MdloDtos.IModelos
 {
     public interface ICiudad
     {
-        public Task<List<MdloDtos.Ciudad>> ListarCiudad();
+        public Task<List<MdloDtos.DTO.CiudadDTO>> ListarCiudad();
 
-        public Task<List<MdloDtos.Ciudad>> FiltrarCiudadPorDepartamento(int Codigo);
+        public Task<List<MdloDtos.DTO.CiudadDTO>> FiltrarCiudadPorDepartamento(int Codigo);
 
-        public Task<MdloDtos.Ciudad> IngresarCiudad(MdloDtos.Ciudad ObjCiudad);
+        public Task<dynamic> IngresarCiudad(MdloDtos.DTO.CiudadDTO ObjCiudad);
 
-        public Task<MdloDtos.Ciudad> EditarCiudad(MdloDtos.Ciudad ObjCiudad);
+        public Task<MdloDtos.DTO.CiudadDTO> EditarCiudad(MdloDtos.DTO.CiudadDTO ObjCiudad);
 
-        public Task<List<MdloDtos.Ciudad>> FiltrarCiudadEspecifico(String Codigo);
-        public Task<List<MdloDtos.Ciudad>> FiltrarCiudadGeneral(String Codigo);
-        public Task<MdloDtos.Ciudad> EliminarCiudad(string Codigo);
+        public Task<List<MdloDtos.DTO.CiudadDTO>> FiltrarCiudadEspecifico(String Codigo);
+        public Task<List<MdloDtos.DTO.CiudadDTO>> FiltrarCiudadGeneral(String Codigo);
+        public Task<dynamic> EliminarCiudad(string Codigo);
 
     }
 }

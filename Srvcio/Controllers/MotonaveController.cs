@@ -29,9 +29,9 @@ namespace Srvcio.Controllers
 
         #region Consultar todas las motonaves
         [HttpGet("listar-motonaves")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Motonave>>> ListarMotonave()
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.MotonaveDTO>>> ListarMotonave()
         { 
-            var ObjMotonave = new List<MdloDtos.Motonave>();
+            var ObjMotonave = new List<MdloDtos.DTO.MotonaveDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             try
@@ -58,9 +58,9 @@ namespace Srvcio.Controllers
 
         #region Filtrar Motonaves por codigo general
         [HttpGet("filtrar-motonave-general")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Motonave>>> FiltrarMotonaveGeneral(string FiltroBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.MotonaveDTO>>> FiltrarMotonaveGeneral(string FiltroBusqueda)
         {
-            var ObjMotonave = new List<MdloDtos.Motonave>();
+            var ObjMotonave = new List<MdloDtos.DTO.MotonaveDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -107,10 +107,10 @@ namespace Srvcio.Controllers
 
         #region Filtrar Motonaves por codigo especifico
         [HttpGet("filtrar-motonave-especifico")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Motonave>>> FiltrarMotonaveEspecifico(string CodigoBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.MotonaveDTO>>> FiltrarMotonaveEspecifico(string CodigoBusqueda)
         {
 
-            var ObjMotonave = new List<MdloDtos.Motonave>();
+            var ObjMotonave = new List<MdloDtos.DTO.MotonaveDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -159,7 +159,7 @@ namespace Srvcio.Controllers
         #region Ingresa Motonave
 
         [HttpPost("ingresar-motonave")]
-        public async Task<ActionResult<dynamic>> IngresarMotonave([FromBody] MdloDtos.Motonave objMotonave)
+        public async Task<ActionResult<dynamic>> IngresarMotonave([FromBody] MdloDtos.DTO.MotonaveDTO objMotonave)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -208,7 +208,7 @@ namespace Srvcio.Controllers
 
         #region Actualizar Motonave
         [HttpPut("actualizar-motonave")]
-        public async Task<ActionResult<dynamic>> EditarMotonave([FromBody] MdloDtos.Motonave objMotonave)
+        public async Task<ActionResult<dynamic>> EditarMotonave([FromBody] MdloDtos.DTO.MotonaveDTO objMotonave)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Actualizacion);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -256,7 +256,7 @@ namespace Srvcio.Controllers
 
         #region Eliminar Motonave por codigo 
         [HttpDelete("eliminar-motonave")]
-        public async Task<ActionResult<dynamic>> EliminarMotonave([FromBody] MdloDtos.Motonave objMotonave)
+        public async Task<ActionResult<dynamic>> EliminarMotonave([FromBody] MdloDtos.DTO.MotonaveDTO objMotonave)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Eliminacion);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -265,7 +265,7 @@ namespace Srvcio.Controllers
                 validacion = await validacionValidacionMotonave.ValidarEliminar(objMotonave);
                 if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa) //si fue exito)
                 {
-                    var ObMotonave = await _dbContext.EliminarMotonave(objMotonave.MoCdgo);
+                    var ObMotonave = await _dbContext.EliminarMotonave(objMotonave.Codigo);
                     if (ObMotonave != null)
                     {
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;

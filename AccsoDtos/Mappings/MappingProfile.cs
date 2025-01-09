@@ -46,8 +46,28 @@ namespace AccsoDtos.Mappings
                 .ForMember(dest => dest.SaldoBajoDeposito, opt => opt.MapFrom((src, _) => src.PaSldoBjoDpsto))
                .ForMember(dest => dest.SaldoBajoSolicitudRetiro, opt => opt.MapFrom((src, _) => src.PaSldoBjoSlctudRtro))
                 .ForMember(dest => dest.PesoMaximoCargar, opt => opt.MapFrom((src, _) => src.PaPsoMxmoACrgar))
-               .ForMember(dest => dest.MinutosVigenciaReserva, opt => opt.MapFrom((src, _) => src.PaMntosVgnviaRsrva)).ReverseMap(); ; 
-            
+               .ForMember(dest => dest.MinutosVigenciaReserva, opt => opt.MapFrom((src, _) => src.PaMntosVgnviaRsrva)).ReverseMap();
+
+            CreateMap<Motonave, MotonaveDTO>()
+                .ForMember(dest => dest.Codigo, opt => opt.MapFrom((src, _) => src.MoCdgo))
+               .ForMember(dest => dest.Nombre, opt => opt.MapFrom((src, _) => src.MoNmbre))
+               .ForMember(dest => dest.Eslra, opt => opt.MapFrom((src, _) => src.MoEslra))
+               .ForMember(dest => dest.Mtrcla, opt => opt.MapFrom((src, _) => src.MoMtrcla))
+               .ForMember(dest => dest.MoBndra, opt => opt.MapFrom((src, _) => src.MoBndra))
+               .ForMember(dest => dest.CantidadEscotillas, opt => opt.MapFrom((src, _) => src.MoCntdadEsctllas))
+                .ForMember(dest => dest.Calado, opt => opt.MapFrom((src, _) => src.MoCldo))
+               .ForMember(dest => dest.SituacionPortuaria, opt => opt.MapFrom((src, _) => src.SituacionPortuaria))
+                .ForMember(dest => dest.VisitaMotonaves, opt => opt.MapFrom((src, _) => src.VisitaMotonaves));
+
+            CreateMap<Ciudad, CiudadDTO>()
+               .ForMember(dest => dest.IdCiudad, opt => opt.MapFrom((src, _) => src.CiRowid))
+              .ForMember(dest => dest.Codigo, opt => opt.MapFrom((src, _) => src.CiCdgo))
+              .ForMember(dest => dest.Nombre, opt => opt.MapFrom((src, _) => src.CiNmbre))
+              .ForMember(dest => dest.IdDepartamento, opt => opt.MapFrom((src, _) => src.CiRowidDprtmnto))
+              .ForMember(dest => dest.CiRowidDprtmntoNavigation, opt => opt.MapFrom((src, _) => src.CiRowidDprtmntoNavigation))
+              .ForMember(dest => dest.Ordens, opt => opt.MapFrom((src, _) => src.Ordens))
+               .ForMember(dest => dest.SolicitudRetiros, opt => opt.MapFrom((src, _) => src.SolicitudRetiros));
+              
         }
     }
 }

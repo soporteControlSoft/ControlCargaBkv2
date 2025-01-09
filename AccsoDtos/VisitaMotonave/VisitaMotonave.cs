@@ -20,7 +20,7 @@ namespace AccsoDtos.VisitaMotonave
     public class VisitaMotonave : MdloDtos.IModelos.IVisitaMotonave
     {
 
-        Parametrizacion.Motonave objMotonave = new Parametrizacion.Motonave();
+        Parametrizacion.Motonave objMotonave = new Parametrizacion.Motonave(null);
 
         #region Consultar Secuencia de registro
         public async Task<string> ConsultarSecuenciaVisitaMotonave(string CodigoCompania, String CodigoMotonave)

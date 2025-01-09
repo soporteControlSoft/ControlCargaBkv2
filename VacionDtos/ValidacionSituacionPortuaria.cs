@@ -18,7 +18,7 @@ namespace VldcionDtos
         AccsoDtos.Parametrizacion.TerminalMaritimo ObjTerminalMaritimo = new AccsoDtos.Parametrizacion.TerminalMaritimo();
 
         //Objetos para hacer las validaciones de existencia
-        AccsoDtos.Parametrizacion.Motonave ObjMotonave = new AccsoDtos.Parametrizacion.Motonave();
+        AccsoDtos.Parametrizacion.Motonave ObjMotonave = new AccsoDtos.Parametrizacion.Motonave(null);
         AccsoDtos.SituacionPortuaria.EstadosMotonave ObjEstadosMotonave = new AccsoDtos.SituacionPortuaria.EstadosMotonave();
         AccsoDtos.Parametrizacion.Pais ObjPais = new AccsoDtos.Parametrizacion.Pais();
         AccsoDtos.Parametrizacion.Usuario ObjUsuario = new AccsoDtos.Parametrizacion.Usuario();

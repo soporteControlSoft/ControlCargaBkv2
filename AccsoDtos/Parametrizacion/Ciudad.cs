@@ -1,4 +1,5 @@
-﻿using MdloDtos.Utilidades;
+﻿using AutoMapper;
+using MdloDtos.Utilidades;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -15,15 +16,24 @@ namespace AccsoDtos.Parametrizacion
     /// 
     public class Ciudad:MdloDtos.IModelos.ICiudad
     {
+
+        private readonly IMapper _mapper;
+
+        public Ciudad(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
+
         #region Ingresar datos a la entidad Ciudad
-        public async Task<MdloDtos.Ciudad> IngresarCiudad(MdloDtos.Ciudad _Ciudad)
+        public async Task<dynamic> IngresarCiudad(MdloDtos.DTO.CiudadDTO _Ciudad)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 var ObjCiudad = new MdloDtos.Ciudad();
                 try
                 {
-                    var CiudadExiste = await this.VerificarCiudad(_Ciudad.CiCdgo);
+                    var CiudadExiste = await this.VerificarCiudad(_Ciudad.Codigo);
 
                     if (CiudadExiste == true)
                     {
@@ -31,9 +41,9 @@ namespace AccsoDtos.Parametrizacion
                     }
                     else
                     {
-                        ObjCiudad.CiCdgo = _Ciudad.CiCdgo;
-                        ObjCiudad.CiNmbre = _Ciudad.CiNmbre;
-                        ObjCiudad.CiRowidDprtmnto = _Ciudad.CiRowidDprtmnto;
+                        ObjCiudad.CiCdgo = _Ciudad.Codigo;
+                        ObjCiudad.CiNmbre = _Ciudad.Nombre;
+                        ObjCiudad.CiRowidDprtmnto = _Ciudad.IdDepartamento;
                         var res = await _dbContex.Ciudads.AddAsync(ObjCiudad);
                         await _dbContex.SaveChangesAsync();
                     }
@@ -52,9 +62,9 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Consultar todos los datos de Ciudad mediante un parametro Codigo de Departamento
-        public async Task<List<MdloDtos.Ciudad>> FiltrarCiudadPorDepartamento(int Codigo)
+        public async Task<List<MdloDtos.DTO.CiudadDTO>> FiltrarCiudadPorDepartamento(int Codigo)
         {
-            List<MdloDtos.Ciudad> listCiudad = new List<MdloDtos.Ciudad>();
+            List<MdloDtos.DTO.CiudadDTO> listCiudad = new List<MdloDtos.DTO.CiudadDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
 
@@ -83,7 +93,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Ciudad para agregar a la lista
-                    MdloDtos.Ciudad objCiudad = new MdloDtos.Ciudad(
+                    MdloDtos.DTO.CiudadDTO objCiudad = new MdloDtos.DTO.CiudadDTO(
                                                                     //Atributos ciudad
                                                                     item.ciudadRowId != null ? item.ciudadRowId : 0,
                                                                     item.ciudadCodigo != null ? item.ciudadCodigo : String.Empty,
@@ -109,9 +119,9 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Listar todos los Ciudad
-        public async Task<List<MdloDtos.Ciudad>> ListarCiudad()
+        public async Task<List<MdloDtos.DTO.CiudadDTO>> ListarCiudad()
         {
-            List<MdloDtos.Ciudad> listCiudad = new List<MdloDtos.Ciudad>();
+            List<MdloDtos.DTO.CiudadDTO> listCiudad = new List<MdloDtos.DTO.CiudadDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
 
@@ -137,7 +147,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Ciudad para agregar a la lista
-                    MdloDtos.Ciudad objCiudad = new MdloDtos.Ciudad(
+                    MdloDtos.DTO.CiudadDTO objCiudad = new MdloDtos.DTO.CiudadDTO(
                                                                     //Atributos ciudad
                                                                     item.ciudadRowId != null ? item.ciudadRowId : 0,
                                                                     item.ciudadCodigo != null ? item.ciudadCodigo : String.Empty,
@@ -150,7 +160,7 @@ namespace AccsoDtos.Parametrizacion
                                                                     item.DepartamentoNombre != null ? item.DepartamentoNombre : String.Empty
                                                                     );
 
-                    //Agregamnos la ciudad a la lista
+                    //Agregamos la ciudad a la lista
                     listCiudad.Add(objCiudad);
                 }
 
@@ -162,40 +172,36 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Actualizar departamentos por el objeto _Ciudad
-        public async Task<MdloDtos.Ciudad> EditarCiudad(MdloDtos.Ciudad _Ciudad)
+        public async Task<MdloDtos.DTO.CiudadDTO> EditarCiudad(MdloDtos.DTO.CiudadDTO _Ciudad)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 try
                 {
-                    MdloDtos.Ciudad CiudadExiste = await _dbContex.Ciudads.FindAsync(_Ciudad.CiRowid);
+                    MdloDtos.Ciudad CiudadExiste = await _dbContex.Ciudads.FindAsync(_Ciudad.IdCiudad);
                     if (CiudadExiste != null)
                     {
-
-                        CiudadExiste.CiCdgo = _Ciudad.CiCdgo;
-                        CiudadExiste.CiNmbre = _Ciudad.CiNmbre;
-                        CiudadExiste.CiRowidDprtmnto = _Ciudad.CiRowidDprtmnto;
+                        CiudadExiste.CiCdgo = _Ciudad.Codigo;
+                        CiudadExiste.CiNmbre = _Ciudad.Nombre;
+                        CiudadExiste.CiRowidDprtmnto = _Ciudad.IdDepartamento;
                         _dbContex.Entry(CiudadExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                         await _dbContex.SaveChangesAsync();
-
                     }
                     _dbContex.Dispose();
-                    return CiudadExiste;
+                    return _Ciudad;
                 }
                 catch (Exception ex)
                 {
                     throw new Exception(ex.ToString());
                 }
-               
-            }
-            
+            } 
         }
         #endregion
 
         #region Filtrar Ciudad por codigo general
-        public async Task<List<MdloDtos.Ciudad>> FiltrarCiudadGeneral(string Codigo)
+        public async Task<List<MdloDtos.DTO.CiudadDTO>> FiltrarCiudadGeneral(string Codigo)
         {
-            List<MdloDtos.Ciudad> listCiudad = new List<MdloDtos.Ciudad>();
+            List<MdloDtos.DTO.CiudadDTO> listCiudad = new List<MdloDtos.DTO.CiudadDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
 
@@ -222,7 +228,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Ciudad para agregar a la lista
-                    MdloDtos.Ciudad objCiudad = new MdloDtos.Ciudad(
+                    MdloDtos.DTO.CiudadDTO objCiudad = new MdloDtos.DTO.CiudadDTO(
                                                                     //Atributos ciudad
                                                                     item.ciudadRowId != null ? item.ciudadRowId : 0,
                                                                     item.ciudadCodigo != null ? item.ciudadCodigo : String.Empty,
@@ -238,8 +244,6 @@ namespace AccsoDtos.Parametrizacion
                     //Agregamnos la ciudad a la lista
                     listCiudad.Add(objCiudad);
                 }
-
-
                 _dbContex.Dispose();
                 return listCiudad;
             }
@@ -247,12 +251,11 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Filtrar Ciudad por codigo Especifico Ciudad
-        public async Task<List<MdloDtos.Ciudad>> FiltrarCiudadEspecifico(string Codigo)
+        public async Task<List<MdloDtos.DTO.CiudadDTO>> FiltrarCiudadEspecifico(string Codigo)
         {
-            List<MdloDtos.Ciudad> listCiudad = new List<MdloDtos.Ciudad>();
+            List<MdloDtos.DTO.CiudadDTO> listCiudad = new List<MdloDtos.DTO.CiudadDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
-
                 var lst = await (from ciudad in _dbContex.Ciudads
                                  join departamento in _dbContex.Departamentos on ciudad.CiRowidDprtmnto equals departamento.DeRowid into departamentoJoin
                                  from departamento in departamentoJoin.DefaultIfEmpty()
@@ -275,8 +278,7 @@ namespace AccsoDtos.Parametrizacion
                 _dbContex.Dispose();
                 foreach (var item in lst)
                 {
-                    //Creamos una entidad Ciudad para agregar a la lista
-                    MdloDtos.Ciudad objCiudad = new MdloDtos.Ciudad(
+                    MdloDtos.DTO.CiudadDTO objCiudad = new MdloDtos.DTO.CiudadDTO(
                                                                     //Atributos ciudad
                                                                     item.ciudadRowId != null ? item.ciudadRowId : 0,
                                                                     item.ciudadCodigo != null ? item.ciudadCodigo : String.Empty,
@@ -288,12 +290,8 @@ namespace AccsoDtos.Parametrizacion
                                                                     item.DepartamentoCodigo != null ? item.DepartamentoCodigo : String.Empty,
                                                                     item.DepartamentoNombre != null ? item.DepartamentoNombre : String.Empty
                                                                     );
-
-                    //Agregamnos la ciudad a la lista
                     listCiudad.Add(objCiudad);
                 }
-
-
                 _dbContex.Dispose();
                 return listCiudad;
             }
@@ -301,7 +299,7 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Eliminar Ciudad Por codigo.
-        public async Task<MdloDtos.Ciudad> EliminarCiudad(string Codigo)
+        public async Task<dynamic> EliminarCiudad(string Codigo)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
@@ -318,16 +316,13 @@ namespace AccsoDtos.Parametrizacion
                         _dbContex.Remove(CiudadExiste);
                         await _dbContex.SaveChangesAsync();
                     }
-
                     _dbContex.Dispose();
                     return CiudadExiste;
                 }
                 catch (Exception ex)
                 {
                     throw new Exception(ex.Message);
-
                 }
-                
             }
         }
         #endregion
@@ -343,18 +338,8 @@ namespace AccsoDtos.Parametrizacion
                     var lst = (from p in _dbContex.Ciudads
                                where p.CiCdgo == Codigo
                                select p).Count();
-
                     var ObjCiudad = lst;
-                    if (ObjCiudad == null || ObjCiudad == 0)
-                    {
-
-                        respuesta = false;
-                    }
-                    else
-                    {
-
-                         respuesta = true;
-                    }
+                    respuesta =  (ObjCiudad == 0) ? false : true;
                 }
                 catch (Exception ex)
                 {
@@ -363,7 +348,6 @@ namespace AccsoDtos.Parametrizacion
                 _dbContex.Dispose();
                 return respuesta;
             }
-
         }
         #endregion
 
@@ -378,18 +362,8 @@ namespace AccsoDtos.Parametrizacion
                     var lst = (from p in _dbContex.Ciudads
                                where p.CiRowid == RowId
                                select p).Count();
-
                     var ObjCiudad = lst;
-                    if (ObjCiudad == null || ObjCiudad == 0)
-                    {
-
-                        respuesta = false;
-                    }
-                    else
-                    {
-
-                        respuesta = true;
-                    }
+                    respuesta=(ObjCiudad == 0) ? false : true;  
                 }
                 catch (Exception ex)
                 {
@@ -398,10 +372,7 @@ namespace AccsoDtos.Parametrizacion
                 _dbContex.Dispose();
                 return respuesta;
             }
-
         }
-
         #endregion
-
     }
 }

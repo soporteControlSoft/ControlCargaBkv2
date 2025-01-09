@@ -11,19 +11,19 @@ namespace VldcionDtos
     /// </summary>
     public class ValidacionMotonave
     {
-        AccsoDtos.Parametrizacion.Motonave ObjMotonave = new AccsoDtos.Parametrizacion.Motonave();
+        AccsoDtos.Parametrizacion.Motonave ObjMotonave = new AccsoDtos.Parametrizacion.Motonave(null);
 
         #region Validacion de Motonave , metodo Ingreso
-        public async Task<int> ValidarIngreso(MdloDtos.Motonave objMotonave)
+        public async Task<int> ValidarIngreso(MdloDtos.DTO.MotonaveDTO objMotonave)
         {
             int resultado = 0;
             try
             {
                 //Validar los campos Obligatorios.
-                if (!string.IsNullOrEmpty(objMotonave.MoCdgo) && (!string.IsNullOrEmpty(objMotonave.MoNmbre)))
+                if (!string.IsNullOrEmpty(objMotonave.Codigo) && (!string.IsNullOrEmpty(objMotonave.Nombre)))
                 {
                     //Validar que el codigo/Llave  No exista.
-                    var MotonaveExiste = await ObjMotonave.VerificarMotonave(objMotonave.MoCdgo);
+                    var MotonaveExiste = await ObjMotonave.VerificarMotonave(objMotonave.Codigo);
                     if (MotonaveExiste == true)
                     {
                         //Retorna valor del TipoMensaje: CodigoExiste
@@ -51,15 +51,15 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de Motonave , metodo Eliminar
-        public async Task<int> ValidarEliminar(MdloDtos.Motonave objMotonave_)
+        public async Task<int> ValidarEliminar(MdloDtos.DTO.MotonaveDTO objMotonave_)
         {
             int resultado = 0;
             try
             {
-                if(!string.IsNullOrEmpty(objMotonave_.MoCdgo))
+                if(!string.IsNullOrEmpty(objMotonave_.Codigo))
                 {
                     //Validar que el codigo/Llave exista.
-                    var MotonaveExiste = await ObjMotonave.VerificarMotonave(objMotonave_.MoCdgo);
+                    var MotonaveExiste = await ObjMotonave.VerificarMotonave(objMotonave_.Codigo);
                     if (MotonaveExiste == false)
                     {
                         //Retorna valor del TipoMensaje: RelacionNoExiste
@@ -87,16 +87,16 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de Motonave , metodo Actualizar
-        public async Task<int> ValidarActualizacion(MdloDtos.Motonave objMotonave)
+        public async Task<int> ValidarActualizacion(MdloDtos.DTO.MotonaveDTO objMotonave)
         {
             int resultado = 0;
             try
             {
                 //Validar los campos Obligatorios.
-                if (!string.IsNullOrEmpty(objMotonave.MoCdgo) && (!string.IsNullOrEmpty(objMotonave.MoNmbre)))
+                if (!string.IsNullOrEmpty(objMotonave.Codigo) && (!string.IsNullOrEmpty(objMotonave.Nombre)))
                 {
                     //Validar que el codigo/Llave No exista.
-                    var MotonaveExiste = await ObjMotonave.VerificarMotonave(objMotonave.MoCdgo);
+                    var MotonaveExiste = await ObjMotonave.VerificarMotonave(objMotonave.Codigo);
                     if (MotonaveExiste == false)
                     {
                         //Retorna valor del TipoMensaje: RelacionNoExiste
