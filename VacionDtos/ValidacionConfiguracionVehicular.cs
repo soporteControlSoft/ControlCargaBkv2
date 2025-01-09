@@ -11,21 +11,21 @@ namespace VldcionDtos
     /// </summary>
     public class ValidacionConfiguracionVehicular
     {
-        AccsoDtos.Parametrizacion.ConfiguracionVehicular ObjConfiguracionVehicular = new AccsoDtos.Parametrizacion.ConfiguracionVehicular();
+        AccsoDtos.Parametrizacion.ConfiguracionVehicular ObjConfiguracionVehicular = new AccsoDtos.Parametrizacion.ConfiguracionVehicular(null);
 
-        #region Validacion de AuditoriaModulo , metodo Ingreso
-        public async Task<int> ValidarIngreso(MdloDtos.ConfiguracionVehicular objConfiguracionVehicular)
+        #region Validacion de ConfiguracionVehicular , metodo Ingreso
+        public async Task<int> ValidarIngreso(MdloDtos.DTO.ConfiguracionVehicularDTO objConfiguracionVehicular)
         {
             int resultado = 0;
             try
             {
                 //Validar los campos Obligatorios.
-                if ((!string.IsNullOrEmpty(objConfiguracionVehicular.CvCdgo) && ((objConfiguracionVehicular.CvCdgo.Length > 0))) &&
-                   ((!string.IsNullOrEmpty(objConfiguracionVehicular.CvNmbre) && ((objConfiguracionVehicular.CvNmbre.Length > 0)))) &&
-                    ((!string.IsNullOrEmpty(objConfiguracionVehicular.CvCdgoCia) && ((objConfiguracionVehicular.CvCdgoCia.Length > 0)))))
+                if ((!string.IsNullOrEmpty(objConfiguracionVehicular.Codigo) && ((objConfiguracionVehicular.Codigo.Length > 0))) &&
+                   ((!string.IsNullOrEmpty(objConfiguracionVehicular.Nombre) && ((objConfiguracionVehicular.Nombre.Length > 0)))) &&
+                    ((!string.IsNullOrEmpty(objConfiguracionVehicular.CodigoCompania) && ((objConfiguracionVehicular.CodigoCompania.Length > 0)))))
                 {                     
                     //Validar que el codigo/Llave  No exista.
-                    var ConfiguracionVehicularExiste = await ObjConfiguracionVehicular.VerificarConfiguracionVehicular(objConfiguracionVehicular.CvCdgo);
+                    var ConfiguracionVehicularExiste = await ObjConfiguracionVehicular.VerificarConfiguracionVehicular(objConfiguracionVehicular.Codigo);
                     if (ConfiguracionVehicularExiste == true)
                     {
                         //Retorna valor del TipoMensaje: CodigoExiste
@@ -53,15 +53,15 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de ConfiguracionVehicular , metodo Eliminar
-        public async Task<int> ValidarEliminar(MdloDtos.ConfiguracionVehicular objConfiguracionVehicular_)
+        public async Task<int> ValidarEliminar(MdloDtos.DTO.ConfiguracionVehicularDTO objConfiguracionVehicular_)
         {
             int resultado = 0;
             try
             {
-                if (objConfiguracionVehicular_.CvRowid != null)
+                if (objConfiguracionVehicular_.IdConfiguracionVehicular != null)
                 {
                     //Validar que el codigo/Llave exista.
-                    var ConfiguracionVehicularExiste = await ObjConfiguracionVehicular.VerificarConfiguracionVehicularPorRowdId((int)objConfiguracionVehicular_.CvRowid);
+                    var ConfiguracionVehicularExiste = await ObjConfiguracionVehicular.VerificarConfiguracionVehicularPorRowdId((int)objConfiguracionVehicular_.IdConfiguracionVehicular);
                     if (ConfiguracionVehicularExiste == false)
                     {
                         //Retorna valor del TipoMensaje: RelacionNoExiste
@@ -89,18 +89,18 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de ConfiguracionVehicular , metodo Actualizar
-        public async Task<int> ValidarActualizacion(MdloDtos.ConfiguracionVehicular objConfiguracionVehicular)
+        public async Task<int> ValidarActualizacion(MdloDtos.DTO.ConfiguracionVehicularDTO objConfiguracionVehicular)
         {
             int resultado = 0;
             try
             {
                 //Validar los campos Obligatorios.
-                if ((!string.IsNullOrEmpty(objConfiguracionVehicular.CvCdgo) && ((objConfiguracionVehicular.CvCdgo.Length > 0))) &&
-                  ((!string.IsNullOrEmpty(objConfiguracionVehicular.CvNmbre) && ((objConfiguracionVehicular.CvNmbre.Length > 0)))) &&
-                   ((!string.IsNullOrEmpty(objConfiguracionVehicular.CvCdgoCia) && ((objConfiguracionVehicular.CvCdgoCia.Length > 0)))))
+                if ((!string.IsNullOrEmpty(objConfiguracionVehicular.Codigo) && ((objConfiguracionVehicular.Codigo.Length > 0))) &&
+                  ((!string.IsNullOrEmpty(objConfiguracionVehicular.Nombre) && ((objConfiguracionVehicular.Nombre.Length > 0)))) &&
+                   ((!string.IsNullOrEmpty(objConfiguracionVehicular.CodigoCompania) && ((objConfiguracionVehicular.CodigoCompania.Length > 0)))))
                 {
                     //Validar que el codigo/Llave No exista.
-                    var ConfiguracionVehicularExiste = await ObjConfiguracionVehicular.VerificarConfiguracionVehicular(objConfiguracionVehicular.CvCdgo);
+                    var ConfiguracionVehicularExiste = await ObjConfiguracionVehicular.VerificarConfiguracionVehicular(objConfiguracionVehicular.Codigo);
                     if (ConfiguracionVehicularExiste == false)
                     {
                         //Retorna valor del TipoMensaje: RelacionNoExiste

@@ -12,7 +12,7 @@ namespace VldcionDtos
     public class ValidacionVehiculo
     {
 
-        AccsoDtos.Parametrizacion.ConfiguracionVehicular _ObjConfiguracionVehicular = new AccsoDtos.Parametrizacion.ConfiguracionVehicular();
+        AccsoDtos.Parametrizacion.ConfiguracionVehicular _ObjConfiguracionVehicular = new AccsoDtos.Parametrizacion.ConfiguracionVehicular(null);
         AccsoDtos.Parametrizacion.Vehiculo _ObjVehiculo = new AccsoDtos.Parametrizacion.Vehiculo();
 
         #region Validacion de vehiculos , metodo Ingreso
