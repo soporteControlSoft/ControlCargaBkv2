@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AccsoDtos.Mappings;
+using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +13,19 @@ namespace VldcionDtos
     /// </summary>
     public class ValidacionMotonave
     {
-        AccsoDtos.Parametrizacion.Motonave ObjMotonave = new AccsoDtos.Parametrizacion.Motonave(null);
+        private readonly IMapper _mapper;
+        AccsoDtos.Parametrizacion.Motonave ObjMotonave ;
+        public ValidacionMotonave()
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
+
+            _mapper = configuration.CreateMapper();
+            ObjMotonave = new AccsoDtos.Parametrizacion.Motonave(_mapper);
+        }
+
 
         #region Validacion de Motonave , metodo Ingreso
         public async Task<int> ValidarIngreso(MdloDtos.DTO.MotonaveDTO objMotonave)

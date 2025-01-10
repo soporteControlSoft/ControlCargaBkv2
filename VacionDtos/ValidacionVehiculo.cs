@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AccsoDtos.Mappings;
+using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,9 +13,23 @@ namespace VldcionDtos
     /// </summary>
     public class ValidacionVehiculo
     {
+        private readonly IMapper _mapper;
 
-        AccsoDtos.Parametrizacion.ConfiguracionVehicular _ObjConfiguracionVehicular = new AccsoDtos.Parametrizacion.ConfiguracionVehicular(null);
+        AccsoDtos.Parametrizacion.ConfiguracionVehicular _ObjConfiguracionVehicular;
         AccsoDtos.Parametrizacion.Vehiculo _ObjVehiculo = new AccsoDtos.Parametrizacion.Vehiculo();
+
+        public ValidacionVehiculo()
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
+
+            _mapper = configuration.CreateMapper();
+            _ObjConfiguracionVehicular = new AccsoDtos.Parametrizacion.ConfiguracionVehicular(_mapper);
+        }
+
+
 
         #region Validacion de vehiculos , metodo Ingreso
         public async Task<int> ValidarIngreso(MdloDtos.Vehiculo ObjVehiculo)
