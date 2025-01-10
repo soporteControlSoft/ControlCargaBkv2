@@ -1,4 +1,7 @@
-﻿using MdloDtos.Utilidades;
+﻿using AutoMapper;
+using MdloDtos.DTO;
+using MdloDtos;
+using MdloDtos.Utilidades;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -15,15 +18,24 @@ namespace AccsoDtos.EstadoHechos
     /// 
     public class Clasificacion:MdloDtos.IModelos.IClasificacion
     {
+        private readonly CcVenturaContext _dbContext;
+        private readonly IMapper _mapper;
+
+        public Clasificacion(IMapper mapper, MdloDtos.CcVenturaContext dbContext)
+        {
+            _mapper = mapper;
+            _dbContext = dbContext;
+        }
+
         #region Ingresar datos a la entidad Clasificacion
-        public async Task<MdloDtos.Clasificacion> IngresarClasificacion(MdloDtos.Clasificacion _Clasificacion)
+        public async Task<ClasificacionDTO> IngresarClasificacion(ClasificacionDTO _ClasificacionDTO)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 var ObjClasificacion = new MdloDtos.Clasificacion();
                 try
                 {
-                    var ClasificacionExiste = await this.VerificarClasificacion(_Clasificacion.ClRowid);
+                    var ClasificacionExiste = await this.VerificarClasificacion(_ClasificacionDTO.Id);
 
                     if (ClasificacionExiste == true)
                     {
@@ -33,10 +45,10 @@ namespace AccsoDtos.EstadoHechos
                     {
                         DateTime fechaSistema = DateTime.Now;
 
-                        ObjClasificacion.ClNmbre = _Clasificacion.ClNmbre;
-                        ObjClasificacion.ClDscrpcion = _Clasificacion.ClDscrpcion;
+                        ObjClasificacion.ClNmbre = _ClasificacionDTO.Nombre;
+                        ObjClasificacion.ClDscrpcion = _ClasificacionDTO.Descripcion;
                         ObjClasificacion.ClFchaCrcion = fechaSistema;
-                        ObjClasificacion.ClCdgoUsrio = _Clasificacion.ClCdgoUsrio;
+                        ObjClasificacion.ClCdgoUsrio = _ClasificacionDTO.CodigoUsuario;
                         ObjClasificacion.ClActvo = true;
 
                         var res = await _dbContex.Clasificacions.AddAsync(ObjClasificacion);
@@ -45,60 +57,58 @@ namespace AccsoDtos.EstadoHechos
                         await _dbContex.SaveChangesAsync();
                     }
 
-                    
+
                 }
                 catch (Exception ex)
                 {
                     throw new Exception(ex.ToString());
                 }
                 _dbContex.Dispose();
-                return ObjClasificacion;
+                return _ClasificacionDTO;
             }
 
         }
         #endregion
 
         #region Listar todos las clasificaciones
-        public async Task<List<MdloDtos.Clasificacion>> ListarClasificacion(bool estado = true)
+        public async Task<List<MdloDtos.DTO.ClasificacionDTO>> ListarClasificacion(bool estado = true)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 // Consulta usando LINQ to SQL
-                var query = from clasificacion in _dbContex.Clasificacions
-                            where clasificacion.ClActvo == estado
-                            select clasificacion;
+                var query = await (from clasificacion in _dbContex.Clasificacions
+                                   where clasificacion.ClActvo == estado
+                                   select clasificacion).ToListAsync();
 
                 // Ejecutar la consulta de manera asíncrona
-                var listClasificacion = await query.ToListAsync();
-
+                var listClasificacion = _mapper.Map<List<ClasificacionDTO>>(query);
                 return listClasificacion;
             }
         }
         #endregion
 
         #region Actualizar _Clasificacion
-        public async Task<MdloDtos.Clasificacion> EditarClasificacion(MdloDtos.Clasificacion _Clasificacion)
+        public async Task<ClasificacionDTO> EditarClasificacion(MdloDtos.DTO.ClasificacionDTO _ClasificacionDTO)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 try
                 {
-                    MdloDtos.Clasificacion ClasificacionExiste = await _dbContex.Clasificacions.FindAsync(_Clasificacion.ClRowid);
+                    MdloDtos.Clasificacion ClasificacionExiste = await _dbContex.Clasificacions.FindAsync(_ClasificacionDTO.Id);
                     if (ClasificacionExiste != null)
                     {
 
-                        ClasificacionExiste.ClNmbre = _Clasificacion.ClNmbre;
-                        ClasificacionExiste.ClDscrpcion = _Clasificacion.ClDscrpcion;
-                        ClasificacionExiste.ClCdgoUsrio = _Clasificacion.ClCdgoUsrio;
-                        ClasificacionExiste.ClActvo = _Clasificacion.ClActvo;
-
+                        ClasificacionExiste.ClNmbre = _ClasificacionDTO.Nombre;
+                        ClasificacionExiste.ClDscrpcion = _ClasificacionDTO.Descripcion;
+                        ClasificacionExiste.ClCdgoUsrio = _ClasificacionDTO.CodigoUsuario;
+                        ClasificacionExiste.ClActvo = _ClasificacionDTO.Estado;
 
                         _dbContex.Entry(ClasificacionExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                         await _dbContex.SaveChangesAsync();
 
                     }
                     _dbContex.Dispose();
-                    return ClasificacionExiste;
+                    return _ClasificacionDTO;
                 }
                 catch (Exception ex)
                 {
@@ -111,22 +121,23 @@ namespace AccsoDtos.EstadoHechos
         #endregion
 
         #region Filtrar Clasificacion por codigo general
-        public async Task<List<MdloDtos.Clasificacion>> FiltrarClasificacionGeneral(string Codigo, bool estado)
+        public async Task<List<ClasificacionDTO>> FiltrarClasificacionGeneral(string Codigo, bool estado)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
-                var lst = await (from clasificacion in _dbContex.Clasificacions
-                                 where clasificacion.ClActvo == estado // Validar el estado
-                                       && (clasificacion.ClRowid.ToString().Contains(Codigo) // Validar ClRowid
-                                       || clasificacion.ClNmbre.Contains(Codigo)) // Validar ClNmbre
-                                 select clasificacion).ToListAsync();
-                return lst;
+                var query = await (from clasificacion in _dbContex.Clasificacions
+                                   where clasificacion.ClActvo == estado // Validar el estado
+                                         && (clasificacion.ClRowid.ToString().Contains(Codigo) // Validar ClRowid
+                                         || clasificacion.ClNmbre.Contains(Codigo)) // Validar ClNmbre
+                                   select clasificacion).ToListAsync();
+                var listClasificacion = _mapper.Map<List<ClasificacionDTO>>(query);
+                return listClasificacion;
             }
         }
         #endregion
 
         #region Filtrar Clasificacion por codigo Especifico clasificacion
-        public async Task<List<MdloDtos.Clasificacion>> FiltrarClasificacionEspecifico(string Codigo, bool estado)
+        public async Task<List<ClasificacionDTO>> FiltrarClasificacionEspecifico(string Codigo, bool estado)
         {
             // Intentar convertir el código a entero
             if (!int.TryParse(Codigo, out int codigoConvert))
@@ -137,34 +148,35 @@ namespace AccsoDtos.EstadoHechos
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 // Filtrar por el código específico y el estado
-                var lst = await (from clasificacion in _dbContex.Clasificacions
-                                 where clasificacion.ClRowid == codigoConvert && clasificacion.ClActvo == estado
-                                 select clasificacion).ToListAsync();
+                var query = await (from clasificacion in _dbContex.Clasificacions
+                                   where clasificacion.ClRowid == codigoConvert && clasificacion.ClActvo == estado
+                                   select clasificacion).ToListAsync();
 
-                return lst;
+                var listClasificacion = _mapper.Map<List<ClasificacionDTO>>(query);
+                return listClasificacion;
             }
         }
 
         #endregion
 
         #region Inactivar Clasificacion Por codigo.
-        public async Task<MdloDtos.Clasificacion> InactivarClasificacion(MdloDtos.Clasificacion _Clasificacion)
+        public async Task<ClasificacionDTO> InactivarClasificacion(ClasificacionDTO _ClasificacionDTO)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 try
                 {
-                    MdloDtos.Clasificacion ClasificacionExiste = await _dbContex.Clasificacions.FindAsync(_Clasificacion.ClRowid);
+                    MdloDtos.Clasificacion ClasificacionExiste = await _dbContex.Clasificacions.FindAsync(_ClasificacionDTO.Id);
                     if (ClasificacionExiste != null)
                     {
-                        ClasificacionExiste.ClActvo = _Clasificacion.ClActvo;
+                        ClasificacionExiste.ClActvo = _ClasificacionDTO.Estado;
 
                         _dbContex.Entry(ClasificacionExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                         await _dbContex.SaveChangesAsync();
 
                     }
                     _dbContex.Dispose();
-                    return ClasificacionExiste;
+                    return _ClasificacionDTO;
                 }
                 catch (Exception ex)
                 {
@@ -180,7 +192,7 @@ namespace AccsoDtos.EstadoHechos
         public async Task<bool> VerificarClasificacion(int Codigo)
         {
             bool respuesta = false;
-            if(Codigo != null)
+            if (Codigo != null)
             {
                 using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
                 {

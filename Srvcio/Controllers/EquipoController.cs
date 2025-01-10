@@ -29,10 +29,10 @@ namespace Srvcio.Controllers
 
         #region Consultar equipo 
         [HttpGet("listar-equipo")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Equipo>>> ListarEquipo([FromQuery] bool estado = true)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.EquipoDTO>>> ListarEquipo([FromQuery] bool estado = true)
         {
            
-            var ObjEquipo = new List<MdloDtos.Equipo>();
+            var ObjEquipo = new List<MdloDtos.DTO.EquipoDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             try
@@ -60,9 +60,9 @@ namespace Srvcio.Controllers
 
         #region Filtrar equipo por codigo
         [HttpGet("filtrar-equipo-general")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Equipo>>> FiltrarEquipoGeneral(string FiltroBusqueda, bool estado)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.EquipoDTO>>> FiltrarEquipoGeneral(string FiltroBusqueda, bool estado)
         {
-            var ObjEquipo = new List<MdloDtos.Equipo>();
+            var ObjEquipo = new List<MdloDtos.DTO.EquipoDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -110,9 +110,9 @@ namespace Srvcio.Controllers
 
         #region Filtrar equipo especifica
         [HttpGet("filtrar-equipo-especifico")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Equipo>>> FiltrarEquipoEspecifico(string CodigoBusqueda, bool estado)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.EquipoDTO>>> FiltrarEquipoEspecifico(string CodigoBusqueda, bool estado)
         {
-            var ObjEquipo = new List<MdloDtos.Equipo>();
+            var ObjEquipo = new List<MdloDtos.DTO.EquipoDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -162,7 +162,7 @@ namespace Srvcio.Controllers
 
         #region Ingresar equipo
         [HttpPost("ingresar-equipo")]
-        public async Task<ActionResult<dynamic>> IngresarEquipo([FromBody] MdloDtos.Equipo objEquipo)
+        public async Task<ActionResult<dynamic>> IngresarEquipo([FromBody] MdloDtos.DTO.EquipoDTO objEquipo)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -208,7 +208,7 @@ namespace Srvcio.Controllers
 
         #region Actualizar equipo
         [HttpPut("actualizar-equipo")]
-        public async Task<ActionResult<dynamic>> EditarEquipo([FromBody] MdloDtos.Equipo ObjEquipo)
+        public async Task<ActionResult<dynamic>> EditarEquipo([FromBody] MdloDtos.DTO.EquipoDTO ObjEquipo)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Actualizacion);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -255,7 +255,7 @@ namespace Srvcio.Controllers
         #region Inactivar equipo
         [HttpPut("inactivar-equipo")]
 
-        public async Task<ActionResult<dynamic>> EliminarEquipo([FromBody] MdloDtos.Equipo ObjEquipo)
+        public async Task<ActionResult<dynamic>> EliminarEquipo([FromBody] MdloDtos.DTO.EquipoDTO ObjEquipo)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Actualizacion);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.

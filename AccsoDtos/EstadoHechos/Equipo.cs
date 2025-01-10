@@ -1,10 +1,14 @@
-﻿using MdloDtos.Utilidades;
+﻿using AutoMapper;
+using MdloDtos;
+using MdloDtos.DTO;
+using MdloDtos.Utilidades;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace AccsoDtos.EstadoHechos
 {
@@ -15,15 +19,23 @@ namespace AccsoDtos.EstadoHechos
     /// 
     public class Equipo:MdloDtos.IModelos.IEquipo
     {
+        private readonly CcVenturaContext _dbContext;
+        private readonly IMapper _mapper;
+
+        public Equipo(IMapper mapper, MdloDtos.CcVenturaContext dbContext)
+        {
+            _mapper = mapper;
+            _dbContext = dbContext;
+        }
         #region Ingresar datos a la entidad Equipo
-        public async Task<MdloDtos.Equipo> IngresarEquipo(MdloDtos.Equipo _Equipo)
+        public async Task<MdloDtos.DTO.EquipoDTO> IngresarEquipo(MdloDtos.DTO.EquipoDTO _EquipoDto)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 var ObjEquipo = new MdloDtos.Equipo();
                 try
                 {
-                    var EquipoExiste = await this.VerificarEquipo(_Equipo.EqRowid);
+                    var EquipoExiste = await this.VerificarEquipo(_EquipoDto.Id);
 
                     if (EquipoExiste == true)
                     {
@@ -34,11 +46,11 @@ namespace AccsoDtos.EstadoHechos
 
                         DateTime fechaSistema = DateTime.Now;
 
-                        ObjEquipo.EqNmbre = _Equipo.EqNmbre;
-                        ObjEquipo.EqDscrpcion = _Equipo.EqDscrpcion;
+                        ObjEquipo.EqNmbre = _EquipoDto.Nombre;
+                        ObjEquipo.EqDscrpcion = _EquipoDto.Descripcion;
                         ObjEquipo.EqFchaCrcion = fechaSistema;
-                        ObjEquipo.EqCdgoUsrio = _Equipo.EqCdgoUsrio;
-                        ObjEquipo.EqCdgo = _Equipo.EqCdgo;
+                        ObjEquipo.EqCdgoUsrio = _EquipoDto.CodigoUsuario;
+                        ObjEquipo.EqCdgo = _EquipoDto.codigoEquipo;
                         ObjEquipo.EqActvo = true;
 
 
@@ -53,50 +65,50 @@ namespace AccsoDtos.EstadoHechos
                     throw new Exception(ex.ToString());
                 }
                 _dbContex.Dispose();
-                return ObjEquipo;
+                return _EquipoDto;
             }
 
         }
         #endregion
 
         #region Listar todos las equipo
-        public async Task<List<MdloDtos.Equipo>> ListarEquipo(bool estado = true)
+        public async Task<List<MdloDtos.DTO.EquipoDTO>> ListarEquipo(bool estado = true)
         {
             List<MdloDtos.Equipo > listEquipo = new List<MdloDtos.Equipo>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
-                var query = from equipo in _dbContex.Equipos
-                            where equipo.EqActvo == estado
-                            select equipo;
-                listEquipo = await query.ToListAsync();
-                _dbContex.Dispose();
-               
+                var query = await (from equipo in _dbContex.Equipos
+                                   where equipo.EqActvo == estado
+                                   select equipo).ToListAsync();
+                
+                var list = _mapper.Map<List<EquipoDTO>>(query);
+                return list;
+
             }
-            return listEquipo;
         }
         #endregion
 
         #region Actualizar departamentos por el objeto _Equipo
-        public async Task<MdloDtos.Equipo> EditarEquipo(MdloDtos.Equipo _Equipo)
+        public async Task<MdloDtos.DTO.EquipoDTO> EditarEquipo(MdloDtos.DTO.EquipoDTO _EquipoDTO)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 try
                 {
-                    MdloDtos.Equipo EquipoExiste = await _dbContex.Equipos.FindAsync(_Equipo.EqRowid);
+                    MdloDtos.Equipo EquipoExiste = await _dbContex.Equipos.FindAsync(_EquipoDTO.Id);
                     if (EquipoExiste != null)
                     {
-                        EquipoExiste.EqNmbre = _Equipo.EqNmbre;
-                        EquipoExiste.EqDscrpcion = _Equipo.EqDscrpcion;
-                        EquipoExiste.EqCdgoUsrio = _Equipo.EqCdgoUsrio;
-                        EquipoExiste.EqCdgo = _Equipo.EqCdgo;
-                        EquipoExiste.EqActvo = _Equipo.EqActvo;
+                        EquipoExiste.EqNmbre = _EquipoDTO.Nombre;
+                        EquipoExiste.EqDscrpcion = _EquipoDTO.Descripcion;
+                        EquipoExiste.EqCdgoUsrio = _EquipoDTO.CodigoUsuario;
+                        EquipoExiste.EqCdgo = _EquipoDTO.codigoEquipo;
+                        EquipoExiste.EqActvo = _EquipoDTO.Estado;
               
                         _dbContex.Entry(EquipoExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                         await _dbContex.SaveChangesAsync();
                     }
                     _dbContex.Dispose();
-                    return EquipoExiste;
+                    return _EquipoDTO;
                 }
                 catch (Exception ex)
                 {
@@ -109,23 +121,24 @@ namespace AccsoDtos.EstadoHechos
         #endregion
 
         #region Filtrar Equipo por codigo general
-        public async Task<List<MdloDtos.Equipo>> FiltrarEquipoGeneral(string Codigo, bool estado)
+        public async Task<List<MdloDtos.DTO.EquipoDTO>> FiltrarEquipoGeneral(string Codigo, bool estado)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 // Filtrar por código (RowID o nombre) y el estado
-                var lst = await (from eq in _dbContex.Equipos
+                var query = await (from eq in _dbContex.Equipos
                                  where (eq.EqRowid.ToString().Contains(Codigo) || eq.EqNmbre.Contains(Codigo))
                                        && eq.EqActvo == estado // Validar el estado
-                                 select eq).ToListAsync();
+                                  select eq).ToListAsync();
 
-                return lst;
+                var list = _mapper.Map<List<EquipoDTO>>(query);
+                return list;
             }
         }
         #endregion
 
         #region Filtrar Equipo por codigo Especifico 
-        public async Task<List<MdloDtos.Equipo>> FiltrarEquipoEspecifico(string Codigo, bool estado)
+        public async Task<List<MdloDtos.DTO.EquipoDTO>> FiltrarEquipoEspecifico(string Codigo, bool estado)
         {
             // Convertir el código a entero
             int codigoConvert = int.Parse(Codigo);
@@ -133,32 +146,33 @@ namespace AccsoDtos.EstadoHechos
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 // Filtrar por código específico y estado
-                var lst = await (from eq in _dbContex.Equipos
+                var query = await (from eq in _dbContex.Equipos
                                  where eq.EqRowid == codigoConvert && eq.EqActvo == estado
                                  select eq).ToListAsync();
 
-                return lst;
+                var list = _mapper.Map<List<EquipoDTO>>(query);
+                return list;
             }
         }
         #endregion
 
         #region inactivar Equipo Por codigo.
-        public async Task<MdloDtos.Equipo> InactivarEquipo(MdloDtos.Equipo _Equipo)
+        public async Task<MdloDtos.DTO.EquipoDTO> InactivarEquipo(MdloDtos.DTO.EquipoDTO _EquipoDTO)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 try
                 {
-                    MdloDtos.Equipo EquipoExiste = await _dbContex.Equipos.FindAsync(_Equipo.EqRowid);
+                    MdloDtos.Equipo EquipoExiste = await _dbContex.Equipos.FindAsync(_EquipoDTO.Id);
                     if (EquipoExiste != null)
                     {
-                        EquipoExiste.EqActvo = _Equipo.EqActvo;
+                        EquipoExiste.EqActvo = _EquipoDTO.Estado;
 
                         _dbContex.Entry(EquipoExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                         await _dbContex.SaveChangesAsync();
                     }
                     _dbContex.Dispose();
-                    return EquipoExiste;
+                    return _EquipoDTO;
                 }
                 catch (Exception ex)
                 {

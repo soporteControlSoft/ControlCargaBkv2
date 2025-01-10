@@ -8,14 +8,14 @@ namespace MdloDtos.IModelos
 {
     public interface IEquipo
     {
-        public Task<MdloDtos.Equipo> IngresarEquipo(MdloDtos.Equipo ObjCEquipo);
-        public Task<List<MdloDtos.Equipo>> ListarEquipo(bool estado);
+        public Task<MdloDtos.DTO.EquipoDTO> IngresarEquipo(MdloDtos.DTO.EquipoDTO ObjCEquipo);
+        public Task<List<MdloDtos.DTO.EquipoDTO>> ListarEquipo(bool estado);
 
-        public Task<MdloDtos.Equipo> EditarEquipo(MdloDtos.Equipo ObjEquipo);
+        public Task<MdloDtos.DTO.EquipoDTO> EditarEquipo(MdloDtos.DTO.EquipoDTO ObjEquipo);
 
-        public Task<List<MdloDtos.Equipo>> FiltrarEquipoGeneral(String Codigo, bool estado);
-        public Task<List<MdloDtos.Equipo>> FiltrarEquipoEspecifico(String Codigo, bool estado);
-        public Task<MdloDtos.Equipo> InactivarEquipo(MdloDtos.Equipo ObjEquipo);
+        public Task<List<MdloDtos.DTO.EquipoDTO>> FiltrarEquipoGeneral(String Codigo, bool estado);
+        public Task<List<MdloDtos.DTO.EquipoDTO>> FiltrarEquipoEspecifico(String Codigo, bool estado);
+        public Task<MdloDtos.DTO.EquipoDTO> InactivarEquipo(MdloDtos.DTO.EquipoDTO ObjEquipo);
         public Task<bool> VerificarEquipo(int Codigo);
 
     }

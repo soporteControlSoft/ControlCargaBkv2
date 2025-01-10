@@ -13,22 +13,22 @@ namespace VldcionDtos
     {
 
        
-        AccsoDtos.EstadoHechos.Equipo ObjEquipo = new AccsoDtos.EstadoHechos.Equipo();
+        AccsoDtos.EstadoHechos.Equipo ObjEquipo = new AccsoDtos.EstadoHechos.Equipo(null, null);
         AccsoDtos.Parametrizacion.Usuario _ObjUsuario = new AccsoDtos.Parametrizacion.Usuario();
 
         #region Validacion de Equipo, metodo Ingreso
-        public async Task<int> ValidarIngreso(MdloDtos.Equipo objEquipo) {
+        public async Task<int> ValidarIngreso(MdloDtos.DTO.EquipoDTO objEquipo) {
 
             int resultado = 0;
             try {
                 //Validar los campos Obligatorios.
                 if (
-                    !string.IsNullOrEmpty(objEquipo.EqNmbre) &&
-                    !string.IsNullOrEmpty(objEquipo.EqDscrpcion)
+                    !string.IsNullOrEmpty(objEquipo.Nombre) &&
+                    !string.IsNullOrEmpty(objEquipo.Descripcion)
                    )
                 {
                     //Validar la llave relacional.
-                    var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objEquipo.EqCdgoUsrio);
+                    var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objEquipo.CodigoUsuario);
                     if (UsuarioExiste == false)
                     {
                         resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.RelacionNoExiste;
@@ -56,18 +56,18 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de equipo , metodo Eliminar
-        public async Task<int> ValidarEliminar(MdloDtos.Equipo objEquipo)
+        public async Task<int> ValidarEliminar(MdloDtos.DTO.EquipoDTO objEquipo)
         {
             int resultado = 0;
             try
             {
-                var EquipoExiste = await ObjEquipo.VerificarEquipo(objEquipo.EqRowid);
+                var EquipoExiste = await ObjEquipo.VerificarEquipo(objEquipo.Id);
                 //Validar si existe el equipo
                 if (EquipoExiste == true)
                 {
                     //Validar los campos Obligatorios.
                     if (
-                         objEquipo.EqActvo == true || objEquipo.EqActvo == false
+                         objEquipo.Estado == true || objEquipo.Estado == false
                        )
                     {
                             resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
@@ -95,23 +95,23 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de Equipo , metodo Actualizar
-        public async Task<int> ValidarActualizacion(MdloDtos.Equipo objEquipo)
+        public async Task<int> ValidarActualizacion(MdloDtos.DTO.EquipoDTO objEquipo)
         {
             int resultado = 0;
             try
             {
-                var EquipoExiste = await ObjEquipo.VerificarEquipo(objEquipo.EqRowid);
+                var EquipoExiste = await ObjEquipo.VerificarEquipo(objEquipo.Id);
                 //Validar si existe el equipo
                 if (EquipoExiste == true)
                 {
                     //Validar los campos Obligatorios.
                     if (
-                        !string.IsNullOrEmpty(objEquipo.EqNmbre) &&
-                        !string.IsNullOrEmpty(objEquipo.EqDscrpcion)
+                        !string.IsNullOrEmpty(objEquipo.Nombre) &&
+                        !string.IsNullOrEmpty(objEquipo.Descripcion)
                        )
                     {
                         //Validar la llave relacional.
-                        var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objEquipo.EqCdgoUsrio);
+                        var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objEquipo.CodigoUsuario);
                         if (UsuarioExiste == false)
                         {
                             resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.RelacionNoExiste;

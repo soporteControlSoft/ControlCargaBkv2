@@ -29,10 +29,10 @@ namespace Srvcio.Controllers
 
         #region Consultar Evento
         [HttpGet("listar-evento")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Evento>>> ListarClasificacion([FromQuery] bool estado = true)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.EventoDTO>>> ListarClasificacion([FromQuery] bool estado = true)
         {
            
-            var ObjEvento = new List<MdloDtos.Evento>();
+            var ObjEvento = new List<MdloDtos.DTO.EventoDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             try
@@ -60,9 +60,9 @@ namespace Srvcio.Controllers
 
         #region Filtrar Evento por codigo
         [HttpGet("filtrar-evento-general")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Evento>>> FiltrarEventoGeneral(string FiltroBusqueda, bool estado)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.EventoDTO>>> FiltrarEventoGeneral(string FiltroBusqueda, bool estado)
         {
-            var ObjEvento = new List<MdloDtos.Evento>();
+            var ObjEvento = new List<MdloDtos.DTO.EventoDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -110,9 +110,9 @@ namespace Srvcio.Controllers
 
         #region Filtrar Evento especifica
         [HttpGet("filtrar-evento-especifico")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Evento>>> FiltrarEventoEspecifico(string CodigoBusqueda,bool estado)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.EventoDTO>>> FiltrarEventoEspecifico(string CodigoBusqueda,bool estado)
         {
-            var ObjEvento = new List<MdloDtos.Evento>();
+            var ObjEvento = new List<MdloDtos.DTO.EventoDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -162,7 +162,7 @@ namespace Srvcio.Controllers
 
         #region Ingresar Evento
         [HttpPost("ingresar-evento")]
-        public async Task<ActionResult<dynamic>> IngresarEvento([FromBody] MdloDtos.Evento objEvento)
+        public async Task<ActionResult<dynamic>> IngresarEvento([FromBody] MdloDtos.DTO.EventoDTO objEvento)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -208,7 +208,7 @@ namespace Srvcio.Controllers
 
         #region Actualizar ObEvento
         [HttpPut("actualizar-evento")]
-        public async Task<ActionResult<dynamic>> EditarEvento([FromBody] MdloDtos.Evento ObjEvento)
+        public async Task<ActionResult<dynamic>> EditarEvento([FromBody] MdloDtos.DTO.EventoDTO ObjEvento)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Actualizacion);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -254,7 +254,7 @@ namespace Srvcio.Controllers
 
         #region Inactivar Evento
         [HttpPut("inactivar-evento")]
-        public async Task<ActionResult<dynamic>> IncativarEvento([FromBody] MdloDtos.Evento ObjEvento)
+        public async Task<ActionResult<dynamic>> IncativarEvento([FromBody] MdloDtos.DTO.EventoDTO ObjEvento)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Inactivar);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.

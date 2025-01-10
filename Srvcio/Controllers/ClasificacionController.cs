@@ -1,4 +1,5 @@
 ﻿using AccsoDtos.AccesoSistema;
+using MdloDtos.DTO;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
@@ -29,9 +30,9 @@ namespace Srvcio.Controllers
 
         #region Consultar clasificacion
         [HttpGet("listar-clasificacion")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Clasificacion>>> ListarClasificacion([FromQuery] bool estado = true)
+        public async Task<ActionResult<IEnumerable<ClasificacionDTO>>> ListarClasificacion([FromQuery] bool estado = true)
         {
-            var ObjClasificacion = new List<MdloDtos.Clasificacion>();
+            var ObjClasificacion = new List<ClasificacionDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
 
@@ -62,9 +63,9 @@ namespace Srvcio.Controllers
 
         #region Filtrar Clasificacion por codigo
         [HttpGet("filtrar-clasificacion-general")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Clasificacion>>> FiltrarClasificacionGeneral(string FiltroBusqueda, bool estado)
+        public async Task<ActionResult<IEnumerable<ClasificacionDTO>>> FiltrarClasificacionGeneral(string FiltroBusqueda, bool estado)
         {
-            var ObjClasificacion = new List<MdloDtos.Clasificacion>();
+            var ObjClasificacion = new List<ClasificacionDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -112,9 +113,9 @@ namespace Srvcio.Controllers
 
         #region Filtrar Clasificacion especifica
         [HttpGet("filtrar-clasificacion-especifico")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Clasificacion>>> FiltrarClasificacionEspecifico(string CodigoBusqueda, bool estado)
+        public async Task<ActionResult<IEnumerable<ClasificacionDTO>>> FiltrarClasificacionEspecifico(string CodigoBusqueda, bool estado)
         {
-            var ObjClasificacion = new List<MdloDtos.Clasificacion>();
+            var ObjClasificacion = new List<ClasificacionDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -123,7 +124,7 @@ namespace Srvcio.Controllers
                 validacion = await validacionCLasificacion.ValidarFiltroBusquedas(Codigo);
                 if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa) //si fue exito)
                 {
-                    
+
                     ObjClasificacion = await this._dbContex.FiltrarClasificacionEspecifico(Codigo, estado);
                     if (ObjClasificacion != null)
                     {
@@ -164,7 +165,7 @@ namespace Srvcio.Controllers
 
         #region Ingresar clasificacion
         [HttpPost("ingresar-clasificacion")]
-        public async Task<ActionResult<dynamic>> IngresarClasificacion([FromBody] MdloDtos.Clasificacion objClasificacion)
+        public async Task<ActionResult<dynamic>> IngresarClasificacion([FromBody] ClasificacionDTO objClasificacion)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -177,7 +178,7 @@ namespace Srvcio.Controllers
                     if (ObClasificacio != null)
                     {
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
-                        respuesta.mensaje =MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                        respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
                         respuesta.datos = ObClasificacio;
                     }
                     else
@@ -210,16 +211,16 @@ namespace Srvcio.Controllers
 
         #region Actualizar Clasificacion
         [HttpPut("actualizar-clasificacion")]
-        public async Task<ActionResult<dynamic>> EditarClasificacion([FromBody] MdloDtos.Clasificacion ObjClasificacion)
+        public async Task<ActionResult<dynamic>> EditarClasificacion([FromBody] ClasificacionDTO ObjClasificacionDTO)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Actualizacion);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
             {
-                validacion = await validacionCLasificacion.ValidarActualizacion(ObjClasificacion);
+                validacion = await validacionCLasificacion.ValidarActualizacion(ObjClasificacionDTO);
                 if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa) //si fue exito)
                 {
-                    var ObClasifiaccion = await this._dbContex.EditarClasificacion(ObjClasificacion);
+                    var ObClasifiaccion = await this._dbContex.EditarClasificacion(ObjClasificacionDTO);
                     if (ObClasifiaccion != null)
                     {
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
@@ -240,14 +241,14 @@ namespace Srvcio.Controllers
                     //regresa el error
                     respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                     respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                    respuesta.datos = ObjClasificacion;
+                    respuesta.datos = ObjClasificacionDTO;
                 }
             }
             catch (Exception ex)
             {
                 respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                 respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                respuesta.datos = ObjClasificacion;
+                respuesta.datos = ObjClasificacionDTO;
                 return BadRequest(respuesta);
             }
             return respuesta;
@@ -256,16 +257,16 @@ namespace Srvcio.Controllers
 
         #region Inactivar clasificacion
         [HttpPut("inactivar-clasificacion")]
-        public async Task<ActionResult<dynamic>> InactivarClasificacion([FromBody] MdloDtos.Clasificacion ObjClasificacion)
+        public async Task<ActionResult<dynamic>> InactivarClasificacion([FromBody] ClasificacionDTO ObjClasificacionDTO)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Actualizacion);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
             {
-                validacion = await validacionCLasificacion.ValidarEliminar(ObjClasificacion);
+                validacion = await validacionCLasificacion.ValidarEliminar(ObjClasificacionDTO);
                 if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa) //si fue exito)
                 {
-                    var ObClasifiaccion = await this._dbContex.InactivarClasificacion(ObjClasificacion);
+                    var ObClasifiaccion = await this._dbContex.InactivarClasificacion(ObjClasificacionDTO);
                     if (ObClasifiaccion != null)
                     {
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
@@ -286,18 +287,19 @@ namespace Srvcio.Controllers
                     //regresa el error
                     respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                     respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                    respuesta.datos = ObjClasificacion;
+                    respuesta.datos = ObjClasificacionDTO;
                 }
             }
             catch (Exception ex)
             {
                 respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                 respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                respuesta.datos = ObjClasificacion;
+                respuesta.datos = ObjClasificacionDTO;
                 return BadRequest(respuesta);
             }
             return respuesta;
         }
         #endregion
+
     }
 }

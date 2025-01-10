@@ -13,27 +13,27 @@ namespace VldcionDtos
     {
 
        
-        AccsoDtos.EstadoHechos.Evento ObjEvento = new AccsoDtos.EstadoHechos.Evento();
+        AccsoDtos.EstadoHechos.Evento ObjEvento = new AccsoDtos.EstadoHechos.Evento(null, null);
         AccsoDtos.Parametrizacion.Usuario _ObjUsuario = new AccsoDtos.Parametrizacion.Usuario();
-        AccsoDtos.EstadoHechos.Clasificacion _ObjClasificacion = new AccsoDtos.EstadoHechos.Clasificacion();
+        AccsoDtos.EstadoHechos.Clasificacion _ObjClasificacion = new AccsoDtos.EstadoHechos.Clasificacion(null, null);
         AccsoDtos.EstadoHechos.Responsable _ObjResponsable = new AccsoDtos.EstadoHechos.Responsable();
-        AccsoDtos.EstadoHechos.Equipo _ObjEquipo = new AccsoDtos.EstadoHechos.Equipo();
+        AccsoDtos.EstadoHechos.Equipo _ObjEquipo = new AccsoDtos.EstadoHechos.Equipo(null, null);
 
 
         #region Validacion de Evento , metodo Ingreso
-        public async Task<int> ValidarIngreso(MdloDtos.Evento objEvento) {
+        public async Task<int> ValidarIngreso(MdloDtos.DTO.EventoDTO objEvento) {
 
             int resultado = 0;
             try {
                 //Validar los campos Obligatorios.
                 if (
-                    !string.IsNullOrEmpty(objEvento.EvNmbre) &&
-                    !string.IsNullOrEmpty(objEvento.EvObsrvcion) &&
-                    !string.IsNullOrEmpty(objEvento.EvFchaIncio)
+                    !string.IsNullOrEmpty(objEvento.Nombre) &&
+                    !string.IsNullOrEmpty(objEvento.Observacion) &&
+                    !string.IsNullOrEmpty(objEvento.FechaInicio)
                    )
                 {
                     //Validar la llave relacional con el usuario.
-                    var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objEvento.EvCdgoUsrio);
+                    var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objEvento.CodigoUsuario);
                     if (UsuarioExiste == false)
                     {
                         //Retorna valor del TipoMensaje: RelacionNoExiste
@@ -41,7 +41,7 @@ namespace VldcionDtos
                     }
                     else
                     {   //Validar la llave relacional con la clasificacion.
-                        var ClasificacionExiste = await _ObjClasificacion.VerificarClasificacion(objEvento.EvRowidClsfccion);
+                        var ClasificacionExiste = await _ObjClasificacion.VerificarClasificacion(objEvento.CodigoClasificacion);
                         if (ClasificacionExiste == false)
                         {
                             //Retorna valor del TipoMensaje: RelacionNoExiste
@@ -49,7 +49,7 @@ namespace VldcionDtos
                         }
                         else
                         {   //Validar la llave relacional con la Responsable.
-                            var ResponsableExiste = await _ObjResponsable.VerificarResponsable(objEvento.EvRowidRspnsble);
+                            var ResponsableExiste = await _ObjResponsable.VerificarResponsable(objEvento.CodigoResponsable);
                             if (ResponsableExiste == false)
                             {
                                 //Retorna valor del TipoMensaje: RelacionNoExiste
@@ -78,16 +78,16 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de evento , metodo inacvtivar
-        public async Task<int> ValidarInactivar(MdloDtos.Evento objEvento)
+        public async Task<int> ValidarInactivar(MdloDtos.DTO.EventoDTO objEvento)
         {
             int resultado = 0;
             try
             {
-                var EventoExiste = await ObjEvento.VerificarEvento (objEvento.EvRowid);
+                var EventoExiste = await ObjEvento.VerificarEvento (objEvento.IdEvento);
                 if (EventoExiste == true)
                 {
                     if (
-                        objEvento.EvActvo == true || objEvento.EvActvo == false
+                        objEvento.Estado == true || objEvento.Estado == false
                    )
                     {
                         resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
@@ -116,22 +116,22 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de evento , metodo Actualizar
-        public async Task<int> ValidarActualizacion(MdloDtos.Evento objEvento)
+        public async Task<int> ValidarActualizacion(MdloDtos.DTO.EventoDTO objEvento)
         {
             int resultado = 0;
             try
             {
-                var EventoExiste = await ObjEvento.VerificarEvento(objEvento.EvRowid);
+                var EventoExiste = await ObjEvento.VerificarEvento(objEvento.IdEvento);
                 if (EventoExiste == true)
                 {
                     if (
-                        !string.IsNullOrEmpty(objEvento.EvNmbre) &&
-                        !string.IsNullOrEmpty(objEvento.EvObsrvcion) &&
-                        !string.IsNullOrEmpty(objEvento.EvFchaIncio) 
+                        !string.IsNullOrEmpty(objEvento.Nombre) &&
+                        !string.IsNullOrEmpty(objEvento.Observacion) &&
+                        !string.IsNullOrEmpty(objEvento.FechaInicio) 
                    )
                     {
                         //Validar la llave relacional con el usuario.
-                        var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objEvento.EvCdgoUsrio);
+                        var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objEvento.CodigoUsuario);
                         if (UsuarioExiste == false)
                         {
                             //Retorna valor del TipoMensaje: RelacionNoExiste
@@ -139,7 +139,7 @@ namespace VldcionDtos
                         }
                         else
                         {   //Validar la llave relacional con la clasificacion.
-                            var ClasificacionExiste = await _ObjClasificacion.VerificarClasificacion(objEvento.EvRowidClsfccion);
+                            var ClasificacionExiste = await _ObjClasificacion.VerificarClasificacion(objEvento.CodigoClasificacion);
                             if (ClasificacionExiste == false)
                             {
                                 //Retorna valor del TipoMensaje: RelacionNoExiste
@@ -147,7 +147,7 @@ namespace VldcionDtos
                             }
                             else
                             {   //Validar la llave relacional con la Responsable.
-                                var ResponsableExiste = await _ObjResponsable.VerificarResponsable(objEvento.EvRowidRspnsble);
+                                var ResponsableExiste = await _ObjResponsable.VerificarResponsable(objEvento.CodigoResponsable);
                                 if (ResponsableExiste == false)
                                 {
                                     //Retorna valor del TipoMensaje: RelacionNoExiste

@@ -8,14 +8,12 @@ namespace MdloDtos.IModelos
 {
     public interface IClasificacion
     {
-        public Task<MdloDtos.Clasificacion> IngresarClasificacion(MdloDtos.Clasificacion ObjClasificacion);
-        public Task<List<MdloDtos.Clasificacion>> ListarClasificacion(bool estado);
-
-        public Task<MdloDtos.Clasificacion> EditarClasificacion(MdloDtos.Clasificacion ObjClasificacion);
-
-        public Task<List<MdloDtos.Clasificacion>> FiltrarClasificacionGeneral(String Codigo, bool estado);
-        public Task<List<MdloDtos.Clasificacion>> FiltrarClasificacionEspecifico(String Codigo, bool estado);
-        public Task<MdloDtos.Clasificacion> InactivarClasificacion(MdloDtos.Clasificacion ObjClasificacion);
+        public Task<MdloDtos.DTO.ClasificacionDTO> IngresarClasificacion(MdloDtos.DTO.ClasificacionDTO ObjClasificacion);
+        public Task<List<MdloDtos.DTO.ClasificacionDTO>> ListarClasificacion(bool estado);
+        public Task<MdloDtos.DTO.ClasificacionDTO> EditarClasificacion(MdloDtos.DTO.ClasificacionDTO ObjClasificacion);
+        public Task<List<MdloDtos.DTO.ClasificacionDTO>> FiltrarClasificacionGeneral(String Codigo, bool estado);
+        public Task<List<MdloDtos.DTO.ClasificacionDTO>> FiltrarClasificacionEspecifico(String Codigo, bool estado);
+        public Task<MdloDtos.DTO.ClasificacionDTO> InactivarClasificacion(MdloDtos.DTO.ClasificacionDTO ObjClasificacion);
         public Task<bool> VerificarClasificacion(int Codigo);
 
     }
