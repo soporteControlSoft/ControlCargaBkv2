@@ -3740,10 +3740,9 @@ public partial class CcVenturaContext : DbContext
                 .HasNoKey()
                 .ToView("wm_Depositos_SolicitudRetiro");
 
-            entity.Property(e => e.Cantidad).HasColumnName("CANTIDAD");
-            entity.Property(e => e.CantidadDespachados).HasColumnName("CANTIDAD_DESPACHADOS");
-            entity.Property(e => e.CantidadRetiro).HasColumnName("CANTIDAD_RETIRO");
-            entity.Property(e => e.CodigoCliente).HasColumnName("CODIGO_CLIENTE");
+            entity.Property(e => e.Abierta).HasColumnName("ABIERTA");
+            entity.Property(e => e.Activa).HasColumnName("ACTIVA");
+            entity.Property(e => e.Ciudad).HasColumnName("CIUDAD");
             entity.Property(e => e.CodigoDeposito)
                 .HasMaxLength(15)
                 .IsUnicode(false)
@@ -3760,19 +3759,24 @@ public partial class CcVenturaContext : DbContext
                 .HasMaxLength(15)
                 .IsUnicode(false)
                 .HasColumnName("CODIGO_PRODUCTO");
-            entity.Property(e => e.CodigoUsuario)
-                .HasMaxLength(15)
+            entity.Property(e => e.CodigoTercero)
+                .HasMaxLength(20)
                 .IsUnicode(false)
-                .HasColumnName("CODIGO_USUARIO");
-            entity.Property(e => e.EstadoSolicitud).HasColumnName("ESTADO_SOLICITUD");
+                .HasColumnName("CODIGO_TERCERO");
+            entity.Property(e => e.EntregaSuspendida).HasColumnName("ENTREGA_SUSPENDIDA");
             entity.Property(e => e.FechaApertura)
                 .HasColumnType("smalldatetime")
                 .HasColumnName("FECHA_APERTURA");
             entity.Property(e => e.IdDeposito).HasColumnName("ID_DEPOSITO");
             entity.Property(e => e.IdRetiro).HasColumnName("ID_RETIRO");
+            entity.Property(e => e.IdTercero).HasColumnName("ID_TERCERO");
             entity.Property(e => e.IdVisita).HasColumnName("ID_VISITA");
             entity.Property(e => e.KilosAutorizado).HasColumnName("KILOS_AUTORIZADO");
             entity.Property(e => e.KilosDespachados).HasColumnName("KILOS_DESPACHADOS");
+            entity.Property(e => e.NombreCiudad)
+                .HasMaxLength(60)
+                .IsUnicode(false)
+                .HasColumnName("NOMBRE_CIUDAD");
             entity.Property(e => e.NombreMotonave)
                 .HasMaxLength(40)
                 .IsUnicode(false)
@@ -3781,13 +3785,24 @@ public partial class CcVenturaContext : DbContext
                 .HasMaxLength(40)
                 .IsUnicode(false)
                 .HasColumnName("NOMBRE_PRODUCTO");
+            entity.Property(e => e.NombreTercero)
+                .HasMaxLength(60)
+                .IsUnicode(false)
+                .HasColumnName("NOMBRE_TERCERO");
+            entity.Property(e => e.NombreZona)
+                .HasMaxLength(30)
+                .IsUnicode(false)
+                .HasColumnName("NOMBRE_ZONA");
+            entity.Property(e => e.Observaciones)
+                .IsUnicode(false)
+                .HasColumnName("OBSERVACIONES");
             entity.Property(e => e.PesoExacto).HasColumnName("PESO_EXACTO");
-            entity.Property(e => e.PlantaDestino)
+            entity.Property(e => e.Planta)
                 .HasMaxLength(50)
                 .IsUnicode(false)
-                .HasColumnName("PLANTA_DESTINO");
-            entity.Property(e => e.Saldos).HasColumnName("SALDOS");
-            entity.Property(e => e.SrAbrta).HasColumnName("sr_abrta");
+                .HasColumnName("PLANTA");
+            entity.Property(e => e.SaldosKilos).HasColumnName("SALDOS_KILOS");
+            entity.Property(e => e.SaldosUnidades).HasColumnName("SALDOS_UNIDADES");
             entity.Property(e => e.SrCmpoPrsnlzdo1)
                 .HasMaxLength(40)
                 .IsUnicode(false)
@@ -3800,11 +3815,9 @@ public partial class CcVenturaContext : DbContext
                 .HasMaxLength(40)
                 .IsUnicode(false)
                 .HasColumnName("sr_cmpo_prsnlzdo3");
-            entity.Property(e => e.SrEntrgaSspndda).HasColumnName("sr_entrga_sspndda");
-            entity.Property(e => e.SrObsrvcnes)
-                .IsUnicode(false)
-                .HasColumnName("sr_obsrvcnes");
-            entity.Property(e => e.ZonaSolicitud).HasColumnName("ZONA_SOLICITUD");
+            entity.Property(e => e.UnidadesAutorizado).HasColumnName("UNIDADES_AUTORIZADO");
+            entity.Property(e => e.UnidadesDespachadas).HasColumnName("UNIDADES_DESPACHADAS");
+            entity.Property(e => e.ZonaId).HasColumnName("ZONA_ID");
         });
 
         modelBuilder.Entity<WmGraficoListadoCliente>(entity =>

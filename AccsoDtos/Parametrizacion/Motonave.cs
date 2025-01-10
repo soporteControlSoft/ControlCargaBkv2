@@ -76,7 +76,8 @@ namespace AccsoDtos.Parametrizacion
                              ).ToListAsync();
                 _dbContex.Dispose();
 
-                var result = (lst.Count > 0) ? _mapper.Map<List<MotonaveDTO>>(lst) : new List<MotonaveDTO>();
+                //var result = (lst.Count > 0) ? _mapper.Map<List<MotonaveDTO>>(lst) : new List<MotonaveDTO>();
+                var result = (lst.Count() > 0) ? _mapper.Map<List<MotonaveDTO>>(lst) : null;
                 return result;
             }
         }
@@ -87,13 +88,27 @@ namespace AccsoDtos.Parametrizacion
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
+                /* var lst = await (from m in _dbContex.Motonaves
+                                  where m.MoCdgo == Codigo
+                                  select m
+                              ).ToListAsync();
+                 _dbContex.Dispose();
+
+
+                 //var result = (lst.Count > 0) ? _mapper.Map<List<MotonaveDTO>>(lst) : new List<MotonaveDTO>();
+                 var result = (lst.Count() > 0) ? _mapper.Map<List<MotonaveDTO>>(lst) : null;
+                 return result;*/
+
+                if (_dbContex == null) throw new InvalidOperationException("DbContext no inicializado.");
+                if (string.IsNullOrEmpty(Codigo)) throw new ArgumentNullException(nameof(Codigo));
+
                 var lst = await (from m in _dbContex.Motonaves
                                  where m.MoCdgo == Codigo
-                                 select m
-                             ).ToListAsync();
-                _dbContex.Dispose();
-                
-                var result = (lst.Count > 0) ? _mapper.Map<List<MotonaveDTO>>(lst) : null;
+                                 select m).ToListAsync();
+
+                if (_mapper == null) throw new InvalidOperationException("Mapper no inicializado.");
+
+                var result = (lst.Count > 0) ? _mapper.Map<List<MotonaveDTO>>(lst) : new List<MotonaveDTO>();
                 return result;
             }
         }
@@ -138,7 +153,8 @@ namespace AccsoDtos.Parametrizacion
             {
                 var lst = await _dbContex.Motonaves.ToListAsync();
                 _dbContex.Dispose();
-                var result = (lst.Count > 0) ? _mapper.Map<List<MotonaveDTO>>(lst) : new List<MotonaveDTO>();
+                //var result = (lst.Count > 0) ? _mapper.Map<List<MotonaveDTO>>(lst) : new List<MotonaveDTO>();
+                var result = (lst.Count() > 0) ? _mapper.Map<List<MotonaveDTO>>(lst) : null;
                 return result;
             }
         }
