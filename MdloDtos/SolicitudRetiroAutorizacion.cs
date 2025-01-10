@@ -57,6 +57,7 @@ public partial class SolicitudRetiroAutorizacion
 
         this.SraRowid = SraRowid;
         this.SraRowidSlctudRtro = SraRowidSlctudRtro;
+        this.SraRowidTrnsprtdra = SraRowidTrnsprtdra;
         this.SraAutrzdoKlos = SraAutrzdoKlos;
         this.SraAutrzdoUnddes = SraAutrzdoUnddes;
         this.SraFcha = SraFcha;
@@ -64,5 +65,7 @@ public partial class SolicitudRetiroAutorizacion
         this.Nombretercero = Nombretercero;
 
     }
+
+
 
 }

@@ -169,11 +169,17 @@ public partial class CcVenturaContext : DbContext
 
     public virtual DbSet<VwMdloDpstoLstarVstaMtnve> VwMdloDpstoLstarVstaMtnves { get; set; }
 
+    public virtual DbSet<VwMdloRsrvaLstarDpsto> VwMdloRsrvaLstarDpstos { get; set; }
+
+    public virtual DbSet<VwMdloRsrvaLstarSlctudRtroMdal> VwMdloRsrvaLstarSlctudRtroMdals { get; set; }
+
     public virtual DbSet<VwMdloRsrvaLstarVstaMtnve> VwMdloRsrvaLstarVstaMtnves { get; set; }
 
     public virtual DbSet<VwModuloSituacionPortuariaListarSituacionPortuarium> VwModuloSituacionPortuariaListarSituacionPortuaria { get; set; }
 
     public virtual DbSet<VwModuloVisitaMotonaveListarVisitaMotonave> VwModuloVisitaMotonaveListarVisitaMotonaves { get; set; }
+
+    public virtual DbSet<VwPrmtrosCnsltar> VwPrmtrosCnsltars { get; set; }
 
     public virtual DbSet<VwPrueba> VwPruebas { get; set; }
 
@@ -3231,6 +3237,61 @@ public partial class CcVenturaContext : DbContext
             entity.Property(e => e.VmScncia).HasColumnName("vm_scncia");
         });
 
+        modelBuilder.Entity<VwMdloRsrvaLstarDpsto>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("vw_MdloRsrva_LstarDpsto");
+
+            entity.Property(e => e.DeCdgo)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("De_cdgo");
+            entity.Property(e => e.DeCia)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("De_cia");
+            entity.Property(e => e.DeEsSubdpsto).HasColumnName("De_es_subdpsto");
+            entity.Property(e => e.DeRowid).HasColumnName("De_rowid");
+            entity.Property(e => e.VmRowid).HasColumnName("Vm_rowid");
+        });
+
+        modelBuilder.Entity<VwMdloRsrvaLstarSlctudRtroMdal>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("vw_MdloRsrva_LstarSlctudRtroMdal");
+
+            entity.Property(e => e.DeCdgo)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("de_cdgo");
+            entity.Property(e => e.DeCia)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("de_cia");
+            entity.Property(e => e.DeEstdo)
+                .HasMaxLength(1)
+                .IsUnicode(false)
+                .HasColumnName("de_estdo");
+            entity.Property(e => e.DeRowid).HasColumnName("de_rowid");
+            entity.Property(e => e.SrCdgo)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("sr_cdgo");
+            entity.Property(e => e.SrCia)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("sr_cia");
+            entity.Property(e => e.SrRowid).HasColumnName("sr_rowid");
+            entity.Property(e => e.SrtActva).HasColumnName("srt_actva");
+            entity.Property(e => e.SrtAutrzdoKlos).HasColumnName("srt_autrzdo_klos");
+            entity.Property(e => e.SrtAutrzdoUnddes).HasColumnName("srt_autrzdo_unddes");
+            entity.Property(e => e.SrtDspchdoKlos).HasColumnName("srt_dspchdo_klos");
+            entity.Property(e => e.SrtDspchdoUnddes).HasColumnName("srt_dspchdo_unddes");
+            entity.Property(e => e.SrtRowidTrnsprtdra).HasColumnName("srt_rowid_trnsprtdra");
+        });
+
         modelBuilder.Entity<VwMdloRsrvaLstarVstaMtnve>(entity =>
         {
             entity
@@ -3612,6 +3673,60 @@ public partial class CcVenturaContext : DbContext
                 .HasColumnName("vnddor_trcro_idntfccion");
         });
 
+        modelBuilder.Entity<VwPrmtrosCnsltar>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("vw_prmtros_cnsltar");
+
+            entity.Property(e => e.PaClvesAntrres).HasColumnName("pa_clves_antrres");
+            entity.Property(e => e.PaCrreoClve)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("pa_crreo_clve");
+            entity.Property(e => e.PaCrreoCnxionSgra).HasColumnName("pa_crreo_cnxion_sgra");
+            entity.Property(e => e.PaCrreoPrto).HasColumnName("pa_crreo_prto");
+            entity.Property(e => e.PaCrreoSrvdor)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("pa_crreo_srvdor");
+            entity.Property(e => e.PaCrreoUsrio)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("pa_crreo_usrio");
+            entity.Property(e => e.PaDiasInctvcionExtrnos).HasColumnName("pa_dias_inctvcion_extrnos");
+            entity.Property(e => e.PaDiasVgnciaClveExtrnos).HasColumnName("pa_dias_vgncia_clve_extrnos");
+            entity.Property(e => e.PaDiasVgnciaClveIntrnos).HasColumnName("pa_dias_vgncia_clve_intrnos");
+            entity.Property(e => e.PaEmprsa)
+                .HasMaxLength(40)
+                .IsUnicode(false)
+                .HasColumnName("pa_emprsa");
+            entity.Property(e => e.PaId)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("pa_id");
+            entity.Property(e => e.PaMntosVgnviaRsrva).HasColumnName("pa_mntos_vgnvia_rsrva");
+            entity.Property(e => e.PaNasClave)
+                .HasMaxLength(40)
+                .IsUnicode(false)
+                .HasColumnName("pa_nas_clave");
+            entity.Property(e => e.PaNasPuerto).HasColumnName("pa_nas_puerto");
+            entity.Property(e => e.PaNasRuta)
+                .HasMaxLength(300)
+                .IsUnicode(false)
+                .HasColumnName("pa_nas_ruta");
+            entity.Property(e => e.PaNasUsuario)
+                .HasMaxLength(40)
+                .IsUnicode(false)
+                .HasColumnName("pa_nas_usuario");
+            entity.Property(e => e.PaPsoMxmoACrgar).HasColumnName("pa_pso_mxmo_a_crgar");
+            entity.Property(e => e.PaSldoBjoDpsto).HasColumnName("pa_sldo_bjo_dpsto");
+            entity.Property(e => e.PaSldoBjoSlctudRtro).HasColumnName("pa_sldo_bjo_slctud_rtro");
+            entity.Property(e => e.PaUrlPrtalLgstco)
+                .HasMaxLength(300)
+                .IsUnicode(false)
+                .HasColumnName("pa_url_prtal_lgstco");
+        });
+
         modelBuilder.Entity<VwPrueba>(entity =>
         {
             entity
@@ -3680,10 +3795,9 @@ public partial class CcVenturaContext : DbContext
                 .HasNoKey()
                 .ToView("wm_Depositos_SolicitudRetiro");
 
-            entity.Property(e => e.Cantidad).HasColumnName("CANTIDAD");
-            entity.Property(e => e.CantidadDespachados).HasColumnName("CANTIDAD_DESPACHADOS");
-            entity.Property(e => e.CantidadRetiro).HasColumnName("CANTIDAD_RETIRO");
-            entity.Property(e => e.CodigoCliente).HasColumnName("CODIGO_CLIENTE");
+            entity.Property(e => e.Abierta).HasColumnName("ABIERTA");
+            entity.Property(e => e.Activa).HasColumnName("ACTIVA");
+            entity.Property(e => e.Ciudad).HasColumnName("CIUDAD");
             entity.Property(e => e.CodigoDeposito)
                 .HasMaxLength(15)
                 .IsUnicode(false)
@@ -3700,19 +3814,24 @@ public partial class CcVenturaContext : DbContext
                 .HasMaxLength(15)
                 .IsUnicode(false)
                 .HasColumnName("CODIGO_PRODUCTO");
-            entity.Property(e => e.CodigoUsuario)
-                .HasMaxLength(15)
+            entity.Property(e => e.CodigoTercero)
+                .HasMaxLength(20)
                 .IsUnicode(false)
-                .HasColumnName("CODIGO_USUARIO");
-            entity.Property(e => e.EstadoSolicitud).HasColumnName("ESTADO_SOLICITUD");
+                .HasColumnName("CODIGO_TERCERO");
+            entity.Property(e => e.EntregaSuspendida).HasColumnName("ENTREGA_SUSPENDIDA");
             entity.Property(e => e.FechaApertura)
                 .HasColumnType("smalldatetime")
                 .HasColumnName("FECHA_APERTURA");
             entity.Property(e => e.IdDeposito).HasColumnName("ID_DEPOSITO");
             entity.Property(e => e.IdRetiro).HasColumnName("ID_RETIRO");
+            entity.Property(e => e.IdTercero).HasColumnName("ID_TERCERO");
             entity.Property(e => e.IdVisita).HasColumnName("ID_VISITA");
             entity.Property(e => e.KilosAutorizado).HasColumnName("KILOS_AUTORIZADO");
             entity.Property(e => e.KilosDespachados).HasColumnName("KILOS_DESPACHADOS");
+            entity.Property(e => e.NombreCiudad)
+                .HasMaxLength(60)
+                .IsUnicode(false)
+                .HasColumnName("NOMBRE_CIUDAD");
             entity.Property(e => e.NombreMotonave)
                 .HasMaxLength(40)
                 .IsUnicode(false)
@@ -3721,13 +3840,24 @@ public partial class CcVenturaContext : DbContext
                 .HasMaxLength(40)
                 .IsUnicode(false)
                 .HasColumnName("NOMBRE_PRODUCTO");
+            entity.Property(e => e.NombreTercero)
+                .HasMaxLength(60)
+                .IsUnicode(false)
+                .HasColumnName("NOMBRE_TERCERO");
+            entity.Property(e => e.NombreZona)
+                .HasMaxLength(30)
+                .IsUnicode(false)
+                .HasColumnName("NOMBRE_ZONA");
+            entity.Property(e => e.Observaciones)
+                .IsUnicode(false)
+                .HasColumnName("OBSERVACIONES");
             entity.Property(e => e.PesoExacto).HasColumnName("PESO_EXACTO");
-            entity.Property(e => e.PlantaDestino)
+            entity.Property(e => e.Planta)
                 .HasMaxLength(50)
                 .IsUnicode(false)
-                .HasColumnName("PLANTA_DESTINO");
-            entity.Property(e => e.Saldos).HasColumnName("SALDOS");
-            entity.Property(e => e.SrAbrta).HasColumnName("sr_abrta");
+                .HasColumnName("PLANTA");
+            entity.Property(e => e.SaldosKilos).HasColumnName("SALDOS_KILOS");
+            entity.Property(e => e.SaldosUnidades).HasColumnName("SALDOS_UNIDADES");
             entity.Property(e => e.SrCmpoPrsnlzdo1)
                 .HasMaxLength(40)
                 .IsUnicode(false)
@@ -3740,11 +3870,9 @@ public partial class CcVenturaContext : DbContext
                 .HasMaxLength(40)
                 .IsUnicode(false)
                 .HasColumnName("sr_cmpo_prsnlzdo3");
-            entity.Property(e => e.SrEntrgaSspndda).HasColumnName("sr_entrga_sspndda");
-            entity.Property(e => e.SrObsrvcnes)
-                .IsUnicode(false)
-                .HasColumnName("sr_obsrvcnes");
-            entity.Property(e => e.ZonaSolicitud).HasColumnName("ZONA_SOLICITUD");
+            entity.Property(e => e.UnidadesAutorizado).HasColumnName("UNIDADES_AUTORIZADO");
+            entity.Property(e => e.UnidadesDespachadas).HasColumnName("UNIDADES_DESPACHADAS");
+            entity.Property(e => e.ZonaId).HasColumnName("ZONA_ID");
         });
 
         modelBuilder.Entity<WmGraficoListadoCliente>(entity =>
