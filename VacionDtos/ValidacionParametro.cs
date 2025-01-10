@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using AccsoDtos.Mappings;
+using AutoMapper;
 using MdloDtos;
 using System;
 using System.Collections.Generic;
@@ -13,9 +14,21 @@ namespace VldcionDtos
     /// </summary>
     public class ValidacionParametro
     {
-        
-        AccsoDtos.Parametrizacion.Parametros ObjParametros = new AccsoDtos.Parametrizacion.Parametros(null  , null); 
+        private readonly IMapper _mapper;
+        AccsoDtos.Parametrizacion.Parametros ObjParametros;
 
+
+        public ValidacionParametro()
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
+
+            _mapper = configuration.CreateMapper();
+            ObjParametros = new AccsoDtos.Parametrizacion.Parametros( _mapper, null);
+        }
+       
         #region valida si existe un parametro por medio de su ID.
         public async Task<int> VerificarParametroExiste(int IdParametro)
         {

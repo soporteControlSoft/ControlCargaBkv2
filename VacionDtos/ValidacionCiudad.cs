@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AccsoDtos.Mappings;
+using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,9 +13,24 @@ namespace VldcionDtos
     /// </summary>
     public class ValidacionCiudad
     {
+        private readonly IMapper _mapper;
 
         AccsoDtos.Parametrizacion.Departamento ObjDepartamento = new AccsoDtos.Parametrizacion.Departamento();
-        AccsoDtos.Parametrizacion.Ciudad ObjCiudad = new AccsoDtos.Parametrizacion.Ciudad(null);
+        AccsoDtos.Parametrizacion.Ciudad ObjCiudad;
+
+        public ValidacionCiudad()
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
+
+            _mapper = configuration.CreateMapper();
+            ObjCiudad = new AccsoDtos.Parametrizacion.Ciudad(_mapper);
+        }
+
+
+
 
         #region Validacion de Ciudad , metodo Ingreso
         public async Task<int> ValidarIngreso(MdloDtos.DTO.CiudadDTO objCiudad) {

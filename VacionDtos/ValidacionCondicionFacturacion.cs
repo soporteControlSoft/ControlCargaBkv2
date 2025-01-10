@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AccsoDtos.Mappings;
+using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +13,19 @@ namespace VldcionDtos
     /// </summary>
     public class ValidacionCondicionFacturacion
     {
-        AccsoDtos.Parametrizacion.CondicionFacturacion ObjCondicionFacturacion = new AccsoDtos.Parametrizacion.CondicionFacturacion(null);
+        private readonly IMapper _mapper; 
+        AccsoDtos.Parametrizacion.CondicionFacturacion ObjCondicionFacturacion;
+
+        public ValidacionCondicionFacturacion()
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
+
+            _mapper = configuration.CreateMapper();
+            ObjCondicionFacturacion = new AccsoDtos.Parametrizacion.CondicionFacturacion(_mapper);
+        }
 
         #region Validacion de CondicionFacturacion , metodo Ingreso
         public async Task<int> ValidarIngreso(MdloDtos.DTO.CondicionFacturacionDTO objCondicionFacturacion)

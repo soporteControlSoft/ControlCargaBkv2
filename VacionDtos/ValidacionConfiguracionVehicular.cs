@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AccsoDtos.Mappings;
+using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +13,19 @@ namespace VldcionDtos
     /// </summary>
     public class ValidacionConfiguracionVehicular
     {
-        AccsoDtos.Parametrizacion.ConfiguracionVehicular ObjConfiguracionVehicular = new AccsoDtos.Parametrizacion.ConfiguracionVehicular(null);
+        private readonly IMapper _mapper;
+        AccsoDtos.Parametrizacion.ConfiguracionVehicular ObjConfiguracionVehicular;
+
+        public ValidacionConfiguracionVehicular()
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
+
+            _mapper = configuration.CreateMapper();
+            ObjConfiguracionVehicular = new AccsoDtos.Parametrizacion.ConfiguracionVehicular(_mapper);
+        }
 
         #region Validacion de ConfiguracionVehicular , metodo Ingreso
         public async Task<int> ValidarIngreso(MdloDtos.DTO.ConfiguracionVehicularDTO objConfiguracionVehicular)
@@ -19,33 +33,27 @@ namespace VldcionDtos
             int resultado = 0;
             try
             {
-                //Validar los campos Obligatorios.
                 if ((!string.IsNullOrEmpty(objConfiguracionVehicular.Codigo) && ((objConfiguracionVehicular.Codigo.Length > 0))) &&
                    ((!string.IsNullOrEmpty(objConfiguracionVehicular.Nombre) && ((objConfiguracionVehicular.Nombre.Length > 0)))) &&
                     ((!string.IsNullOrEmpty(objConfiguracionVehicular.CodigoCompania) && ((objConfiguracionVehicular.CodigoCompania.Length > 0)))))
                 {                     
-                    //Validar que el codigo/Llave  No exista.
                     var ConfiguracionVehicularExiste = await ObjConfiguracionVehicular.VerificarConfiguracionVehicular(objConfiguracionVehicular.Codigo);
                     if (ConfiguracionVehicularExiste == true)
                     {
-                        //Retorna valor del TipoMensaje: CodigoExiste
                         resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.CodigoExiste;
                     }
                     else
                     {
-                        //Retorna valor del TipoMensaje: TransaccionExitosa
                         resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
                     }
                 }
                 else
                 {
-                    //Retorna valor del TipoMensaje: NoAceptaValoresNull
                     resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
                 }
             }
             catch (Exception ex)
             {
-                //Retorna valor del TipoMensaje: TransaccionIncorrecta
                 resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             }
             return resultado;
@@ -60,16 +68,13 @@ namespace VldcionDtos
             {
                 if (objConfiguracionVehicular_.IdConfiguracionVehicular != null)
                 {
-                    //Validar que el codigo/Llave exista.
                     var ConfiguracionVehicularExiste = await ObjConfiguracionVehicular.VerificarConfiguracionVehicularPorRowdId((int)objConfiguracionVehicular_.IdConfiguracionVehicular);
                     if (ConfiguracionVehicularExiste == false)
                     {
-                        //Retorna valor del TipoMensaje: RelacionNoExiste
                         resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.RelacionNoExiste;
                     }
                     else
                     {
-                        //Retorna valor del TipoMensaje: TransaccionExitosa
                         resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
                     }
                 }
