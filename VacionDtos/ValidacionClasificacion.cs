@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MdloDtos.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,22 +12,24 @@ namespace VldcionDtos
     /// </summary>
     public class ValidacionClasificacion
     {
-        AccsoDtos.EstadoHechos.Clasificacion ObjClasificacion = new AccsoDtos.EstadoHechos.Clasificacion();
+        AccsoDtos.EstadoHechos.Clasificacion ObjClasificacion = new AccsoDtos.EstadoHechos.Clasificacion(null, null);
         AccsoDtos.Parametrizacion.Usuario _ObjUsuario = new AccsoDtos.Parametrizacion.Usuario();
 
         #region Validacion de Clasificacion , metodo Ingreso
-        public async Task<int> ValidarIngreso(MdloDtos.Clasificacion objClasificacion) {
+        public async Task<int> ValidarIngreso(MdloDtos.DTO.ClasificacionDTO objClasificacion)
+        {
 
             int resultado = 0;
-            try {
+            try
+            {
                 //Validar los campos Obligatorios.
                 if (
-                    !string.IsNullOrEmpty(objClasificacion.ClNmbre) &&
-                    !string.IsNullOrEmpty(objClasificacion.ClDscrpcion)
+                    !string.IsNullOrEmpty(objClasificacion.Nombre) &&
+                    !string.IsNullOrEmpty(objClasificacion.Descripcion)
                    )
                 {
                     //Validar la llave relacional.
-                    var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objClasificacion.ClCdgoUsrio);
+                    var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objClasificacion.CodigoUsuario);
                     if (UsuarioExiste == false)
                     {
                         //Retorna valor del TipoMensaje: RelacionNoExiste
@@ -44,7 +47,7 @@ namespace VldcionDtos
                     resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 //Retorna valor del TipoMensaje: TransaccionIncorrecta
                 resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
@@ -54,17 +57,17 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de Ciudad , metodo Inactivar
-        public async Task<int> ValidarEliminar(MdloDtos.Clasificacion objClasificacion)
+        public async Task<int> ValidarEliminar(ClasificacionDTO objClasificacionDTO)
         {
             int resultado = 0;
             try
             {
-                var ClasificacionExiste = await ObjClasificacion.VerificarClasificacion(objClasificacion.ClRowid);
+                var ClasificacionExiste = await ObjClasificacion.VerificarClasificacion(objClasificacionDTO.Id);
                 if (ClasificacionExiste == true)
                 {
                     //Validar los campos Obligatorios.
                     if (
-                        objClasificacion.ClActvo == true || objClasificacion.ClActvo == false
+                        objClasificacionDTO.Estado == true || objClasificacionDTO.Estado == false
                        )
                     {
                         resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
@@ -89,23 +92,23 @@ namespace VldcionDtos
         }
         #endregion
 
-        #region Validacion de Ciudad , metodo Actualizar
-        public async Task<int> ValidarActualizacion(MdloDtos.Clasificacion objClasificacion)
+        #region Validacion de Clasificacion, metodo Actualizar
+        public async Task<int> ValidarActualizacion(ClasificacionDTO objClasificacionDTO)
         {
             int resultado = 0;
             try
             {
-                var ClasificacionExiste = await ObjClasificacion.VerificarClasificacion(objClasificacion.ClRowid);
+                var ClasificacionExiste = await ObjClasificacion.VerificarClasificacion(objClasificacionDTO.Id);
                 if (ClasificacionExiste == true)
                 {
                     //Validar los campos Obligatorios.
                     if (
-                        !string.IsNullOrEmpty(objClasificacion.ClNmbre) &&
-                        !string.IsNullOrEmpty(objClasificacion.ClDscrpcion)
+                        !string.IsNullOrEmpty(objClasificacionDTO.Nombre) &&
+                        !string.IsNullOrEmpty(objClasificacionDTO.Descripcion)
                        )
                     {
                         //Validar la llave relacional.
-                        var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objClasificacion.ClCdgoUsrio);
+                        var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objClasificacionDTO.CodigoUsuario);
                         if (UsuarioExiste == false)
                         {
                             //Retorna valor del TipoMensaje: RelacionNoExiste
@@ -162,5 +165,6 @@ namespace VldcionDtos
             return resultado;
         }
         #endregion
+
     }
 }

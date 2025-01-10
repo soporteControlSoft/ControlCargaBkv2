@@ -15,7 +15,7 @@ namespace VldcionDtos
 
        
         AccsoDtos.EstadoHechos.EstadoHecho ObjEstadoHecho = new AccsoDtos.EstadoHechos.EstadoHecho();
-        AccsoDtos.EstadoHechos.Evento _ObjEvento = new AccsoDtos.EstadoHechos.Evento();
+        AccsoDtos.EstadoHechos.Evento _ObjEvento = new AccsoDtos.EstadoHechos.Evento(null, null);
         AccsoDtos.EstadoHechos.Sector _ObjSector = new AccsoDtos.EstadoHechos.Sector();
         AccsoDtos.Parametrizacion.Usuario _ObjUsuario = new AccsoDtos.Parametrizacion.Usuario();
 

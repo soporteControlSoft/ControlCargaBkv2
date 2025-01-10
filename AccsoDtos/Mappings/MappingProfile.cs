@@ -48,6 +48,14 @@ namespace AccsoDtos.Mappings
                 .ForMember(dest => dest.PesoMaximoCargar, opt => opt.MapFrom((src, _) => src.PaPsoMxmoACrgar))
                 .ForMember(dest => dest.MinutosVigenciaReserva, opt => opt.MapFrom((src, _) => src.PaMntosVgnviaRsrva)).ReverseMap();
 
+            CreateMap<Clasificacion, ClasificacionDTO>()
+               .ForMember(dest => dest.Id, opt => opt.MapFrom((src, _) => src.ClRowid))
+               .ForMember(dest => dest.Nombre, opt => opt.MapFrom((src, _) => src.ClNmbre))
+               .ForMember(dest => dest.Descripcion, opt => opt.MapFrom((src, _) => src.ClDscrpcion))
+               .ForMember(dest => dest.FechaCreacion, opt => opt.MapFrom((src, _) => src.ClFchaCrcion))
+               .ForMember(dest => dest.CodigoUsuario, opt => opt.MapFrom((src, _) => src.ClCdgoUsrio))
+               .ForMember(dest => dest.Estado, opt => opt.MapFrom((src, _) => src.ClActvo));
+
             CreateMap<Motonave, MotonaveDTO>()
                 .ForMember(dest => dest.Codigo, opt => opt.MapFrom((src, _) => src.MoCdgo))
                 .ForMember(dest => dest.Nombre, opt => opt.MapFrom((src, _) => src.MoNmbre))
@@ -87,6 +95,29 @@ namespace AccsoDtos.Mappings
                 .ForMember(dest => dest.Vehiculos, opt => opt.MapFrom((src, _) => src.Vehiculos))
                 .ForMember(dest => dest.CompaniaCodigo, opt => opt.MapFrom((src, _) => src.CvCdgoCiaNavigation.CiaCdgo))
                 .ForMember(dest => dest.CompaniaNombre, opt => opt.MapFrom((src, _) => src.CvCdgoCiaNavigation.CiaNmbre));
+
+            CreateMap<Equipo, EquipoDTO>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom((src, _) => src.EqRowid))
+                .ForMember(dest => dest.codigoEquipo, opt => opt.MapFrom((src, _) => src.EqCdgo))
+                .ForMember(dest => dest.Nombre, opt => opt.MapFrom((src, _) => src.EqNmbre))
+                .ForMember(dest => dest.Descripcion, opt => opt.MapFrom((src, _) => src.EqDscrpcion))
+                .ForMember(dest => dest.FechaCreacion, opt => opt.MapFrom((src, _) => src.EqFchaCrcion))
+                .ForMember(dest => dest.CodigoUsuario, opt => opt.MapFrom((src, _) => src.EqCdgoUsrio))
+                .ForMember(dest => dest.Estado, opt => opt.MapFrom((src, _) => src.EqActvo));
+
+            CreateMap<Evento, EventoDTO>()
+                .ForMember(dest => dest.IdEvento, opt => opt.MapFrom((src, _) => src.EvRowid))
+                .ForMember(dest => dest.Nombre, opt => opt.MapFrom((src, _) => src.EvNmbre))
+                .ForMember(dest => dest.Observacion, opt => opt.MapFrom((src, _) => src.EvObsrvcion))
+                .ForMember(dest => dest.FechaCreacion, opt => opt.MapFrom((src, _) => src.EvFchaCrcion))
+                .ForMember(dest => dest.FechaInicio, opt => opt.MapFrom((src, _) => src.EvFchaIncio))
+                .ForMember(dest => dest.FechaFin, opt => opt.MapFrom((src, _) => src.EvFchaFin))
+                .ForMember(dest => dest.Escotilla, opt => opt.MapFrom((src, _) => src.EvEsctlla))
+                .ForMember(dest => dest.CodigoClasificacion, opt => opt.MapFrom((src, _) => src.EvRowidClsfccion))
+                .ForMember(dest => dest.CodigoResponsable, opt => opt.MapFrom((src, _) => src.EvRowidRspnsble))
+                .ForMember(dest => dest.Equipo, opt => opt.MapFrom((src, _) => src.EvEqpo))
+                .ForMember(dest => dest.CodigoUsuario, opt => opt.MapFrom((src, _) => src.EvCdgoUsrio))
+                .ForMember(dest => dest.Estado, opt => opt.MapFrom((src, _) => src.EvActvo));
 
         }
     }

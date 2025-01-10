@@ -8,14 +8,14 @@ namespace MdloDtos.IModelos
 {
     public interface IEventos
     {
-        public Task<MdloDtos.Evento> IngresarEvento(MdloDtos.Evento ObjEvento);
-        public Task<List<MdloDtos.Evento>> ListarEvento( bool estado );
+        public Task<MdloDtos.DTO.EventoDTO> IngresarEvento(MdloDtos.DTO.EventoDTO ObjEvento);
+        public Task<List<MdloDtos.DTO.EventoDTO>> ListarEvento( bool estado );
 
-        public Task<MdloDtos.Evento> EditarEvento(MdloDtos.Evento ObjEvento);
+        public Task<MdloDtos.DTO.EventoDTO> EditarEvento(MdloDtos.DTO.EventoDTO ObjEvento);
 
-        public Task<List<MdloDtos.Evento>> FiltrarEventoGeneral(String Codigo, bool estado);
-        public Task<List<MdloDtos.Evento>> FiltrarEventoEspecifico(String Codigo, bool estado);
-        public Task<MdloDtos.Evento> InactivarEvento(MdloDtos.Evento ObjEvento);
+        public Task<List<MdloDtos.DTO.EventoDTO>> FiltrarEventoGeneral(String Codigo, bool estado);
+        public Task<List<MdloDtos.DTO.EventoDTO>> FiltrarEventoEspecifico(String Codigo, bool estado);
+        public Task<MdloDtos.DTO.EventoDTO> InactivarEvento(MdloDtos.DTO.EventoDTO ObjEvento);
         public Task<bool> VerificarEvento(int Codigo);
 
     }
