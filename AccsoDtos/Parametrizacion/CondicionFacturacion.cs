@@ -70,7 +70,7 @@ namespace AccsoDtos.Parametrizacion
                                  select c
                              ).ToListAsync();
                 _dbContex.Dispose();
-                var result = _mapper.Map<List<CondicionFacturacionDTO>>(lst);
+                var result = (lst.Count > 0) ? _mapper.Map<List<CondicionFacturacionDTO>>(lst) : new List<CondicionFacturacionDTO>();
                 return result;
             }
         }
@@ -87,7 +87,7 @@ namespace AccsoDtos.Parametrizacion
                                  select c
                              ).ToListAsync();
                 _dbContex.Dispose();
-                var result = _mapper.Map<List<CondicionFacturacionDTO>>(lst);
+                var result = (lst.Count > 0) ? _mapper.Map<List<CondicionFacturacionDTO>>(lst) : new List<CondicionFacturacionDTO>();
                 return result;
             }
         }
@@ -128,7 +128,7 @@ namespace AccsoDtos.Parametrizacion
             {
                 var lst = await _dbContex.CondicionFacturacions.ToListAsync();
                 _dbContex.Dispose();
-                var result = _mapper.Map<List<CondicionFacturacionDTO>>(lst);
+                var result = (lst.Count > 0) ? _mapper.Map<List<CondicionFacturacionDTO>>(lst) : new List<CondicionFacturacionDTO>();
                 return result;
             }
         }

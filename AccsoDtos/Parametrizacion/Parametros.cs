@@ -33,8 +33,8 @@ namespace AccsoDtos.Parametrizacion
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 var lst = await (from prmtros in _dbContex.Parametros
-                                 select prmtros).ToListAsync();        
-                var result = _mapper.Map<List<ParametroDTO>>(lst);
+                                 select prmtros).ToListAsync();
+                var result = (lst.Count > 0) ? _mapper.Map<List<ParametroDTO>>(lst) : new List<ParametroDTO>();
                 return result;
             }
         }
@@ -48,7 +48,7 @@ namespace AccsoDtos.Parametrizacion
             {
                 var lst = await (from prmtros in _dbContex.Parametros
                                  select prmtros).ToListAsync();
-                var result = _mapper.Map<List<ParametroDTO>>(lst);
+                var result = (lst.Count > 0) ? _mapper.Map<List<ParametroDTO>>(lst) : new List<ParametroDTO>();
                 return result;
             }
         }

@@ -65,7 +65,8 @@ namespace AccsoDtos.Mappings
                 .ForMember(dest => dest.CantidadEscotillas, opt => opt.MapFrom((src, _) => src.MoCntdadEsctllas))
                 .ForMember(dest => dest.Calado, opt => opt.MapFrom((src, _) => src.MoCldo))
                 .ForMember(dest => dest.SituacionPortuaria, opt => opt.MapFrom((src, _) => src.SituacionPortuaria))
-                .ForMember(dest => dest.VisitaMotonaves, opt => opt.MapFrom((src, _) => src.VisitaMotonaves));
+                .ForMember(dest => dest.VisitaMotonaves, opt => opt.MapFrom((src, _) => src.VisitaMotonaves))
+                ;
 
             CreateMap<Ciudad, CiudadDTO>()
                 .ForMember(dest => dest.IdCiudad, opt => opt.MapFrom((src, _) => src.CiRowid))

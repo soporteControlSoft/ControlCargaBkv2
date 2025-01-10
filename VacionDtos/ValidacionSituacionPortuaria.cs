@@ -1,4 +1,6 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using AccsoDtos.Mappings;
+using AutoMapper;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,15 +15,31 @@ namespace VldcionDtos
     /// </summary>
     public class ValidacionSituacionPortuaria
     {
+        private readonly IMapper _mapper;
+
         AccsoDtos.SituacionPortuaria.SituacionPortuaria ObjSituacionPortuaria = new AccsoDtos.SituacionPortuaria.SituacionPortuaria();
         AccsoDtos.Parametrizacion.ZonaCd ObjZonaCd = new AccsoDtos.Parametrizacion.ZonaCd();
         AccsoDtos.Parametrizacion.TerminalMaritimo ObjTerminalMaritimo = new AccsoDtos.Parametrizacion.TerminalMaritimo();
 
         //Objetos para hacer las validaciones de existencia
-        AccsoDtos.Parametrizacion.Motonave ObjMotonave = new AccsoDtos.Parametrizacion.Motonave(null);
+        AccsoDtos.Parametrizacion.Motonave ObjMotonave ;
         AccsoDtos.SituacionPortuaria.EstadosMotonave ObjEstadosMotonave = new AccsoDtos.SituacionPortuaria.EstadosMotonave();
         AccsoDtos.Parametrizacion.Pais ObjPais = new AccsoDtos.Parametrizacion.Pais();
         AccsoDtos.Parametrizacion.Usuario ObjUsuario = new AccsoDtos.Parametrizacion.Usuario();
+
+
+        public ValidacionSituacionPortuaria()
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
+
+            _mapper = configuration.CreateMapper();
+            ObjMotonave = new AccsoDtos.Parametrizacion.Motonave(_mapper);
+        }
+
+
 
         #region Validacion de SituacionPortuaria , metodo Ingreso
         public async Task<int> ValidarIngreso(MdloDtos.SituacionPortuarium objSituacionPortuaria) {

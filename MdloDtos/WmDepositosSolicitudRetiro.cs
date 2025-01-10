@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace MdloDtos;
 
 public partial class WmDepositosSolicitudRetiro
 {
-    [Key]
     public int IdDeposito { get; set; }
 
     public string CodigoDeposito { get; set; } = null!;
@@ -21,35 +19,35 @@ public partial class WmDepositosSolicitudRetiro
 
     public string? NombreProducto { get; set; }
 
-    public int? Saldos { get; set; }
+    public int SaldosKilos { get; set; }
 
-    public string CodigoUsuario { get; set; } = null!;
+    public int SaldosUnidades { get; set; }
 
-    public int CodigoCliente { get; set; }
+    public int IdTercero { get; set; }
 
     public int IdVisita { get; set; }
 
     public int IdRetiro { get; set; }
 
-    public int CantidadRetiro { get; set; }
+    public int Ciudad { get; set; }
 
-    public string? PlantaDestino { get; set; }
+    public string? Planta { get; set; }
 
     public int? KilosAutorizado { get; set; }
 
-    public int? Cantidad { get; set; }
+    public int? UnidadesAutorizado { get; set; }
 
     public int? KilosDespachados { get; set; }
 
-    public int? CantidadDespachados { get; set; }
+    public int? UnidadesDespachadas { get; set; }
 
-    public bool? EstadoSolicitud { get; set; }
+    public bool? Activa { get; set; }
 
-    public bool? SrAbrta { get; set; }
+    public bool? Abierta { get; set; }
 
-    public bool? SrEntrgaSspndda { get; set; }
+    public bool? EntregaSuspendida { get; set; }
 
-    public string? SrObsrvcnes { get; set; }
+    public string? Observaciones { get; set; }
 
     public string? SrCmpoPrsnlzdo1 { get; set; }
 
@@ -57,9 +55,17 @@ public partial class WmDepositosSolicitudRetiro
 
     public string? SrCmpoPrsnlzdo3 { get; set; }
 
-    public int? ZonaSolicitud { get; set; }
+    public int? ZonaId { get; set; }
 
     public bool? PesoExacto { get; set; }
 
     public DateTime? FechaApertura { get; set; }
+
+    public string CodigoTercero { get; set; } = null!;
+
+    public string? NombreCiudad { get; set; }
+
+    public string? NombreZona { get; set; }
+
+    public string? NombreTercero { get; set; }
 }
