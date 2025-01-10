@@ -115,7 +115,7 @@ namespace Srvcio.Controllers
             try
             {
 
-                if ((_SolicitudRetiro.SrCia is not null) && (_SolicitudRetiro.SrCdgo is not null) &&
+                if ((_SolicitudRetiro.SrCia is not null) &&
                      (!string.IsNullOrEmpty(_SolicitudRetiro.SrRowidDpsto.ToString())) && (_SolicitudRetiro.SrAutrzdoCntdad is not null) ) // exito
 
                 {
