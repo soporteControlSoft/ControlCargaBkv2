@@ -76,8 +76,7 @@ namespace AccsoDtos.Parametrizacion
                              ).ToListAsync();
                 _dbContex.Dispose();
 
-                var result = _mapper.Map<List<MotonaveDTO>>(lst);
-
+                var result = (lst.Count > 0) ? _mapper.Map<List<MotonaveDTO>>(lst) : new List<MotonaveDTO>();
                 return result;
             }
         }
@@ -93,7 +92,8 @@ namespace AccsoDtos.Parametrizacion
                                  select m
                              ).ToListAsync();
                 _dbContex.Dispose();
-                var result = _mapper.Map<List<MotonaveDTO>>(lst);
+                
+                var result = (lst.Count > 0) ? _mapper.Map<List<MotonaveDTO>>(lst) : null;
                 return result;
             }
         }
@@ -138,7 +138,7 @@ namespace AccsoDtos.Parametrizacion
             {
                 var lst = await _dbContex.Motonaves.ToListAsync();
                 _dbContex.Dispose();
-                var result = _mapper.Map<List<MotonaveDTO>>(lst);
+                var result = (lst.Count > 0) ? _mapper.Map<List<MotonaveDTO>>(lst) : new List<MotonaveDTO>();
                 return result;
             }
         }
