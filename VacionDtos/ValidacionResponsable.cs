@@ -13,22 +13,22 @@ namespace VldcionDtos
     {
 
        
-        AccsoDtos.EstadoHechos.Responsable ObjResponsable = new AccsoDtos.EstadoHechos.Responsable();
+        AccsoDtos.EstadoHechos.Responsable ObjResponsable = new AccsoDtos.EstadoHechos.Responsable(null, null);
         AccsoDtos.Parametrizacion.Usuario _ObjUsuario = new AccsoDtos.Parametrizacion.Usuario();
 
         #region Validacion de Responsable , metodo Ingreso
-        public async Task<int> ValidarIngreso(MdloDtos.Responsable objResponsable) {
+        public async Task<int> ValidarIngreso(MdloDtos.DTO.ResponsableDTO objResponsable) {
 
             int resultado = 0;
             try {
                 //Validar los campos Obligatorios.
                 if (
-                    !string.IsNullOrEmpty(objResponsable.ReNmbre) &&
-                    !string.IsNullOrEmpty(objResponsable.ReDscrpcion)
+                    !string.IsNullOrEmpty(objResponsable.Nombre) &&
+                    !string.IsNullOrEmpty(objResponsable.Descripcion)
                    )
                 {
                     //Validar la llave relacional.
-                    var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objResponsable.ReCdgoUsrio);
+                    var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objResponsable.CodigoUsuario);
                     if (UsuarioExiste == false)
                     {
                         resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.RelacionNoExiste;
@@ -57,18 +57,18 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de Responsable , metodo Eliminar
-        public async Task<int> ValidarEliminar(MdloDtos.Responsable objResponsable)
+        public async Task<int> ValidarEliminar(MdloDtos.DTO.ResponsableDTO objResponsable)
         {
             int resultado = 0;
             try
             {
                 //Validar los campos Obligatorios.
-                var ResponsableExiste = await ObjResponsable.VerificarResponsable(objResponsable.ReRowid);
+                var ResponsableExiste = await ObjResponsable.VerificarResponsable(objResponsable.Id);
                 if (ResponsableExiste == true)
                 {
                     //Validar los campos Obligatorios.
                     if (
-                       objResponsable.ReActvo == true || objResponsable.ReActvo == false
+                       objResponsable.Estado == true || objResponsable.Estado == false
                    )
                     {
                         resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
@@ -96,23 +96,23 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de Ciudad , metodo Actualizar
-        public async Task<int> ValidarActualizacion(MdloDtos.Responsable objResponsable)
+        public async Task<int> ValidarActualizacion(MdloDtos.DTO.ResponsableDTO objResponsable)
         {
             int resultado = 0;
             try
             {
                 //Validar los campos Obligatorios.
-                var ResponsableExiste = await ObjResponsable.VerificarResponsable(objResponsable.ReRowid);
+                var ResponsableExiste = await ObjResponsable.VerificarResponsable(objResponsable.Id);
                 if (ResponsableExiste == true)
                 {
                     //Validar los campos Obligatorios.
                     if (
-                    !string.IsNullOrEmpty(objResponsable.ReNmbre) &&
-                    !string.IsNullOrEmpty(objResponsable.ReDscrpcion)
+                    !string.IsNullOrEmpty(objResponsable.Nombre) &&
+                    !string.IsNullOrEmpty(objResponsable.Descripcion)
                    )
                     {
                         //Validar la llave relacional.
-                        var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objResponsable.ReCdgoUsrio);
+                        var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objResponsable.CodigoUsuario);
                         if (UsuarioExiste == false)
                         {
                             //Retorna valor del TipoMensaje: RelacionNoExiste

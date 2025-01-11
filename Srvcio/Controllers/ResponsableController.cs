@@ -29,10 +29,10 @@ namespace Srvcio.Controllers
 
         #region Consultar responsable
         [HttpGet("listar-responsable")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Responsable>>> ListarResponsable([FromQuery] bool estado = true)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.ResponsableDTO>>> ListarResponsable([FromQuery] bool estado = true)
         {
            
-            var ObjResponsable = new List<MdloDtos.Responsable>();
+            var ObjResponsable = new List<MdloDtos.DTO.ResponsableDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             try
@@ -60,9 +60,9 @@ namespace Srvcio.Controllers
 
         #region Filtrar Responsable por codigo
         [HttpGet("filtrar-responsable-general")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Responsable>>> FiltrarResponsableGeneral(string FiltroBusqueda, bool estado)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.ResponsableDTO>>> FiltrarResponsableGeneral(string FiltroBusqueda, bool estado)
         {
-            var ObjResponsable = new List<MdloDtos.Responsable>();
+            var ObjResponsable = new List<MdloDtos.DTO.ResponsableDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -110,9 +110,9 @@ namespace Srvcio.Controllers
 
         #region Filtrar Responsable especifica
         [HttpGet("filtrar-responsable-especifico")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Responsable>>> FiltrarResponsableEspecifico(string CodigoBusqueda, bool estado)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.ResponsableDTO>>> FiltrarResponsableEspecifico(string CodigoBusqueda, bool estado)
         {
-            var ObjResponsable = new List<MdloDtos.Responsable>();
+            var ObjResponsable = new List<MdloDtos.DTO.ResponsableDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -161,7 +161,7 @@ namespace Srvcio.Controllers
 
         #region Ingresar Responsable
         [HttpPost("ingresar-responsable")]
-        public async Task<ActionResult<dynamic>> IngresarResponsable([FromBody] MdloDtos.Responsable objResponsable)
+        public async Task<ActionResult<dynamic>> IngresarResponsable([FromBody] MdloDtos.DTO.ResponsableDTO objResponsable)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -207,7 +207,7 @@ namespace Srvcio.Controllers
 
         #region Actualizar Responsable
         [HttpPut("actualizar-responsable")]
-        public async Task<ActionResult<dynamic>> EditarResponsable([FromBody] MdloDtos.Responsable ObjResponsable)
+        public async Task<ActionResult<dynamic>> EditarResponsable([FromBody] MdloDtos.DTO.ResponsableDTO ObjResponsable)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Actualizacion);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -253,7 +253,7 @@ namespace Srvcio.Controllers
 
         #region Eliminar clasificacion
         [HttpPut("inactivar-responsable")]
-        public async Task<ActionResult<dynamic>> EliminarResponsable([FromBody] MdloDtos.Responsable ObjResponsable)
+        public async Task<ActionResult<dynamic>> EliminarResponsable([FromBody] MdloDtos.DTO.ResponsableDTO ObjResponsable)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Eliminacion);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.

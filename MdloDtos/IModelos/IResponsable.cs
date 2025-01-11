@@ -8,14 +8,14 @@ namespace MdloDtos.IModelos
 {
     public interface IResponsable
     {
-        public Task<MdloDtos.Responsable> IngresarResponsable(MdloDtos.Responsable ObjResponsable);
-        public Task<List<MdloDtos.Responsable>> ListarResponsable(bool estado);
+        public Task<MdloDtos.DTO.ResponsableDTO> IngresarResponsable(MdloDtos.DTO.ResponsableDTO ObjResponsable);
+        public Task<List<MdloDtos.DTO.ResponsableDTO>> ListarResponsable(bool estado);
 
-        public Task<MdloDtos.Responsable> EditarResponsable(MdloDtos.Responsable ObjResponsable);
+        public Task<MdloDtos.DTO.ResponsableDTO> EditarResponsable(MdloDtos.DTO.ResponsableDTO ObjResponsable);
 
-        public Task<List<MdloDtos.Responsable>> FiltrarResponsableGeneral(String Codigo, bool estado);
-        public Task<List<MdloDtos.Responsable>> FiltrarResponsableEspecifico(String Codigo, bool estado);
-        public Task<MdloDtos.Responsable> InactivarResponsable(MdloDtos.Responsable ObjResponsable);
+        public Task<List<MdloDtos.DTO.ResponsableDTO>> FiltrarResponsableGeneral(String Codigo, bool estado);
+        public Task<List<MdloDtos.DTO.ResponsableDTO>> FiltrarResponsableEspecifico(String Codigo, bool estado);
+        public Task<MdloDtos.DTO.ResponsableDTO> InactivarResponsable(MdloDtos.DTO.ResponsableDTO ObjResponsable);
         public Task<bool> VerificarResponsable(int? Codigo);
 
     }

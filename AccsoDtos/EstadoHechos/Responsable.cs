@@ -1,10 +1,14 @@
-﻿using MdloDtos.Utilidades;
+﻿using AutoMapper;
+using MdloDtos;
+using MdloDtos.DTO;
+using MdloDtos.Utilidades;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace AccsoDtos.EstadoHechos
 {
@@ -15,15 +19,23 @@ namespace AccsoDtos.EstadoHechos
     /// 
     public class Responsable : MdloDtos.IModelos.IResponsable
     {
+        private readonly CcVenturaContext _dbContext;
+        private readonly IMapper _mapper;
+
+        public Responsable(IMapper mapper, MdloDtos.CcVenturaContext dbContext)
+        {
+            _mapper = mapper;
+            _dbContext = dbContext;
+        }
         #region Ingresar datos a la entidad Responsable
-        public async Task<MdloDtos.Responsable> IngresarResponsable(MdloDtos.Responsable _Responsable)
+        public async Task<MdloDtos.DTO.ResponsableDTO> IngresarResponsable(MdloDtos.DTO.ResponsableDTO _ResponsableDTO)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 var ObjResponsable = new MdloDtos.Responsable();
                 try
                 {
-                    var ResponsableExiste = await this.VerificarResponsable(_Responsable.ReRowid);
+                    var ResponsableExiste = await this.VerificarResponsable(_ResponsableDTO.Id);
 
                     if (ResponsableExiste == true)
                     {
@@ -34,10 +46,10 @@ namespace AccsoDtos.EstadoHechos
 
                         DateTime fechaSistema = DateTime.Now;
 
-                        ObjResponsable.ReNmbre = _Responsable.ReNmbre;
-                        ObjResponsable.ReDscrpcion = _Responsable.ReDscrpcion;
+                        ObjResponsable.ReNmbre = _ResponsableDTO.Nombre;
+                        ObjResponsable.ReDscrpcion = _ResponsableDTO.Descripcion;
                         ObjResponsable.ReFchaCrcion = fechaSistema;
-                        ObjResponsable.ReCdgoUsrio = _Responsable.ReCdgoUsrio;
+                        ObjResponsable.ReCdgoUsrio = _ResponsableDTO.CodigoUsuario;
                         ObjResponsable.ReActvo = true;
 
 
@@ -45,62 +57,57 @@ namespace AccsoDtos.EstadoHechos
 
 
                         await _dbContex.SaveChangesAsync();
-                    }
-
-                    
+                    }                    
                 }
                 catch (Exception ex)
                 {
                     throw new Exception(ex.ToString());
                 }
                 _dbContex.Dispose();
-                return ObjResponsable;
+                return _ResponsableDTO;
             }
 
         }
         #endregion
 
         #region Listar todos las clasificaciones
-        public async Task<List<MdloDtos.Responsable>> ListarResponsable(bool estado = true)
+        public async Task<List<MdloDtos.DTO.ResponsableDTO>> ListarResponsable(bool estado = true)
         {
             
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
-                var query = from responsable in _dbContex.Responsables
+                var query = await (from responsable in _dbContex.Responsables
                             where responsable.ReActvo == estado
-                            select responsable;
+                            select responsable).ToListAsync();
 
+                var list = _mapper.Map<List<ResponsableDTO>>(query);
+                return list;
 
-
-                var listResponsable = await query.ToListAsync();
-
-                return listResponsable;
-               
             }
         }
         #endregion
 
         #region Actualizar  por el objeto Responsable
-        public async Task<MdloDtos.Responsable> EditarResponsable(MdloDtos.Responsable _Responsable)
+        public async Task<MdloDtos.DTO.ResponsableDTO> EditarResponsable(MdloDtos.DTO.ResponsableDTO _ResponsableDTO)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 try
                 {
-                    MdloDtos.Responsable ResponsableExiste = await _dbContex.Responsables.FindAsync(_Responsable.ReRowid);
+                    MdloDtos.Responsable ResponsableExiste = await _dbContex.Responsables.FindAsync(_ResponsableDTO.Id);
                     if (ResponsableExiste != null)
                     {
-                        ResponsableExiste.ReNmbre = _Responsable.ReNmbre;
-                        ResponsableExiste.ReDscrpcion = _Responsable.ReDscrpcion;
-                        ResponsableExiste.ReCdgoUsrio = _Responsable.ReCdgoUsrio;
-                        ResponsableExiste.ReActvo = _Responsable.ReActvo;
+                        ResponsableExiste.ReNmbre = _ResponsableDTO.Nombre;
+                        ResponsableExiste.ReDscrpcion = _ResponsableDTO.Descripcion;
+                        ResponsableExiste.ReCdgoUsrio = _ResponsableDTO.CodigoUsuario;
+                        ResponsableExiste.ReActvo = _ResponsableDTO.Estado;
 
 
                         _dbContex.Entry(ResponsableExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                         await _dbContex.SaveChangesAsync();
                     }
                     _dbContex.Dispose();
-                    return ResponsableExiste;
+                    return _ResponsableDTO;
                 }
                 catch (Exception ex)
                 {
@@ -113,24 +120,25 @@ namespace AccsoDtos.EstadoHechos
         #endregion
 
         #region Filtrar responsable por codigo general
-        public async Task<List<MdloDtos.Responsable>> FiltrarResponsableGeneral(string Codigo, bool estado)
+        public async Task<List<MdloDtos.DTO.ResponsableDTO>> FiltrarResponsableGeneral(string Codigo, bool estado)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 // Filtrar por RowID o nombre y el estado
-                var lst = await (from responsable in _dbContex.Responsables
+                var query = await (from responsable in _dbContex.Responsables
                                  where (responsable.ReRowid.ToString().Contains(Codigo) || responsable.ReNmbre.Contains(Codigo))
                                        && responsable.ReActvo == estado // Validar el estado
-                                 select responsable).ToListAsync();
+                select responsable).ToListAsync();
 
-                return lst;
+                var list = _mapper.Map<List<ResponsableDTO>>(query);
+                return list;
             }
         }
 
         #endregion
 
         #region Filtrar Responsable por codigo Especifico Responsable
-        public async Task<List<MdloDtos.Responsable>> FiltrarResponsableEspecifico(string Codigo, bool estado)
+        public async Task<List<MdloDtos.DTO.ResponsableDTO>> FiltrarResponsableEspecifico(string Codigo, bool estado)
         {
             // Convertir el código a entero
             int codigoConvert = int.Parse(Codigo);
@@ -138,31 +146,32 @@ namespace AccsoDtos.EstadoHechos
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 // Filtrar por código específico y estado
-                var lst = await (from responsable in _dbContex.Responsables
+                var query = await (from responsable in _dbContex.Responsables
                                  where responsable.ReRowid == codigoConvert && responsable.ReActvo == estado
                                  select responsable).ToListAsync();
 
-                return lst;
+                var list = _mapper.Map<List<ResponsableDTO>>(query);
+                return list;
             }
         }
         #endregion
 
         #region Inactivar Responsable Por codigo.
-        public async Task<MdloDtos.Responsable> InactivarResponsable(MdloDtos.Responsable _Responsable)
+        public async Task<MdloDtos.DTO.ResponsableDTO> InactivarResponsable(MdloDtos.DTO.ResponsableDTO _ResponsableDTO)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 try
                 {
-                    MdloDtos.Responsable ResponsableExiste = await _dbContex.Responsables.FindAsync(_Responsable.ReRowid);
+                    MdloDtos.Responsable ResponsableExiste = await _dbContex.Responsables.FindAsync(_ResponsableDTO.Id);
                     if (ResponsableExiste != null)
                     {
-                        ResponsableExiste.ReActvo = _Responsable.ReActvo;
+                        ResponsableExiste.ReActvo = _ResponsableDTO.Estado;
                         _dbContex.Entry(ResponsableExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                         await _dbContex.SaveChangesAsync();
                     }
                     _dbContex.Dispose();
-                    return ResponsableExiste;
+                    return _ResponsableDTO;
                 }
                 catch (Exception ex)
                 {

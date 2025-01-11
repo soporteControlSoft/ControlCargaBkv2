@@ -120,6 +120,14 @@ namespace AccsoDtos.Mappings
                 .ForMember(dest => dest.CodigoUsuario, opt => opt.MapFrom((src, _) => src.EvCdgoUsrio))
                 .ForMember(dest => dest.Estado, opt => opt.MapFrom((src, _) => src.EvActvo));
 
+            CreateMap<Responsable, ResponsableDTO>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom((src, _) => src.ReRowid))
+                .ForMember(dest => dest.Nombre, opt => opt.MapFrom((src, _) => src.ReNmbre))
+                .ForMember(dest => dest.Descripcion, opt => opt.MapFrom((src, _) => src.ReDscrpcion))
+                .ForMember(dest => dest.FechaCreacion, opt => opt.MapFrom((src, _) => src.ReFchaCrcion))
+                .ForMember(dest => dest.CodigoUsuario, opt => opt.MapFrom((src, _) => src.ReCdgoUsrio))
+                .ForMember(dest => dest.Estado, opt => opt.MapFrom((src, _) => src.ReActvo));
+
         }
     }
 }
