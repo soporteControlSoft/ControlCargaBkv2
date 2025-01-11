@@ -115,8 +115,8 @@ namespace Srvcio.Controllers
             try
             {
 
-                if ((_SolicitudRetiro.SrCia is not null) && (_SolicitudRetiro.SrCdgo is not null) &&
-                     (!string.IsNullOrEmpty(_SolicitudRetiro.SrRowidDpsto.ToString())) && (_SolicitudRetiro.SrAutrzdoCntdad is not null) ) // exito
+                if ((_SolicitudRetiro.SrCia is not null)  &&
+                     (!string.IsNullOrEmpty(_SolicitudRetiro.SrRowidDpsto.ToString())) ) // exito
 
                 {
                     var ObSubdeposito = await this._dbContex.IngresarSolicitudRetiros(_SolicitudRetiro);
@@ -218,8 +218,8 @@ namespace Srvcio.Controllers
             try
             {
 
-                if ((_SolicitudRetiro.SrCia is not null) && (_SolicitudRetiro.SrCdgo is not null) &&
-                     (!string.IsNullOrEmpty(_SolicitudRetiro.SrRowidDpsto.ToString())) && (_SolicitudRetiro.SrAutrzdoCntdad is not null)) // exito
+                if ((_SolicitudRetiro.SrCia is not null) &&
+                     (!string.IsNullOrEmpty(_SolicitudRetiro.SrRowidDpsto.ToString()))) // exito
 
                 {
                     var ObSubdeposito = await this._dbContex.EditarSolicitudRetiro(_SolicitudRetiro);

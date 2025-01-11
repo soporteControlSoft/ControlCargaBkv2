@@ -89,25 +89,26 @@ namespace AccsoDtos.PortalClientes
             {
                 try
                 {
+                    DateTime dat = DateTime.Today;
                     string? sr_cia = _SolicitudRetiro.SrCia;
-                    string? sr_cdgo = _SolicitudRetiro.SrCdgo;
+                    string? sr_cdgo = "";
                     int? sr_rowid_dpsto = _SolicitudRetiro.SrRowidDpsto;
                     int? DeRowisr_rowid_cdaddTrcro = _SolicitudRetiro.SrRowidCdad;
                     string? sr_plnta_dstno = _SolicitudRetiro.SrPlntaDstno;
-                    DateTime? sr_fcha_aprtra = _SolicitudRetiro.SrFchaAprtra;
+                    DateTime? sr_fcha_aprtra = dat;
                     int? sr_autrzdo_klos = _SolicitudRetiro.SrAutrzdoKlos;
                     int? sr_autrzdo_cntdad = _SolicitudRetiro.SrAutrzdoCntdad;
-                    int? sr_dspchdo_klos = _SolicitudRetiro.SrDspchdoKlos;
-                    int? sr_dspchdo_cntdad = _SolicitudRetiro.SrDspchdoCntdad;
+                    int? sr_dspchdo_klos = 0;
+                    int? sr_dspchdo_cntdad = 0;
                     bool? sr_actva = _SolicitudRetiro.SrActva;
-                    bool? sr_entrga_sspndda = _SolicitudRetiro.SrEntrgaSspndda;
+                    bool? sr_entrga_sspndda = false;
                     bool? sr_abrta = _SolicitudRetiro.SrAbrta;
                     string? sr_obsrvcnes = _SolicitudRetiro.SrObsrvcnes;
                     string? sr_cmpo_prsnlzdo1 = _SolicitudRetiro.SrCmpoPrsnlzdo1;
                     string? SrCmpoPrsnlzdo2 = _SolicitudRetiro.SrCmpoPrsnlzdo2;
                     string? SrCmpoPrsnlzdo3 = _SolicitudRetiro.SrCmpoPrsnlzdo3;
                     int? sr_rowid_zna_cd = _SolicitudRetiro.SrRowidZnaCd;
-                    bool? sr_entrgar_pso_excto = _SolicitudRetiro.SrEntrgarPsoExcto;
+                    bool? sr_entrgar_pso_excto = false;
 
    
                     var res = await _dbContex.Ingresar_SolicitudRetiro(sr_cia, sr_cdgo, sr_rowid_dpsto, DeRowisr_rowid_cdaddTrcro, sr_plnta_dstno, sr_fcha_aprtra,
