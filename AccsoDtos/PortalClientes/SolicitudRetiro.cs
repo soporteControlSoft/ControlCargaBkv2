@@ -18,6 +18,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
+
 namespace AccsoDtos.PortalClientes
 {
 
@@ -81,7 +82,7 @@ namespace AccsoDtos.PortalClientes
             }
         }
 
-        // ingreso de datos a la entidad solitcitud de retiros
+        #region ingreso de datos a la entidad solitcitud de retiros
         public async Task<MdloDtos.SolicitudRetiro> IngresarSolicitudRetiros(MdloDtos.SolicitudRetiro _SolicitudRetiro)
         {
             var ObjSolicitudRetiro = new MdloDtos.SolicitudRetiro();
@@ -126,7 +127,7 @@ namespace AccsoDtos.PortalClientes
             }
         }
 
-
+        #endregion
         #region Actualiza Solicitud de retiro ( abierta o cerrada)
         public async Task<MdloDtos.SolicitudRetiro> EditarSolicitudRetiro(MdloDtos.SolicitudRetiro _SolicitudRetiro)
         {
@@ -138,24 +139,20 @@ namespace AccsoDtos.PortalClientes
                     if (SolicitudRetiroExiste != null)
                     {
                         SolicitudRetiroExiste.SrCia = _SolicitudRetiro.SrCia;
-                        SolicitudRetiroExiste.SrCdgo = _SolicitudRetiro.SrCdgo;
                         SolicitudRetiroExiste.SrRowidDpsto = _SolicitudRetiro.SrRowidDpsto;
                         SolicitudRetiroExiste.SrRowidCdad = _SolicitudRetiro.SrRowidCdad;
                         SolicitudRetiroExiste.SrPlntaDstno = _SolicitudRetiro.SrPlntaDstno;
-                        SolicitudRetiroExiste.SrFchaAprtra = _SolicitudRetiro.SrFchaAprtra;
                         SolicitudRetiroExiste.SrAutrzdoKlos = _SolicitudRetiro.SrAutrzdoKlos;
                         SolicitudRetiroExiste.SrAutrzdoCntdad = _SolicitudRetiro.SrAutrzdoCntdad;
-                        SolicitudRetiroExiste.SrDspchdoKlos = _SolicitudRetiro.SrDspchdoKlos;
-                        SolicitudRetiroExiste.SrDspchdoCntdad = _SolicitudRetiro.SrDspchdoCntdad;
+                        SolicitudRetiroExiste.SrDspchdoKlos = 0;
+                        SolicitudRetiroExiste.SrDspchdoCntdad = 0;
                         SolicitudRetiroExiste.SrActva = _SolicitudRetiro.SrActva;
                         SolicitudRetiroExiste.SrAbrta = _SolicitudRetiro.SrAbrta;
-                        SolicitudRetiroExiste.SrEntrgaSspndda = _SolicitudRetiro.SrEntrgaSspndda;
                         SolicitudRetiroExiste.SrObsrvcnes = _SolicitudRetiro.SrObsrvcnes;
                         SolicitudRetiroExiste.SrCmpoPrsnlzdo1 = _SolicitudRetiro.SrCmpoPrsnlzdo1;
                         SolicitudRetiroExiste.SrCmpoPrsnlzdo2 = _SolicitudRetiro.SrCmpoPrsnlzdo2;
                         SolicitudRetiroExiste.SrCmpoPrsnlzdo3 = _SolicitudRetiro.SrCmpoPrsnlzdo3;
                         SolicitudRetiroExiste.SrRowidZnaCd = _SolicitudRetiro.SrRowidZnaCd;
-                        SolicitudRetiroExiste.SrEntrgarPsoExcto = _SolicitudRetiro.SrEntrgarPsoExcto;
                         _dbContex.SolicitudRetiros.Entry(SolicitudRetiroExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                         await _dbContex.SaveChangesAsync();
                     }
@@ -172,6 +169,137 @@ namespace AccsoDtos.PortalClientes
 
 
 
+        #region ingresar solicitud de retiros Transportadora version 1
+        public async Task<MdloDtos.SolicitudRetiroTransportadora> IngresarSolicitudRetiroTrasnportadora(MdloDtos.SolicitudRetiroTransportadora _SolicitudRetiroTransportadora)
+        {
+            var ObjPSolicitudRetiroTransportadora = new MdloDtos.SolicitudRetiroTransportadora();
+            using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
+            {
+                try
+                {
+
+                    ObjPSolicitudRetiroTransportadora.SrtRowidSlctudRtro = _SolicitudRetiroTransportadora.SrtRowidSlctudRtro;
+                    ObjPSolicitudRetiroTransportadora.SrtRowidTrnsprtdra = _SolicitudRetiroTransportadora.SrtRowidTrnsprtdra;
+                    ObjPSolicitudRetiroTransportadora.SrtAutrzdoKlos = _SolicitudRetiroTransportadora.SrtAutrzdoKlos;
+                    ObjPSolicitudRetiroTransportadora.SrtDspchdoKlos = _SolicitudRetiroTransportadora.SrtDspchdoKlos;
+                    ObjPSolicitudRetiroTransportadora.SrtAutrzdoUnddes = _SolicitudRetiroTransportadora.SrtAutrzdoUnddes;
+                    ObjPSolicitudRetiroTransportadora.SrtDspchdoUnddes = _SolicitudRetiroTransportadora.SrtDspchdoUnddes;
+                    ObjPSolicitudRetiroTransportadora.SrtActva = _SolicitudRetiroTransportadora.SrtActva;
+
+                    var res = await _dbContex.SolicitudRetiroTransportadoras.AddAsync(ObjPSolicitudRetiroTransportadora);
+                    await _dbContex.SaveChangesAsync();
+
+                    var ObjSolicituAutorizacion = new MdloDtos.SolicitudRetiroAutorizacion();
+                    ObjSolicituAutorizacion.SraRowidSlctudRtro = _SolicitudRetiroTransportadora.SrtRowidSlctudRtro;
+                    ObjSolicituAutorizacion.SraRowidTrnsprtdra = _SolicitudRetiroTransportadora.SrtRowidTrnsprtdra;
+                    ObjSolicituAutorizacion.SraAutrzdoKlos = _SolicitudRetiroTransportadora.SrtAutrzdoKlos;
+                    ObjSolicituAutorizacion.SraAutrzdoUnddes = _SolicitudRetiroTransportadora.SrtAutrzdoUnddes;
+                    ObjSolicituAutorizacion.SraFcha = System.DateTime.Now;
+                    ObjSolicituAutorizacion.SraCdgoUsrio = "andres";
+                    var prueba = IngresarSolicitudRetirosAutorizacion(ObjSolicituAutorizacion);
+
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.ToString());
+                }
+                _dbContex.Dispose();
+                return ObjPSolicitudRetiroTransportadora;
+            }
+
+        }
+        #endregion
+
+
+        #region ingresar solicitud de retiros Transportadora version 2 . cerrada.
+        public async Task<MdloDtos.SolicitudRetiroTransportadora> IngresarTrasnportadoraCerrada(MdloDtos.SolicitudRetiroTransportadora _SolicitudRetiroTransportadora)
+        {
+            var ObjPSolicitudRetiroTransportadora = new MdloDtos.SolicitudRetiroTransportadora();
+            using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
+            {
+                try
+                {
+                    MdloDtos.SolicitudRetiro SolicitudRetiroExiste = await _dbContex.SolicitudRetiros.FindAsync(_SolicitudRetiroTransportadora.SrtRowidSlctudRtro);
+                    int? kilos = SolicitudRetiroExiste.SrAutrzdoKlos;
+                    int? unidades = SolicitudRetiroExiste.SrAutrzdoCntdad;
+
+                    if ((  _SolicitudRetiroTransportadora.SrtAutrzdoKlos <= kilos) || (_SolicitudRetiroTransportadora.SrtAutrzdoUnddes <= unidades )) {
+
+                        ObjPSolicitudRetiroTransportadora.SrtRowidSlctudRtro = _SolicitudRetiroTransportadora.SrtRowidSlctudRtro;
+                        ObjPSolicitudRetiroTransportadora.SrtRowidTrnsprtdra = _SolicitudRetiroTransportadora.SrtRowidTrnsprtdra;
+                        ObjPSolicitudRetiroTransportadora.SrtAutrzdoKlos = _SolicitudRetiroTransportadora.SrtAutrzdoKlos;
+                        ObjPSolicitudRetiroTransportadora.SrtAutrzdoUnddes = _SolicitudRetiroTransportadora.SrtAutrzdoUnddes;
+                        ObjPSolicitudRetiroTransportadora.SrtDspchdoKlos = 0;
+                        ObjPSolicitudRetiroTransportadora.SrtDspchdoUnddes = 0;
+                        ObjPSolicitudRetiroTransportadora.SrtActva = _SolicitudRetiroTransportadora.SrtActva;
+
+                        //actualizart la solicitud , re caulculando las cantidades y kilos. abierta
+                        if (SolicitudRetiroExiste != null)
+                        {
+                            var lst = await (from p in _dbContex.SolicitudRetiroTransportadoras
+                                            where (p.SrtRowidSlctudRtro == ObjPSolicitudRetiroTransportadora.SrtRowidSlctudRtro) 
+                                            select p).ToListAsync();
+                            int? sumaKilos = 0;
+                            int? sumaUnidades = 0;
+                            foreach (var item in lst) {
+
+                                sumaKilos = item.SrtAutrzdoKlos + ObjPSolicitudRetiroTransportadora.SrtAutrzdoKlos + sumaKilos;
+                                sumaUnidades = item.SrtAutrzdoUnddes + +sumaUnidades;
+
+                            }
+                            SolicitudRetiroExiste.SrAutrzdoKlos = sumaKilos;
+                            SolicitudRetiroExiste.SrAutrzdoCntdad = sumaUnidades;
+                           
+                            _dbContex.SolicitudRetiros.Entry(SolicitudRetiroExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                            await _dbContex.SaveChangesAsync();
+                        }
+                    }
+                    var res = await _dbContex.SolicitudRetiroTransportadoras.AddAsync(ObjPSolicitudRetiroTransportadora);
+                    await _dbContex.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.ToString());
+                }
+                _dbContex.Dispose();
+                return ObjPSolicitudRetiroTransportadora;
+            }
+        }
+        #endregion
+
+        #region ingresar solicitud de retiros Transportadora version 2 . abierta.
+        public async Task<MdloDtos.SolicitudRetiroTransportadora> IngresarTrasnportadoraAbierta(MdloDtos.SolicitudRetiroTransportadora _SolicitudRetiroTransportadora)
+        {
+            var ObPSolicitudTransportadora = new MdloDtos.SolicitudRetiroTransportadora();
+            using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
+            {
+                try
+                {
+                    MdloDtos.SolicitudRetiro SolicitudRetiroExiste = await _dbContex.SolicitudRetiros.FindAsync(_SolicitudRetiroTransportadora.SrtRowidSlctudRtro);
+                    int? kilos = SolicitudRetiroExiste.SrAutrzdoKlos;
+                    int? unidades = SolicitudRetiroExiste.SrAutrzdoCntdad;
+
+
+                    ObPSolicitudTransportadora.SrtRowidSlctudRtro = _SolicitudRetiroTransportadora.SrtRowidSlctudRtro;
+                    ObPSolicitudTransportadora.SrtRowidTrnsprtdra = _SolicitudRetiroTransportadora.SrtRowidTrnsprtdra;
+                    ObPSolicitudTransportadora.SrtAutrzdoKlos = kilos;
+                    ObPSolicitudTransportadora.SrtAutrzdoUnddes = unidades;
+                    ObPSolicitudTransportadora.SrtDspchdoKlos = 0;
+                    ObPSolicitudTransportadora.SrtDspchdoUnddes = 0;
+                    ObPSolicitudTransportadora.SrtActva = _SolicitudRetiroTransportadora.SrtActva;
+
+                    var res = await _dbContex.SolicitudRetiroTransportadoras.AddAsync(ObPSolicitudTransportadora);
+                    await _dbContex.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.ToString());
+                }
+                _dbContex.Dispose();
+                return ObPSolicitudTransportadora;
+            }
+        }
+        #endregion
 
         //Cerrar Solicitud de Retiros.
         public async Task<int> CerrarSolicitudRetiro(int sr_rowid)
@@ -355,46 +483,7 @@ namespace AccsoDtos.PortalClientes
         }
         #endregion
 
-        #region ingresar solicitud de retiros Transportadora 
-        public async Task<MdloDtos.SolicitudRetiroTransportadora> IngresarSolicitudRetiroTrasnportadora(MdloDtos.SolicitudRetiroTransportadora _SolicitudRetiroTransportadora)
-        {
-            var ObjPSolicitudRetiroTransportadora = new MdloDtos.SolicitudRetiroTransportadora();
-            using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
-            {
-                try
-                {
-
-                    ObjPSolicitudRetiroTransportadora.SrtRowidSlctudRtro = _SolicitudRetiroTransportadora.SrtRowidSlctudRtro;
-                    ObjPSolicitudRetiroTransportadora.SrtRowidTrnsprtdra = _SolicitudRetiroTransportadora.SrtRowidTrnsprtdra;
-                    ObjPSolicitudRetiroTransportadora.SrtAutrzdoKlos = _SolicitudRetiroTransportadora.SrtAutrzdoKlos;
-                    ObjPSolicitudRetiroTransportadora.SrtDspchdoKlos = _SolicitudRetiroTransportadora.SrtDspchdoKlos;
-                    ObjPSolicitudRetiroTransportadora.SrtAutrzdoUnddes = _SolicitudRetiroTransportadora.SrtAutrzdoUnddes;
-                    ObjPSolicitudRetiroTransportadora.SrtDspchdoUnddes = _SolicitudRetiroTransportadora.SrtDspchdoUnddes;
-                    ObjPSolicitudRetiroTransportadora.SrtActva = _SolicitudRetiroTransportadora.SrtActva;
-
-                    var res = await _dbContex.SolicitudRetiroTransportadoras.AddAsync(ObjPSolicitudRetiroTransportadora);
-                        await _dbContex.SaveChangesAsync();
-
-                    var ObjSolicituAutorizacion = new MdloDtos.SolicitudRetiroAutorizacion();
-                    ObjSolicituAutorizacion.SraRowidSlctudRtro = _SolicitudRetiroTransportadora.SrtRowidSlctudRtro;
-                    ObjSolicituAutorizacion.SraRowidTrnsprtdra = _SolicitudRetiroTransportadora.SrtRowidTrnsprtdra;
-                    ObjSolicituAutorizacion.SraAutrzdoKlos = _SolicitudRetiroTransportadora.SrtAutrzdoKlos;
-                    ObjSolicituAutorizacion.SraAutrzdoUnddes = _SolicitudRetiroTransportadora.SrtAutrzdoUnddes;
-                    ObjSolicituAutorizacion.SraFcha = System.DateTime.Now;
-                    ObjSolicituAutorizacion.SraCdgoUsrio = "andres";
-                    var prueba= IngresarSolicitudRetirosAutorizacion(ObjSolicituAutorizacion);
-
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.ToString());
-                }
-                _dbContex.Dispose();
-                return ObjPSolicitudRetiroTransportadora;
-            }
-
-        }
-        #endregion
+       
 
         #region Consultar solicitud de retiros Trasnportadora  por ID retiros Autorizacion.
         public async Task<List<MdloDtos.SolicitudRetiroTransportadora>> ConsultarSolicitudRetiroIdRetiroTrasnportadora(int IdSolicitudRetiro)
