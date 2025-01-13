@@ -45,12 +45,33 @@ public partial class SolicitudRetiroTransportadora
     [NotMapped]
     public virtual Tercero? SrtRowidTrnsprtdraNavigation { get; set; } = null!;
 
+    [NotMapped]
+    public string? TeCdgo { get; set; } = string.Empty;
+    [NotMapped]
+    public string? TeNmbre { get; set; } = string.Empty;
+    [NotMapped]
+    public string? TeIdntfccion { get; set; } = string.Empty;
 
-    public string? TeCdgo { get; set; }
-    public string? TeNmbre { get; set; }
-    public string? TeIdntfccion { get; set; }
 
-    public SolicitudRetiroTransportadora() { }
+    
+
+
+    public SolicitudRetiroTransportadora(int? SrtRowid, int? SrtRowidSlctudRtro,
+        int? SrtRowidTrnsprtdra, int? SrtAutrzdoKlos, int? SrtAutrzdoUnddes, bool? SrtActva, int? SrtDspchdoKlos,
+        int? SrtDspchdoUnddes) {
+
+        this.SrtRowid = SrtRowid;
+        this.SrtRowidSlctudRtro = SrtRowidSlctudRtro;
+        this.SrtRowidTrnsprtdra = SrtRowidTrnsprtdra;
+        this.SrtAutrzdoKlos = SrtAutrzdoKlos;
+        this.SrtAutrzdoUnddes = SrtAutrzdoUnddes;
+        this.SrtActva = SrtActva;
+        this.SrtDspchdoKlos = SrtDspchdoKlos;
+        this.SrtDspchdoUnddes = SrtDspchdoUnddes;
+
+    }
+
+
 
     public SolicitudRetiroTransportadora(int? SrtRowid, int? SrtRowidSlctudRtro,
         int? SrtRowidTrnsprtdra, int? SrtAutrzdoKlos, int? SrtAutrzdoUnddes, bool? SrtActva, string? TeCdgo, string? TeNmbre, string? TeIdntfccion,
@@ -72,4 +93,6 @@ public partial class SolicitudRetiroTransportadora
 
 
     }
+
+    public SolicitudRetiroTransportadora() { }
 }

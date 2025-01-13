@@ -115,8 +115,8 @@ namespace Srvcio.Controllers
             try
             {
 
-                if ((_SolicitudRetiro.SrCia is not null) &&
-                     (!string.IsNullOrEmpty(_SolicitudRetiro.SrRowidDpsto.ToString())) && (_SolicitudRetiro.SrAutrzdoCntdad is not null) ) // exito
+                if ((_SolicitudRetiro.SrCia is not null)  &&
+                     (!string.IsNullOrEmpty(_SolicitudRetiro.SrRowidDpsto.ToString())) ) // exito
 
                 {
                     var ObSubdeposito = await this._dbContex.IngresarSolicitudRetiros(_SolicitudRetiro);
@@ -217,11 +217,6 @@ namespace Srvcio.Controllers
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
             {
-
-                if ((_SolicitudRetiro.SrCia is not null) && (_SolicitudRetiro.SrCdgo is not null) &&
-                     (!string.IsNullOrEmpty(_SolicitudRetiro.SrRowidDpsto.ToString())) && (_SolicitudRetiro.SrAutrzdoCntdad is not null)) // exito
-
-                {
                     var ObSubdeposito = await this._dbContex.EditarSolicitudRetiro(_SolicitudRetiro);
                     if (ObSubdeposito != null)
                     {
@@ -238,13 +233,85 @@ namespace Srvcio.Controllers
                         respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
                         respuesta.datos = ObSubdeposito;
                     }
+            }
+            catch (Exception ex)
+            {
+                respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
+                respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                respuesta.datos = "null";
+                return BadRequest(respuesta);
+            }
+
+            return respuesta;
+        }
+        #endregion
+
+
+        #region Ingresar Solicitud de retiro transportadora abierta
+        [HttpPost("ingresar-trasnportadora-abierta")]
+        public async Task<ActionResult<dynamic>> IngresarTrasnportadoraAbierta([FromBody] MdloDtos.SolicitudRetiroTransportadora _SolicitudRetiro)
+        {
+
+            int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
+            int validacion = 0; // para sacar el mensaje de la operacion del crud.
+            try
+            {
+               
+                    var ObSubdeposito = await this._dbContex.IngresarTrasnportadoraAbierta(_SolicitudRetiro);
+                    if (ObSubdeposito != null)
+                    {
+                        respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
+                        respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                        respuesta.datos = ObSubdeposito;
+                    }
+                    else
+                    {
+                        //Error en la transaccion.
+                        validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
+
+                        respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
+                        respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                        respuesta.datos = ObSubdeposito;
+                    }
+              
+            }
+            catch (Exception ex)
+            {
+                respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
+                respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                respuesta.datos = "null";
+                return BadRequest(respuesta);
+            }
+
+            return respuesta;
+        }
+        #endregion
+
+        #region Ingresar Solicitud de retiro transportadora cerrada
+        [HttpPost("ingresar-trasnportadora-cerrada")]
+        public async Task<ActionResult<dynamic>> IngresarTrasnportadoraCerrada([FromBody] MdloDtos.SolicitudRetiroTransportadora _SolicitudRetiroTransportadora)
+        {
+
+            int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
+            int validacion = 0; // para sacar el mensaje de la operacion del crud.
+            try
+            {
+
+                var ObSubdeposito = await this._dbContex.IngresarTrasnportadoraCerrada(_SolicitudRetiroTransportadora);
+                if (ObSubdeposito != null)
+                {
+                    respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
+                    respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
+                    respuesta.datos = ObSubdeposito;
                 }
                 else
                 {
-                    //regresa el error
+                    //Error en la transaccion.
+                    validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
+
                     respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                     respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                    respuesta.datos = "null";
+                    respuesta.datos = ObSubdeposito;
                 }
 
             }
@@ -259,7 +326,6 @@ namespace Srvcio.Controllers
             return respuesta;
         }
         #endregion
-
 
         #region Ingresar Solicitud de retiro transportadora
         [HttpPost("ingresar-solicitudRetiro-trasnportadora")]
