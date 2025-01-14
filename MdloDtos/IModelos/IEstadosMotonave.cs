@@ -8,8 +8,8 @@ namespace MdloDtos.IModelos
 {
     public interface IEstadosMotonave
     {
-        public Task<List<MdloDtos.EstadoMotonave>> ListarEstadoMotonave();
-        public Task<List<MdloDtos.EstadoMotonave>> FiltrarEstadoMotonaveEspecifico(string Codigo);
+        public Task<List<MdloDtos.DTO.EstadoMotonaveDTO>> ListarEstadoMotonave();
+        public Task<List<MdloDtos.DTO.EstadoMotonaveDTO>> FiltrarEstadoMotonaveEspecifico(string Codigo);
         
     }
 }

@@ -1,4 +1,6 @@
-﻿using MdloDtos;
+﻿using AccsoDtos.Mappings;
+using AutoMapper;
+using MdloDtos;
 using MdloDtos.RNDC;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -12,10 +14,24 @@ namespace VldcionDtos
 {
     public class ValidacionReserva
     {
-        AccsoDtos.Reserva.Reserva _ObjReserva = new AccsoDtos.Reserva.Reserva();
+        private readonly IMapper _mapper;
+
+        AccsoDtos.Reserva.Reserva _ObjReserva;
         AccsoDtos.RNDC.RNDC RNDC = new AccsoDtos.RNDC.RNDC();
         ValidacionTercero validacionTercero = new ValidacionTercero();
         AccsoDtos.Parametrizacion.Usuario _ObjUsuario = new AccsoDtos.Parametrizacion.Usuario();
+
+        public ValidacionReserva()
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
+
+            _mapper = configuration.CreateMapper();
+            _ObjReserva = new AccsoDtos.Reserva.Reserva(_mapper);
+        }
+
 
         #region Validacion  de la existencia de una solicitud de retiro mediante su RowId
         public async Task<int> ValidarExistenciaSolicitudRetiro(int IdSolicitudRetiro)
@@ -25,8 +41,9 @@ namespace VldcionDtos
                 if (IdSolicitudRetiro > 0)
                 {
                     bool SolicitudRetiroExiste = await _ObjReserva.VerificarSolicitudRetiro(IdSolicitudRetiro);
-                    return (!SolicitudRetiroExiste) ?  (int)MdloDtos.Utilidades.Constantes.TipoMensaje.RelacionNoExiste :
-                                                            (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;  
+                    return !SolicitudRetiroExiste 
+                        ? (int)MdloDtos.Utilidades.Constantes.TipoMensaje.RelacionNoExiste 
+                        : (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;  
                 }
                 else
                 {
@@ -48,8 +65,9 @@ namespace VldcionDtos
                 if (CodigoOrden > 0)
                 {
                     bool OrdenExiste = await _ObjReserva.VerificarOrden(CodigoOrden);
-                    return (!OrdenExiste) ? (int)MdloDtos.Utilidades.Constantes.TipoMensaje.RelacionNoExiste :
-                                            (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
+                    return !OrdenExiste 
+                        ? (int)MdloDtos.Utilidades.Constantes.TipoMensaje.RelacionNoExiste 
+                        : (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
                 }
                 else
                 {
@@ -64,21 +82,21 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion el estado de un manifiesto
-        public async Task<string> ValidarManifiesto(MdloDtos.Orden _Orden)
+        public async Task<string> ValidarManifiesto(MdloDtos.DTO.OrdenDTO _Orden)
         {
             try
             {
-                if (string.IsNullOrEmpty(_Orden.OrMnfsto))
+                if (string.IsNullOrEmpty(_Orden.Manifiesto))
                     return "El manifiesto es obligatorio";
 
-                var transportadora = await validacionTercero.ConsultarTerceroPorId(_Orden.OrRowidTrnsprtdra);
+                var transportadora = await validacionTercero.ConsultarTerceroPorId(_Orden.IdTransportadora);
                 if (transportadora == null)
                     return "La transportadora no está creada en el sistema";
 
                 if (string.IsNullOrEmpty(transportadora.TeCdgo))
                     return "La transportadora no tiene código NIT asociado, es necesario para validar el manifiesto";
 
-                var result = await RNDC.validarManifiesto(_Orden.OrMnfsto, transportadora.TeCdgo);
+                var result = await RNDC.validarManifiesto(_Orden.Manifiesto, transportadora.TeCdgo);
                 if (!result.transaccionExitosa)
                     return $"Error al tratar de validar el manifiesto con el sistema de RNDC: {result.errorCode} {result.errorText}";
 
@@ -96,14 +114,13 @@ namespace VldcionDtos
             }
         }
 
-        private string ValidarManifiestoActivo(ConsultaManifiestoRespuesta result, MdloDtos.Orden _Orden)
+        private string ValidarManifiestoActivo(ConsultaManifiestoRespuesta result, MdloDtos.DTO.OrdenDTO _Orden)
         {
-            if (result.placa.Equals(_Orden.OrPlca) &&
-                (result.id_Conductor.Equals(_Orden.OrIdntfccionCndctor) || result.id_Conductor2.Equals(_Orden.OrIdntfccionCndctor)))
-            {
-                return "OK";
-            }
-            return "El manifiesto se encuentra activo, pero los datos de placa y conductor no coinciden con el número de manifiesto";
+            return ( result.placa.Equals(_Orden.Placa) &&
+                   ( result.id_Conductor.Equals(_Orden.IdentificacionConductor) || 
+                     result.id_Conductor2.Equals(_Orden.IdentificacionConductor)))
+                ? "OK"
+                : "El manifiesto se encuentra activo, pero los datos de placa y conductor no coinciden con el número de manifiesto";
         }
         #endregion
 

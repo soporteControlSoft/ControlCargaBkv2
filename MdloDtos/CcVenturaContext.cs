@@ -4454,67 +4454,67 @@ public async Task<List<MdloDtos.SpInvntrioBdgaDpsto>> DpsitoAdmnstrcion_Invntrio
         }
     }
 
-    public async Task<string> RegistrarOrden(MdloDtos.Orden orden)
+    public async Task<string> RegistrarOrden(MdloDtos.DTO.OrdenDTO orden)
     {
         try
         {
             // Configuración de parámetros de entrada
-            var param1 = new SqlParameter("@or_rowid_trnsprtdra", orden.OrRowidTrnsprtdra);
-            var param2 = new SqlParameter("@or_actva", orden.OrActva);
-            var param3 = new SqlParameter("@or_fcha_rsrva", orden.OrFchaRsrva);
-            var param4 = new SqlParameter("@or_fcha_rgstro_rsrva", orden.OrFchaRgstroRsrva);
-            var param5 = new SqlParameter("@or_cdgo_usrio_rsrva", orden.OrCdgoUsrioRsrva);
-            var param6 = new SqlParameter("@or_plca", orden.OrPlca);
-            var param7 = new SqlParameter("@or_rmlque", orden.OrRmlque);
-            var param8 = new SqlParameter("@or_mnfsto", orden.OrMnfsto);
-            var param9 = new SqlParameter("@or_rmsion", orden.OrMnfsto);
-            var param10 = new SqlParameter("@or_idntfccion_cndctor", orden.OrIdntfccionCndctor);
+            var param1 = new SqlParameter("@or_rowid_trnsprtdra", orden.IdTransportadora);
+            var param2 = new SqlParameter("@or_actva", orden.Activa);
+            var param3 = new SqlParameter("@or_fcha_rsrva", orden.FechaReserva);
+            var param4 = new SqlParameter("@or_fcha_rgstro_rsrva", orden.FechaRegistroReserva);
+            var param5 = new SqlParameter("@or_cdgo_usrio_rsrva", orden.CodigoUsuarioReserva);
+            var param6 = new SqlParameter("@or_plca", orden.Placa);
+            var param7 = new SqlParameter("@or_rmlque", orden.Remolque);
+            var param8 = new SqlParameter("@or_mnfsto", orden.Manifiesto);
+            var param9 = new SqlParameter("@or_rmsion", orden.Remision);
+            var param10 = new SqlParameter("@or_idntfccion_cndctor", orden.IdentificacionConductor);
 
-            var param11 = new SqlParameter("@or_llmda", orden.OrLlmda);
-            var param12 = new SqlParameter("@or_rdcda", orden.OrRdcda);
-            var param13 = new SqlParameter("@or_fcha_rdccion", orden.OrFchaRdccion);
-            var param14 = new SqlParameter("@or_rowid_dpsto", orden.OrRowidDpsto);
-            var param15 = new SqlParameter("@or_rowid_slctud_rtro", orden.OrRowidSlctudRtro);
-            var param16 = new SqlParameter("@or_rowid_cnfgrcion_vhclar", orden.OrRowidCnfgrcionVhclar);
-            var param17 = new SqlParameter("@or_rowid_cdad", orden.OrRowidCdad);
-            var param18 = new SqlParameter("@or_rowid_zna_cd", orden.OrRowidZnaCd);
-            var param19 = new SqlParameter("@or_rdccion_hlla_vldda", orden.OrRdccionHllaVldda);
-            var param20 = new SqlParameter("@or_cdgo_usrio_rdccion", orden.OrCdgoUsrioRdccion);
+            var param11 = new SqlParameter("@or_llmda", orden.Llamada);
+            var param12 = new SqlParameter("@or_rdcda", orden.Radicada);
+            var param13 = new SqlParameter("@or_fcha_rdccion", orden.FechaRadicacion);
+            var param14 = new SqlParameter("@or_rowid_dpsto", orden.IdDeposito);
+            var param15 = new SqlParameter("@or_rowid_slctud_rtro", orden.IdSolicitudRetiro);
+            var param16 = new SqlParameter("@or_rowid_cnfgrcion_vhclar", orden.IdConfiguracionVehicular);
+            var param17 = new SqlParameter("@or_rowid_cdad", orden.IdCiudad);
+            var param18 = new SqlParameter("@or_rowid_zna_cd", orden.IdZonaCargueDescargue);
+            var param19 = new SqlParameter("@or_rdccion_hlla_vldda", orden.RadicaccionHuellaValidada);
+            var param20 = new SqlParameter("@or_cdgo_usrio_rdccion", orden.CodigoUsuarioRadicaccion);
 
-            var param21 = new SqlParameter("@or_llmdas", orden.OrLlmdas);
-            var param22= new SqlParameter("@or_fcha_anlcion", orden.OrFchaAnlcion);
-            var param23 = new SqlParameter("@or_id_scdad", orden.OrIdScdad);
-            var param24 = new SqlParameter("@or_vgncia_trno", orden.OrVgnciaTrno);
-            var param25 = new SqlParameter("@or_trno_vlddo", orden.OrTrnoVlddo);
-            var param26 = new SqlParameter("@or_pso_a_crgar", orden.OrPsoACrgar);
-            var param27 = new SqlParameter("@or_cncpto", orden.OrCncpto);
-            var param28 = new SqlParameter("@or_crrge_trno", orden.OrCrrgeTrno);
-            var param29 = new SqlParameter("@or_crrge_trno_fcha", orden.OrCrrgeTrnoFcha);
-            var param30 = new SqlParameter("@or_vldar_vgncia_rdccion", orden.OrVldarVgnciaRdccion);
+            var param21 = new SqlParameter("@or_llmdas", orden.NumeroLLamadas);
+            var param22= new SqlParameter("@or_fcha_anlcion", orden.FechaAnulacion);
+            var param23 = new SqlParameter("@or_id_scdad", orden.IdSocidad);
+            var param24 = new SqlParameter("@or_vgncia_trno", orden.VigenciaTurno);
+            var param25 = new SqlParameter("@or_trno_vlddo", orden.TurnoValidado);
+            var param26 = new SqlParameter("@or_pso_a_crgar", orden.PesoACargar);
+            var param27 = new SqlParameter("@or_cncpto", orden.Concepto);
+            var param28 = new SqlParameter("@or_crrge_trno", orden.CorrigeTurno);
+            var param29 = new SqlParameter("@or_crrge_trno_fcha", orden.CorrigeTurnoFecha);
+            var param30 = new SqlParameter("@or_vldar_vgncia_rdccion", orden.ValidarVigenciaRadicaccion);
 
-            var param31 = new SqlParameter("@or_fcha_entrda_scdad", orden.OrFchaEntrdaScdad);
-            var param32 = new SqlParameter("@or_usrio_entrda_scdad", orden.OrUsrioEntrdaScdad);
-            var param33 = new SqlParameter("@or_fcha_prmer_llmdo", orden.OrFchaPrmerLlmdo);
-            var param34 = new SqlParameter("@or_fcha_ultmo_llmdo", orden.OrFchaUltmoLlmdo);
-            var param35 = new SqlParameter("@or_tpo", orden.OrTpo);
-            var param36 = new SqlParameter("@or_trcro", orden.OrTrcro);
-            var param37 = new SqlParameter("@or_trno_nmro", orden.OrTrnoNmro);
-            var param38 = new SqlParameter("@or_obsrvcnes", orden.OrObsrvcnes);
-            var param39 = new SqlParameter("@or_artclo", orden.OrArtclo);
-            var param40 = new SqlParameter("@or_fcha_slda_scdad", orden.OrFchaSldaScdad);
+            var param31 = new SqlParameter("@or_fcha_entrda_scdad", orden.FechaEntradaSociedad);
+            var param32 = new SqlParameter("@or_usrio_entrda_scdad", orden.UsuarioEntradaSociedad);
+            var param33 = new SqlParameter("@or_fcha_prmer_llmdo", orden.FechaPrimerLlamado);
+            var param34 = new SqlParameter("@or_fcha_ultmo_llmdo", orden.FechaUltimoLlamado);
+            var param35 = new SqlParameter("@or_tpo", orden.Tipo);
+            var param36 = new SqlParameter("@or_trcro", orden.Tercero);
+            var param37 = new SqlParameter("@or_trno_nmro", orden.TurnoNumero);
+            var param38 = new SqlParameter("@or_obsrvcnes", orden.Observaciones);
+            var param39 = new SqlParameter("@or_artclo", orden.Articulo);
+            var param40 = new SqlParameter("@or_fcha_slda_scdad", orden.FechaSalidaSocidad);
 
-            var param41 = new SqlParameter("@or_usrio_slda_scdad", orden.OrUsrioSldaScdad);
-            var param42 = new SqlParameter("@or_ubccion_rdccion", orden.OrUbccionRdccion);
-            var param43 = new SqlParameter("@or_tpo_crrcria", orden.OrTpoCrrcria);
-            var param44 = new SqlParameter("@or_intrfaz_insde", orden.OrIntrfazInsde);
-            var param45 = new SqlParameter("@or_intrfaz_insde_cnclda", orden.OrIntrfazInsdeCnclda);
-            var param46 = new SqlParameter("@or_cdgo_csal_cnclcion", orden.OrCdgoCsalCnclcion);
-            var param47 = new SqlParameter("@or_obsrvcnes_cnclcion", orden.OrObsrvcnesCnclcion);
-            var param48 = new SqlParameter("@or_intrfaz_insde_con_error", orden.OrIntrfazInsdeConError);
-            var param49 = new SqlParameter("@or_intrfaz_insde_cnclda_con_error", orden.OrIntrfazInsdeCncldaConError);
-            var param50 = new SqlParameter("@or_ingrsoid_insde", orden.OrIngrsoidInsde);
+            var param41 = new SqlParameter("@or_usrio_slda_scdad", orden.UsuarioSalidaSociada);
+            var param42 = new SqlParameter("@or_ubccion_rdccion", orden.UbicacionRadicacion);//VALIDAR
+            var param43 = new SqlParameter("@or_tpo_crrcria", orden.TipoCarroceria);
+            var param44 = new SqlParameter("@or_intrfaz_insde", orden.InterfazInside);
+            var param45 = new SqlParameter("@or_intrfaz_insde_cnclda", orden.InterfazInsideCancelada);
+            var param46 = new SqlParameter("@or_cdgo_csal_cnclcion", orden.CodigoCausalCancelacion);
+            var param47 = new SqlParameter("@or_obsrvcnes_cnclcion", orden.ObservacionesCancelacion);
+            var param48 = new SqlParameter("@or_intrfaz_insde_con_error", orden.InterfazInsideConError);
+            var param49 = new SqlParameter("@or_intrfaz_insde_cnclda_con_error", orden.InterfazInsideCanceladaConError);
+            var param50 = new SqlParameter("@or_ingrsoid_insde", orden.IngresoIdInside);
 
-            var param51 = new SqlParameter("@or_ingrsoid2_insde", orden.OrIngrsoid2Insde);
+            var param51 = new SqlParameter("@or_ingrsoid2_insde", orden.IngresoId2Inside);
 
             // Configuración de parámetro de salida
             var paramResultado = new SqlParameter("@rtrno", SqlDbType.VarChar)

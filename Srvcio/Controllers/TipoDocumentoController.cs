@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Srvcio.Controllers
 {
@@ -11,11 +12,13 @@ namespace Srvcio.Controllers
     public class TipoDocumentoController : Controller
     {
         private readonly MdloDtos.IModelos.ITipoDocumento _dbContext;
+        private readonly IMapper _mapper;
 
         MdloDtos.Utilidades.RespuestaServicios respuesta = new MdloDtos.Utilidades.RespuestaServicios();
-        public TipoDocumentoController(MdloDtos.IModelos.ITipoDocumento dbContext)
+        public TipoDocumentoController(MdloDtos.IModelos.ITipoDocumento dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -25,10 +28,10 @@ namespace Srvcio.Controllers
 
         #region Consultar todos los Tipos de documentos
         [HttpGet("consultar-tipo-documento")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.TipoDocumento>>> ListarTipoDocumento()
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.TipoDocumentoDTO>>> ListarTipoDocumento()
         {
 
-            var ObjTipoDocumento = new List<MdloDtos.TipoDocumento>();
+            var ObjTipoDocumento = new List<MdloDtos.DTO.TipoDocumentoDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             try
@@ -56,10 +59,10 @@ namespace Srvcio.Controllers
 
         #region Filtrar Tipos de documentos por codigo general
         [HttpGet("filtrar-tipo-documento-general")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.TipoDocumento>>> FiltrarTipoDocumentoGeneral(string FiltroBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.TipoDocumentoDTO>>> FiltrarTipoDocumentoGeneral(string FiltroBusqueda)
         {
 
-            var ObjTipoDocumento = new List<MdloDtos.TipoDocumento>();
+            var ObjTipoDocumento = new List<MdloDtos.DTO.TipoDocumentoDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -106,10 +109,10 @@ namespace Srvcio.Controllers
 
         #region Filtrar Tipos de documentos por codigo especifico
         [HttpGet("filtrar-tipo-documento-especifico")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.TipoDocumento>>> FiltrarTipoDocumentoEspecifico(string CodigoBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.TipoDocumentoDTO>>> FiltrarTipoDocumentoEspecifico(string CodigoBusqueda)
         {
 
-            var ObjTipoDocumento = new List<MdloDtos.TipoDocumento>();
+            var ObjTipoDocumento = new List<MdloDtos.DTO.TipoDocumentoDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -158,7 +161,7 @@ namespace Srvcio.Controllers
         #region Ingresa Tipo Documento
 
         [HttpPost("ingresar-tipo-documento")]
-        public async Task<ActionResult<dynamic>> IngresarTipoDocumento([FromBody] MdloDtos.TipoDocumento ObjTipoDocumento_)
+        public async Task<ActionResult<dynamic>> IngresarTipoDocumento([FromBody] MdloDtos.DTO.TipoDocumentoDTO ObjTipoDocumento_)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -209,7 +212,7 @@ namespace Srvcio.Controllers
 
         #region Actualizar tipo documento
         [HttpPut("editar-tipo-documento")]
-        public async Task<ActionResult<dynamic>> EditarTipoDocumento([FromBody] MdloDtos.TipoDocumento ObjTipoDocumento_)
+        public async Task<ActionResult<dynamic>> EditarTipoDocumento([FromBody] MdloDtos.DTO.TipoDocumentoDTO ObjTipoDocumento_)
         {
 
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
@@ -260,10 +263,10 @@ namespace Srvcio.Controllers
 
         #region Filtrar Tipos de documentos donde sea activo y origen sea M
         [HttpGet("filtrar-tipo-documento-detalle")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.TipoDocumento>>> FiltrarTipoDocumentoDetalle()
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.TipoDocumentoDTO>>> FiltrarTipoDocumentoDetalle()
         {
 
-            var ObjTipoDocumento = new List<MdloDtos.TipoDocumento>();
+            var ObjTipoDocumento = new List<MdloDtos.DTO.TipoDocumentoDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             try

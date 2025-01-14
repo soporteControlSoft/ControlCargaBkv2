@@ -1,4 +1,6 @@
-﻿using MdloDtos;
+﻿using AutoMapper;
+using MdloDtos;
+using MdloDtos.DTO;
 using MdloDtos.Utilidades;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -16,27 +18,32 @@ namespace AccsoDtos.Reserva
     /// 
     public class Reserva: MdloDtos.IModelos.IReserva
     {
+        private readonly IMapper _mapper;
+
+        public Reserva(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
 
         #region Consultar todas las visita de motonave para una compañia en particular
-        public async Task<List<MdloDtos.VwMdloRsrvaLstarVstaMtnve>> ConsultarVisitaMotonave(String codigoCompania)
+        public async Task<List<MdloDtos.DTO.VwMdloRsrvaLstarVstaMtnveDTO>> ConsultarVisitaMotonave(String codigoCompania)
         {
             List<MdloDtos.VwMdloRsrvaLstarVstaMtnve> list= new List<MdloDtos.VwMdloRsrvaLstarVstaMtnve>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
-
                 var lst = await (from vstaMtnve in _dbContex.VwMdloRsrvaLstarVstaMtnves
                                  where vstaMtnve.VmCdgoCia == codigoCompania
                                  select vstaMtnve
                                ).ToListAsync();
                 _dbContex.Dispose();
-                
-                return lst;
+                var result = (lst.Count > 0) ? _mapper.Map<List<VwMdloRsrvaLstarVstaMtnveDTO>>(lst) : new List<VwMdloRsrvaLstarVstaMtnveDTO>();
+                return result;
             }
         }
         #endregion
 
         #region Consultar todos los depositos de una visita de motonave en particular
-        public async Task<List<MdloDtos.VwMdloRsrvaLstarDpsto>> ConsultarDeposito(int idVisitaMotonave)
+        public async Task<List<MdloDtos.DTO.VwMdloRsrvaLstarDpstoDTO>> ConsultarDeposito(int idVisitaMotonave)
         {
             List<MdloDtos.VwMdloRsrvaLstarDpsto> list = new List<MdloDtos.VwMdloRsrvaLstarDpsto>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
@@ -48,7 +55,8 @@ namespace AccsoDtos.Reserva
                                ).ToListAsync();
                 _dbContex.Dispose();
 
-                return lst;
+                var result = (lst.Count > 0) ? _mapper.Map<List<VwMdloRsrvaLstarDpstoDTO>>(lst) : new List<VwMdloRsrvaLstarDpstoDTO>();
+                return result;
             }
         }
         #endregion
@@ -65,28 +73,28 @@ namespace AccsoDtos.Reserva
                                  select slctudRtro
                                ).ToListAsync();
                 _dbContex.Dispose();
-
                 return lst;
             }
         }
         #endregion
 
         #region Consultar el detalle de una solicitud de retiro para una solicitud de retiro en particular y una transportadora particular
-        public async Task<List<MdloDtos.SpMdloRsrvaDtlleSlctudRtro>> ListarDetalleSolicitudRetiro(int IdSolicitudRetiro, int idTransportadora)
+        public async Task<List<MdloDtos.DTO.SpMdloRsrvaDtlleSlctudRtroDTO>> ListarDetalleSolicitudRetiro(int IdSolicitudRetiro, int idTransportadora)
         {
             List<MdloDtos.SpMdloRsrvaDtlleSlctudRtro> list = new List<MdloDtos.SpMdloRsrvaDtlleSlctudRtro>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
-                list  = await _dbContex.ListarDetalleSolicitudRetiro(IdSolicitudRetiro, idTransportadora);          
+                list = await _dbContex.ListarDetalleSolicitudRetiro(IdSolicitudRetiro, idTransportadora);          
                 _dbContex.Dispose();
 
-                return list;
+                var result = (list.Count > 0) ? _mapper.Map<List<SpMdloRsrvaDtlleSlctudRtroDTO>>(list) : new List<SpMdloRsrvaDtlleSlctudRtroDTO>();
+                return result;
             }
         }
         #endregion
 
         #region Consultar el detalle de una orden o reserva para una orden en particular a partir de su codigo.
-        public async Task<List<MdloDtos.SpMdloRsrvaDtlleOrden>> ListarDetalleOrden(int cdgoOrden)
+        public async Task<List<MdloDtos.DTO.SpMdloRsrvaDtlleOrdenDTO>> ListarDetalleOrden(int cdgoOrden)
         {
             List<MdloDtos.SpMdloRsrvaDtlleOrden> list = new List<MdloDtos.SpMdloRsrvaDtlleOrden>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
@@ -94,7 +102,8 @@ namespace AccsoDtos.Reserva
                 list = await _dbContex.ListarDetalleOrden(cdgoOrden);
                 _dbContex.Dispose();
 
-                return list;
+                var result = (list.Count > 0) ? _mapper.Map<List<SpMdloRsrvaDtlleOrdenDTO>>(list) : new List<SpMdloRsrvaDtlleOrdenDTO>();
+                return result;
             }
         }
         #endregion
@@ -142,7 +151,7 @@ namespace AccsoDtos.Reserva
         #endregion
 
         #region Ingresar datos a la entidad Orden
-        public async Task<dynamic> RegistrarOrden(MdloDtos.Orden _Orden)
+        public async Task<dynamic> RegistrarOrden(MdloDtos.DTO.OrdenDTO _Orden)
         {
             string retorno = "";
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
@@ -170,12 +179,7 @@ namespace AccsoDtos.Reserva
                                             {
                                                 orden.OrCdgo
                                             }).ToListAsync();
-                    if (listOrden.Count > 0)
-                    {
-                        cdgoOrden = listOrden[0].OrCdgo;
-                    }
-                    
-                   
+                    cdgoOrden = (listOrden.Count > 0) ? cdgoOrden = listOrden[0].OrCdgo : cdgoOrden;
                 }
                 catch (Exception ex)
                 {
@@ -201,14 +205,10 @@ namespace AccsoDtos.Reserva
                     {
                         DateTime Hoy = DateTime.Now;
                         Observaciones = Observaciones.Replace("]#&&#[", "").Replace("]#&&[", "").Replace("#&&#", "");//codigo para evitar que se registre un separador dentro del comentario.
-                        if (OrdenExiste.OrObsrvcnes != null)
-                        {
-                            OrdenExiste.OrObsrvcnes = OrdenExiste.OrObsrvcnes + "#&&#[" + Hoy.ToString() + "]#&&[" + CodigoUsuario + "]#&&[" + Observaciones + "]";
-                        }
-                        else
-                        {
-                            OrdenExiste.OrObsrvcnes = "[" + Hoy.ToString() + "]#&&[" + CodigoUsuario + "]#&&[" + Observaciones + "]";
-                        }
+
+                        OrdenExiste.OrObsrvcnes = (OrdenExiste.OrObsrvcnes != null) ?
+                                    OrdenExiste.OrObsrvcnes + "#&&#[" + Hoy.ToString() + "]#&&[" + CodigoUsuario + "]#&&[" + Observaciones + "]" :
+                                    "[" + Hoy.ToString() + "]#&&[" + CodigoUsuario + "]#&&[" + Observaciones + "]";
 
                         _dbContex.Ordens.Update(OrdenExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                         await _dbContex.SaveChangesAsync();
@@ -334,7 +334,5 @@ namespace AccsoDtos.Reserva
             }
         }
         #endregion
-
-       
     }
 }

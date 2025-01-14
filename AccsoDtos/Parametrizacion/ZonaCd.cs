@@ -1,4 +1,6 @@
-﻿using MdloDtos.Utilidades;
+﻿using AutoMapper;
+using MdloDtos.DTO;
+using MdloDtos.Utilidades;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -15,15 +17,23 @@ namespace AccsoDtos.Parametrizacion
     /// 
     public class ZonaCd:MdloDtos.IModelos.IZonaCd
     {
+
+        private readonly IMapper _mapper;
+
+        public ZonaCd(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
         #region Ingresar datos a la entidad ZonaCd
-        public async Task<MdloDtos.ZonaCd> IngresarZonaCd(MdloDtos.ZonaCd _ZonaCd)
+        public async Task<dynamic> IngresarZonaCd(MdloDtos.DTO.ZonaCdDTO _ZonaCd)
         {
             var ObjZonaCd = new MdloDtos.ZonaCd();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 try
                 {
-                    var ZonaCdExiste = await this.VerificarZonaCodigo(_ZonaCd.ZcdCdgo);
+                    var ZonaCdExiste = await this.VerificarZonaCodigo(_ZonaCd.Codigo);
 
                     if (ZonaCdExiste == true)
                     {
@@ -31,17 +41,16 @@ namespace AccsoDtos.Parametrizacion
                     }
                     else
                     {
-
-                        ObjZonaCd.ZcdCdgo = _ZonaCd.ZcdCdgo;
-                        ObjZonaCd.ZcdNmbre = _ZonaCd.ZcdNmbre;
-                        ObjZonaCd.ZcdActvo = _ZonaCd.ZcdActvo;
-                        ObjZonaCd.ZcdRowidSde = _ZonaCd.ZcdRowidSde;
-                        ObjZonaCd.ZcdBdga = _ZonaCd.ZcdBdga;
-                        ObjZonaCd.ZcdSlo = _ZonaCd.ZcdSlo;
-                        ObjZonaCd.ZcdMlle = _ZonaCd.ZcdMlle;
-                        ObjZonaCd.ZcdPtio = _ZonaCd.ZcdPtio;
-                        ObjZonaCd.ZcdCpcdad = _ZonaCd.ZcdCpcdad;
-                        ObjZonaCd.ZcdPlnta = _ZonaCd.ZcdPlnta;
+                        ObjZonaCd.ZcdCdgo = _ZonaCd.Codigo;
+                        ObjZonaCd.ZcdNmbre = _ZonaCd.Nombre;
+                        ObjZonaCd.ZcdActvo = _ZonaCd.Estado;
+                        ObjZonaCd.ZcdRowidSde = _ZonaCd.IdSede;
+                        ObjZonaCd.ZcdBdga = _ZonaCd.Bodega;
+                        ObjZonaCd.ZcdSlo = _ZonaCd.Slo;
+                        ObjZonaCd.ZcdMlle = _ZonaCd.Muelle;
+                        ObjZonaCd.ZcdPtio = _ZonaCd.Patio;
+                        ObjZonaCd.ZcdCpcdad = _ZonaCd.Capacidad;
+                        ObjZonaCd.ZcdPlnta = _ZonaCd.Planta;
 
                         var res = await _dbContex.ZonaCds.AddAsync(ObjZonaCd);
                         await _dbContex.SaveChangesAsync();
@@ -60,14 +69,14 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region valida si existe una ZonaCd validando nombre y Sede mediante un Objeto ZonaCd
-        public bool ValidacionZonaNombreIngresar(MdloDtos.ZonaCd objZonaCd)
+        public bool ValidacionZonaNombreIngresar(MdloDtos.DTO.ZonaCdDTO objZonaCd)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 Boolean retorno = false;
                 var lst = (from e in _dbContex.ZonaCds
-                           where    e.ZcdNmbre == objZonaCd.ZcdNmbre && 
-                                    e.ZcdRowidSde== objZonaCd.ZcdRowidSde
+                           where    e.ZcdNmbre == objZonaCd.Nombre && 
+                                    e.ZcdRowidSde== objZonaCd.IdSede
                            select e).Count();
 
                 if (lst > 0)
@@ -84,15 +93,15 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region valida si existe una ZonaCd validando RowId, nombre y Sede pasando como parámetro un Objeto ZonaCd
-        public bool ValidacionZonaNombreActualizar(MdloDtos.ZonaCd objZonaCd)
+        public bool ValidacionZonaNombreActualizar(MdloDtos.DTO.ZonaCdDTO objZonaCd)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 Boolean retorno = false;
                 var lst = (from e in _dbContex.ZonaCds
-                           where    e.ZcdRowid != objZonaCd.ZcdRowid &&  
-                                    e.ZcdNmbre == objZonaCd.ZcdNmbre &&
-                                    e.ZcdRowidSde == objZonaCd.ZcdRowidSde
+                           where    e.ZcdRowid != objZonaCd.IdZona &&  
+                                    e.ZcdNmbre == objZonaCd.Nombre &&
+                                    e.ZcdRowidSde == objZonaCd.IdSede
                            select e).Count();
 
                 if (lst > 0)
@@ -109,9 +118,9 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Consultar todos los datos de ZonaCd mediante un parametro Codigo de Sede
-        public async Task<List<MdloDtos.ZonaCd>> FiltrarZonaCdPorSede(int Codigo)
+        public async Task<List<MdloDtos.DTO.ZonaCdDTO>> FiltrarZonaCdPorSede(int Codigo)
         {
-            List<MdloDtos.ZonaCd> listadoZonaCd = new List<MdloDtos.ZonaCd>();
+            List<MdloDtos.DTO.ZonaCdDTO> listadoZonaCd = new List<MdloDtos.DTO.ZonaCdDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
 
@@ -146,7 +155,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Vehículos para agregar a la lista
-                    MdloDtos.ZonaCd objZonaCd = new MdloDtos.ZonaCd(
+                    MdloDtos.DTO.ZonaCdDTO objZonaCd = new MdloDtos.DTO.ZonaCdDTO(
                                                                 //Atributos Vehículo
                                                                 item.ZcdRowid != null ? item.ZcdRowid : 0,
                                                                 item.ZcdCdgo != null ? item.ZcdCdgo : String.Empty,
@@ -176,9 +185,9 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Listar todos los ZonaCd
-        public async Task<List<MdloDtos.ZonaCd>> ListarZonaCd()
+        public async Task<List<MdloDtos.DTO.ZonaCdDTO>> ListarZonaCd()
         {
-            List<MdloDtos.ZonaCd> listadoZonaCd = new List<MdloDtos.ZonaCd>();
+            List<MdloDtos.DTO.ZonaCdDTO> listadoZonaCd = new List<MdloDtos.DTO.ZonaCdDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
 
@@ -211,7 +220,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Vehículos para agregar a la lista
-                    MdloDtos.ZonaCd objZonaCd = new MdloDtos.ZonaCd(
+                    MdloDtos.DTO.ZonaCdDTO objZonaCd = new MdloDtos.DTO.ZonaCdDTO(
                                                                 //Atributos Vehículo
                                                                 item.ZcdRowid != null ? item.ZcdRowid : 0,
                                                                 item.ZcdCdgo != null ? item.ZcdCdgo : String.Empty,
@@ -233,6 +242,7 @@ namespace AccsoDtos.Parametrizacion
                     //Agregamnos la Configuración Vehicular a la lista
                     listadoZonaCd.Add(objZonaCd);
                 }
+
                 _dbContex.Dispose();
                 return listadoZonaCd;
             }
@@ -240,45 +250,44 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Actualizar ZonaCd por el objeto _ZonaCd
-        public async Task<MdloDtos.ZonaCd> EditarZonaCd(MdloDtos.ZonaCd _ZonaCd)
+        public async Task<MdloDtos.DTO.ZonaCdDTO> EditarZonaCd(MdloDtos.DTO.ZonaCdDTO _ZonaCd)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 try {
-                    MdloDtos.ZonaCd ZonaCdxiste = await _dbContex.ZonaCds.FindAsync(_ZonaCd.ZcdRowid);
+                    MdloDtos.ZonaCd ZonaCdxiste = await _dbContex.ZonaCds.FindAsync(_ZonaCd.IdZona);
                     if (ZonaCdxiste != null)
                     {
-                        ZonaCdxiste.ZcdCdgo = _ZonaCd.ZcdCdgo;
-                        ZonaCdxiste.ZcdNmbre = _ZonaCd.ZcdNmbre;
-                        ZonaCdxiste.ZcdActvo = _ZonaCd.ZcdActvo;
-                        ZonaCdxiste.ZcdRowidSde = _ZonaCd.ZcdRowidSde;
-                        ZonaCdxiste.ZcdBdga = _ZonaCd.ZcdBdga;
-                        ZonaCdxiste.ZcdSlo = _ZonaCd.ZcdSlo;
-                        ZonaCdxiste.ZcdMlle = _ZonaCd.ZcdMlle;
-                        ZonaCdxiste.ZcdPtio = _ZonaCd.ZcdPtio;
-                        ZonaCdxiste.ZcdCpcdad = _ZonaCd.ZcdCpcdad;
-                        ZonaCdxiste.ZcdPlnta = _ZonaCd.ZcdPlnta;
+                        ZonaCdxiste.ZcdCdgo = _ZonaCd.Codigo;
+                        ZonaCdxiste.ZcdNmbre = _ZonaCd.Nombre;
+                        ZonaCdxiste.ZcdActvo = _ZonaCd.Estado;
+                        ZonaCdxiste.ZcdRowidSde = _ZonaCd.IdSede;
+                        ZonaCdxiste.ZcdBdga = _ZonaCd.Bodega;
+                        ZonaCdxiste.ZcdSlo = _ZonaCd.Slo;
+                        ZonaCdxiste.ZcdMlle = _ZonaCd.Muelle;
+                        ZonaCdxiste.ZcdPtio = _ZonaCd.Patio;
+                        ZonaCdxiste.ZcdCpcdad = _ZonaCd.Capacidad;
+                        ZonaCdxiste.ZcdPlnta = _ZonaCd.Planta;
 
                         _dbContex.Entry(ZonaCdxiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                         await _dbContex.SaveChangesAsync();
 
                     }
                     _dbContex.Dispose();
-                    return ZonaCdxiste;
+                    return _ZonaCd;
                 }
                 catch (Exception ex)
                 {
                     throw new Exception(ex.Message);
-
                 }
             }
         }
         #endregion
 
         #region Filtrar ZonaCd por codigo General
-        public async Task<List<MdloDtos.ZonaCd>> FiltrarZonaCdGeneral(string Codigo)
+        public async Task<List<MdloDtos.DTO.ZonaCdDTO>> FiltrarZonaCdGeneral(string Codigo)
         {
-            List<MdloDtos.ZonaCd> listadoZonaCd = new List<MdloDtos.ZonaCd>();
+            List<MdloDtos.DTO.ZonaCdDTO> listadoZonaCd = new List<MdloDtos.DTO.ZonaCdDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
 
@@ -313,7 +322,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Vehículos para agregar a la lista
-                    MdloDtos.ZonaCd objZonaCd = new MdloDtos.ZonaCd(
+                    MdloDtos.DTO.ZonaCdDTO objZonaCd = new MdloDtos.DTO.ZonaCdDTO(
                                                                 //Atributos Vehículo
                                                                 item.ZcdRowid != null ? item.ZcdRowid : 0,
                                                                 item.ZcdCdgo != null ? item.ZcdCdgo : String.Empty,
@@ -342,9 +351,9 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Filtrar ZonaCd por codigo Especifico
-        public async Task<List<MdloDtos.ZonaCd>> FiltrarZonaCdEspecifico(string Codigo)
+        public async Task<List<MdloDtos.DTO.ZonaCdDTO>> FiltrarZonaCdEspecifico(string Codigo)
         {
-            List<MdloDtos.ZonaCd> listadoZonaCd = new List<MdloDtos.ZonaCd>();
+            List<MdloDtos.DTO.ZonaCdDTO> listadoZonaCd = new List<MdloDtos.DTO.ZonaCdDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
 
@@ -379,7 +388,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Vehículos para agregar a la lista
-                    MdloDtos.ZonaCd objZonaCd = new MdloDtos.ZonaCd(
+                    MdloDtos.DTO.ZonaCdDTO objZonaCd = new MdloDtos.DTO.ZonaCdDTO(
                                                                 //Atributos Vehículo
                                                                 item.ZcdRowid != null ? item.ZcdRowid : 0,
                                                                 item.ZcdCdgo != null ? item.ZcdCdgo : String.Empty,
@@ -408,9 +417,9 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Filtrar ZonaCd por id
-        public async Task<List<MdloDtos.ZonaCd>> FiltrarZonaCdId(int? id)
+        public async Task<List<MdloDtos.DTO.ZonaCdDTO>> FiltrarZonaCdId(int? id)
         {
-            List<MdloDtos.ZonaCd> listadoZonaCd = new List<MdloDtos.ZonaCd>();
+            List<MdloDtos.DTO.ZonaCdDTO> listadoZonaCd = new List<MdloDtos.DTO.ZonaCdDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
 
@@ -444,7 +453,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Vehículos para agregar a la lista
-                    MdloDtos.ZonaCd objZonaCd = new MdloDtos.ZonaCd(
+                    MdloDtos.DTO.ZonaCdDTO objZonaCd = new MdloDtos.DTO.ZonaCdDTO(
                                                                 //Atributos Vehículo
                                                                 item.ZcdRowid != null ? item.ZcdRowid : 0,
                                                                 item.ZcdCdgo != null ? item.ZcdCdgo : String.Empty,
@@ -473,7 +482,7 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Eliminar ZonaCd Por codigo.
-        public async Task<MdloDtos.ZonaCd> EliminarZonaCd(int Codigo)
+        public async Task<dynamic> EliminarZonaCd(int Codigo)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
@@ -495,7 +504,6 @@ namespace AccsoDtos.Parametrizacion
                 catch (Exception ex)
                 {
                     throw new Exception(ex.Message);
-
                 }
             }
 
@@ -517,12 +525,10 @@ namespace AccsoDtos.Parametrizacion
                     var ObjZonaCd = lst;
                     if (ObjZonaCd == null || ObjZonaCd == 0)
                     {
-
                         respuesta = false;
                     }
                     else
                     {
-
                        respuesta = true;
                     }   
                 }
@@ -553,12 +559,10 @@ namespace AccsoDtos.Parametrizacion
                     var ObjZonaCd = lst;
                     if (ObjZonaCd == null || ObjZonaCd == 0)
                     {
-
                         respuesta = false;
                     }
                     else
                     {
-
                         respuesta = true;
                     }
                 }
@@ -575,7 +579,7 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region listar zona cd si por bodega, silo patio o muelle
-        public async Task<List<MdloDtos.ZonaCd>> cargarZonaSegunLugar(string zn)
+        public async Task<List<MdloDtos.DTO.ZonaCdDTO>> cargarZonaSegunLugar(string zn)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
@@ -599,7 +603,7 @@ namespace AccsoDtos.Parametrizacion
                         break;
                     default:
                         // Retorna lista vacía si no coincide con ninguno de los casos
-                        return new List<MdloDtos.ZonaCd>();
+                        return new List<MdloDtos.DTO.ZonaCdDTO>();
                 }
 
                 // Realizar el `join` con la tabla `Sedes` para traer los datos de la sede relacionada
@@ -647,14 +651,18 @@ namespace AccsoDtos.Parametrizacion
                     item.SeNmbre
                 )).ToList();
 
-                return listadoZonaCd;
+                //return listadoZonaCd;
+                var result = (listadoZonaCd.Count > 0) ? 
+                        _mapper.Map<List<MdloDtos.DTO.ZonaCdDTO>>(lst) : 
+                        new List<MdloDtos.DTO.ZonaCdDTO>();
+                return result;
             }
         }
 
         #endregion
 
         #region listar zona cd si por bodega, silo patio o muelle y filtro de busqueda
-        public async Task<List<MdloDtos.ZonaCd>> cargarZonaSegunLugarBuscar(string zn, string busqueda = "")
+        public async Task<List<MdloDtos.DTO.ZonaCdDTO>> cargarZonaSegunLugarBuscar(string zn, string busqueda = "")
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
@@ -678,7 +686,7 @@ namespace AccsoDtos.Parametrizacion
                         break;
                     default:
                         // Si no coincide con ninguno de los casos, retorna una lista vacía
-                        return new List<MdloDtos.ZonaCd>();
+                    return new List<MdloDtos.DTO.ZonaCdDTO>();
                 }
 
                 // Aplicar el filtro de búsqueda adicional si el parámetro `busqueda` tiene valor
@@ -732,7 +740,11 @@ namespace AccsoDtos.Parametrizacion
                     item.SeNmbre
                 )).ToList();
 
-                return listadoZonaCd;
+                //return listadoZonaCd;
+                var result = (listadoZonaCd.Count > 0) ?
+                        _mapper.Map<List<MdloDtos.DTO.ZonaCdDTO>>(lst) :
+                        new List<MdloDtos.DTO.ZonaCdDTO>();
+                return result;
             }
         }
 

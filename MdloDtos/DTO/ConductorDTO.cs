@@ -4,74 +4,63 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
-namespace AccsoDtos.DTO;
+namespace MdloDtos.DTO;
 
 public partial class ConductorDTO
 {
     [Key]
     [StringLength(15)]
     [JsonPropertyName("Identificacion")]
-    public string CnIdntfccion { get; set; } = null!;
+    public string Identificacion { get; set; } = null!;
 
     [StringLength(40)]
     [JsonPropertyName("Nombre")]
-    public string CnNmbre { get; set; } = null!;
-
-    //[JsonPropertyName("Imagen")]
-    //public byte[]? CnFeatures { get; set; }
+    public string? Nombre { get; set; } = null!;
 
     [JsonPropertyName("Imagen")]
-    public string? ImagenBase64 { get; set; }
-
-    [NotMapped]
-    public byte[]? CnFeatures
-    {
-        get
-        {
-            return string.IsNullOrEmpty(ImagenBase64) ? null : Convert.FromBase64String(ImagenBase64);
-        }
-    }
-
-
-
+    public byte[]? Imagen { get; set; }
+   
     [StringLength(10)]
     [JsonPropertyName("Vehiculo")]
-    public string? CnVhclo { get; set; }
+    public string? Vehiculo { get; set; }
 
     [JsonPropertyName("IdTransportadora")]
-    public int? CnRowidTrnsprtdra { get; set; }
+    public int? IdTransportadora { get; set; }
 
     [JsonPropertyName("FechaRegistro")]
-    public DateTime CnFchaRgstro { get; set; }
+    public DateTime FechaRegistro { get; set; }
 
     [StringLength(15)]
     [JsonPropertyName("CodigoUsuarioEnrolo")]
-    public string? CnCdgoUsrioEnrlo { get; set; }
+    public string? CodigoUsuarioEnrolo { get; set; }
 
     [JsonPropertyName("FechaEnrolamiento")]
-    public DateTime? CnFchaEnrlmnto { get; set; }
+    public DateTime? FechaEnrolamiento { get; set; }
 
     [StringLength(15)]
     [JsonPropertyName("Movil")]
-    public string? CnMvil { get; set; }
+    public string? Movil { get; set; }
 
     [StringLength(15)]
     [JsonPropertyName("NumeroLicencia")]
-    public string? CnNmroLcncia { get; set; }
+    public string? NumeroLicencia { get; set; }
 
     [StringLength(15)]
     [JsonPropertyName("TipoLicencia")]
-    public string? CnTpoLcncia { get; set; }
+    public string? TipoLicencia { get; set; }
 
     [JsonPropertyName("FechaVencimientoLcncia")]
-    public DateTime? CnFchaVncmntoLcncia { get; set; }
+    public DateTime? FechaVencimientoLcncia { get; set; }
 
     [JsonPropertyName("Activo")]
-    public bool? CnActvo { get; set; }
+    public bool? Activo { get; set; }
 
     [JsonPropertyName("Urbano")]
-    public bool? CnUrbno { get; set; }
+    public bool? Urbano { get; set; }
 
     [NotMapped]
+    [JsonIgnore]
     public virtual MdloDtos.Tercero? CnRowidTrnsprtdraNavigation { get; set; }
+
+
 }

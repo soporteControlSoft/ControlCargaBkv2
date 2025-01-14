@@ -18,85 +18,42 @@ namespace AccsoDtos.Parametrizacion
     /// 
     public class Conductor : MdloDtos.IModelos.IConductor
     {
-        /* #region Ingresar datos a la entidad Conductor
-         public async Task<MdloDtos.Conductor> IngresarConductor(MdloDtos.Conductor conductor)
-         {
-             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
-             {
-                 var ObjConductor = new MdloDtos.Conductor();
-                 try
-                 {
-                     /*var ObjConductor = await this.VerificarConductor(conductor.CnIdntfccion);
 
-                      if (ObjConductor == true)
-                      {
-                          throw new Exception(MdloDtos.Utilidades.Mensajes.Error + " al momento de hacer un :" + MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
-                      }
-                      else
-                          {
+        private readonly IMapper _mapper;
 
-                         ObjConductor.CnIdntfccion = conductor.CnIdntfccion;
-                         ObjConductor.CnNmbre = conductor.CnNmbre;
-                         ObjConductor.CnFeatures = conductor.CnFeatures;
-                         ObjConductor.CnVhclo = conductor.CnVhclo;
-                         ObjConductor.CnRowidTrnsprtdra = conductor.CnRowidTrnsprtdra;
-                         ObjConductor.CnFchaRgstro = conductor.CnFchaRgstro;
-                         ObjConductor.CnCdgoUsrioEnrlo = conductor.CnCdgoUsrioEnrlo;
-                         ObjConductor.CnFchaEnrlmnto = conductor.CnFchaEnrlmnto;
-                         ObjConductor.CnMvil = conductor.CnMvil;
-                         ObjConductor.CnNmroLcncia = conductor.CnNmroLcncia;
-                         ObjConductor.CnTpoLcncia = conductor.CnTpoLcncia;
-                         ObjConductor.CnFchaVncmntoLcncia = conductor.CnFchaVncmntoLcncia;
-                         ObjConductor.CnActvo = conductor.CnActvo;
-                         ObjConductor.CnUrbno = conductor.CnUrbno;
-
-
-                         var res = await _dbContex.Conductors.AddAsync(ObjConductor);
-                         await _dbContex.SaveChangesAsync();
-                     //}
-
-
-                 }
-                 catch (Exception ex)
-                 {
-                     throw new Exception(ex.ToString());
-                 }
-                 _dbContex.Dispose();
-                 return ObjConductor;
-             }
-
-
-         }
-         #endregion*/
+        public Conductor(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
 
         #region Ingresar datos a la entidad Conductor
-        public async Task<MdloDtos.Conductor> IngresarConductor(MdloDtos.Conductor conductor)       {
+        public async Task<dynamic> IngresarConductor(MdloDtos.DTO.ConductorDTO conductor)       {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 var ObjConductor = new MdloDtos.Conductor();
                 try
                 {
-                    bool conductorExiste = await this.VerificarExistenciaConductor(conductor.CnIdntfccion);
+                    bool conductorExiste = await this.VerificarExistenciaConductor(conductor.Identificacion);
                     if (conductorExiste == true)
                     {
                         throw new Exception(MdloDtos.Utilidades.Mensajes.Error + " al momento de hacer un :" + MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
                     }
                     else
                     {
-                        ObjConductor.CnIdntfccion = conductor.CnIdntfccion;
-                        ObjConductor.CnNmbre = conductor.CnNmbre;
-                        ObjConductor.CnFeatures = conductor.CnFeatures;
-                        ObjConductor.CnVhclo = conductor.CnVhclo;
-                        ObjConductor.CnRowidTrnsprtdra = conductor.CnRowidTrnsprtdra;
-                        ObjConductor.CnFchaRgstro = conductor.CnFchaRgstro;
-                        ObjConductor.CnCdgoUsrioEnrlo = conductor.CnCdgoUsrioEnrlo;
-                        ObjConductor.CnFchaEnrlmnto = conductor.CnFchaEnrlmnto;
-                        ObjConductor.CnMvil = conductor.CnMvil;
-                        ObjConductor.CnNmroLcncia = conductor.CnNmroLcncia;
-                        ObjConductor.CnTpoLcncia = conductor.CnTpoLcncia;
-                        ObjConductor.CnFchaVncmntoLcncia = conductor.CnFchaVncmntoLcncia;
-                        ObjConductor.CnActvo = conductor.CnActvo;
-                        ObjConductor.CnUrbno = conductor.CnUrbno;
+                        ObjConductor.CnIdntfccion = conductor.Identificacion;
+                        ObjConductor.CnNmbre = conductor.Nombre;
+                        ObjConductor.CnFeatures = conductor.Imagen;
+                        ObjConductor.CnVhclo = conductor.Vehiculo;
+                        ObjConductor.CnRowidTrnsprtdra = conductor.IdTransportadora;
+                        ObjConductor.CnFchaRgstro = conductor.FechaRegistro;
+                        ObjConductor.CnCdgoUsrioEnrlo = conductor.CodigoUsuarioEnrolo;
+                        ObjConductor.CnFchaEnrlmnto = conductor.FechaEnrolamiento;
+                        ObjConductor.CnMvil = conductor.Movil;
+                        ObjConductor.CnNmroLcncia = conductor.NumeroLicencia;
+                        ObjConductor.CnTpoLcncia = conductor.TipoLicencia;
+                        ObjConductor.CnFchaVncmntoLcncia = conductor.FechaVencimientoLcncia;
+                        ObjConductor.CnActvo = conductor.Activo;
+                        ObjConductor.CnUrbno = conductor.Urbano;
                         var res = await _dbContex.Conductors.AddAsync(ObjConductor);
                         await _dbContex.SaveChangesAsync();
                     }
@@ -126,35 +83,35 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Actualizar Un conductor
-        public async Task<MdloDtos.Conductor> EditarConductor(MdloDtos.Conductor _Conductor)
+        public async Task<MdloDtos.DTO.ConductorDTO> EditarConductor(MdloDtos.DTO.ConductorDTO _Conductor)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 try
                 {
-                    MdloDtos.Conductor ConductorExiste = await _dbContex.Conductors.FindAsync(_Conductor.CnIdntfccion);
+                    MdloDtos.Conductor ConductorExiste = await _dbContex.Conductors.FindAsync(_Conductor.Identificacion);
                     if (ConductorExiste != null)
                     {
-                        ConductorExiste.CnIdntfccion = _Conductor.CnIdntfccion;
-                        ConductorExiste.CnNmbre = _Conductor.CnNmbre;
-                        ConductorExiste.CnFeatures = _Conductor.CnFeatures;
-                        ConductorExiste.CnVhclo = _Conductor.CnVhclo;
-                        ConductorExiste.CnRowidTrnsprtdra = _Conductor.CnRowidTrnsprtdra;
-                        ConductorExiste.CnFchaRgstro = _Conductor.CnFchaRgstro;
-                        ConductorExiste.CnCdgoUsrioEnrlo = _Conductor.CnCdgoUsrioEnrlo;
-                        ConductorExiste.CnFchaEnrlmnto = _Conductor.CnFchaEnrlmnto;
-                        ConductorExiste.CnMvil = _Conductor.CnMvil;
-                        ConductorExiste.CnNmroLcncia = _Conductor.CnNmroLcncia;
-                        ConductorExiste.CnTpoLcncia = _Conductor.CnTpoLcncia;
-                        ConductorExiste.CnFchaVncmntoLcncia = _Conductor.CnFchaVncmntoLcncia;
-                        ConductorExiste.CnActvo = _Conductor.CnActvo;
-                        ConductorExiste.CnUrbno = _Conductor.CnUrbno;
+                        ConductorExiste.CnIdntfccion = _Conductor.Identificacion;
+                        ConductorExiste.CnNmbre = _Conductor.Nombre;
+                        ConductorExiste.CnFeatures = _Conductor.Imagen;
+                        ConductorExiste.CnVhclo = _Conductor.Vehiculo;
+                        ConductorExiste.CnRowidTrnsprtdra = _Conductor.IdTransportadora;
+                        ConductorExiste.CnFchaRgstro = _Conductor.FechaRegistro;
+                        ConductorExiste.CnCdgoUsrioEnrlo = _Conductor.CodigoUsuarioEnrolo;
+                        ConductorExiste.CnFchaEnrlmnto = _Conductor.FechaEnrolamiento;
+                        ConductorExiste.CnMvil = _Conductor.Movil;
+                        ConductorExiste.CnNmroLcncia = _Conductor.NumeroLicencia;
+                        ConductorExiste.CnTpoLcncia = _Conductor.TipoLicencia;
+                        ConductorExiste.CnFchaVncmntoLcncia = _Conductor.FechaVencimientoLcncia;
+                        ConductorExiste.CnActvo = _Conductor.Activo;
+                        ConductorExiste.CnUrbno = _Conductor.Urbano;
 
                         _dbContex.Entry(ConductorExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                         await _dbContex.SaveChangesAsync();
                     }
                     _dbContex.Dispose();
-                    return ConductorExiste;
+                    return _Conductor;
                 }
                 catch (Exception ex)
                 {
@@ -195,7 +152,7 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Eliminar Conductor Por Identificacion.
-        public async Task<MdloDtos.Conductor> EliminarConductor(string Identificacion)
+        public async Task<dynamic> EliminarConductor(string Identificacion)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {

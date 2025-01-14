@@ -1,4 +1,6 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using AccsoDtos.Mappings;
+using AutoMapper;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +11,23 @@ namespace VldcionDtos
 {
     public class ValidacionDocumentacionVisita
     {
+        private readonly IMapper _mapper;
+
         AccsoDtos.VisitaMotonave.DocumentacionVisita ObjDocumentacionVisita = new AccsoDtos.VisitaMotonave.DocumentacionVisita();
-        AccsoDtos.Parametrizacion.TipoDocumento ObjTipoDocumento = new AccsoDtos.Parametrizacion.TipoDocumento();
+        AccsoDtos.Parametrizacion.TipoDocumento ObjTipoDocumento;
         AccsoDtos.Parametrizacion.Usuario ObjUsuario = new AccsoDtos.Parametrizacion.Usuario();
         AccsoDtos.VisitaMotonave.VisitaMotonave ObjVisitaMotonave = new AccsoDtos.VisitaMotonave.VisitaMotonave();
-   
 
+        public ValidacionDocumentacionVisita()
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
+
+            _mapper = configuration.CreateMapper();
+            ObjTipoDocumento = new AccsoDtos.Parametrizacion.TipoDocumento(_mapper);
+        }
 
         #region Validacion Motonave asociada a la visita motonave encabezado ( Filtros: codigo usuario y codigo compania)
         public async Task<int> ValidarFiltroBusquedas(string? CodigoUsuario, string CodigoCompania)

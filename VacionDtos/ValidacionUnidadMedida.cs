@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AccsoDtos.Mappings;
+using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,141 +13,105 @@ namespace VldcionDtos
     /// </summary>
     public class ValidacionUnidadMedida
     {
-        AccsoDtos.Parametrizacion.UnidadMedida ObjUnidadMedida = new AccsoDtos.Parametrizacion.UnidadMedida();
+        private readonly IMapper _mapper;
+        AccsoDtos.Parametrizacion.UnidadMedida ObjUnidadMedida;
+
+        public ValidacionUnidadMedida()
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
+
+            _mapper = configuration.CreateMapper();
+            ObjUnidadMedida = new AccsoDtos.Parametrizacion.UnidadMedida(_mapper);
+        }
+
 
         #region Validacion de UnidadMedida , metodo Ingreso
-        public async Task<int> ValidarIngreso(MdloDtos.UnidadMedidum objUnidadMedida)
+        public async Task<int> ValidarIngreso(MdloDtos.DTO.UnidadMedidumDTO objUnidadMedida)
         {
-            int resultado = 0;
             try
             {
-                //Validar los campos Obligatorios.
-                if ((!string.IsNullOrEmpty(objUnidadMedida.UmCdgo)) && (!string.IsNullOrEmpty(objUnidadMedida.UmNmbre)))
+                if (string.IsNullOrEmpty(objUnidadMedida.Codigo) || string.IsNullOrEmpty(objUnidadMedida.Nombre))
                 {
-                    //Validar que el codigo/Llave  No exista.
-                    var UnidadMedidaExiste = await ObjUnidadMedida.VerificarUnidadMedida(objUnidadMedida.UmCdgo);
-                    if (UnidadMedidaExiste == true)
-                    {
-                        //Retorna valor del TipoMensaje: CodigoExiste
-                        resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.CodigoExiste;
-                    }
-                    else
-                    {
-                        //Retorna valor del TipoMensaje: TransaccionExitosa
-                        resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
-                    }
+                    return (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
                 }
-                else
-                {
-                    //Retorna valor del TipoMensaje: NoAceptaValoresNull
-                    resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
-                }
+
+                bool unidadMedidaExiste = await ObjUnidadMedida.VerificarUnidadMedida(objUnidadMedida.Codigo);
+                return unidadMedidaExiste
+                    ? (int)MdloDtos.Utilidades.Constantes.TipoMensaje.CodigoExiste
+                    : (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                //Retorna valor del TipoMensaje: TransaccionIncorrecta
-                resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
+                return (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             }
-            return resultado;
         }
         #endregion
 
         #region Validacion de UnidadMedida , metodo Eliminar
-        public async Task<int> ValidarEliminar(MdloDtos.UnidadMedidum objUnidadMedida_)
+        public async Task<int> ValidarEliminar(MdloDtos.DTO.UnidadMedidumDTO objUnidadMedida_)
         {
-            int resultado = 0;
             try
             {
-                if(!string.IsNullOrEmpty(objUnidadMedida_.UmCdgo))
+                if (string.IsNullOrEmpty(objUnidadMedida_.Codigo))
                 {
-                    //Validar que el codigo/Llave exista.
-                    var UnidadMedidaExiste = await ObjUnidadMedida.VerificarUnidadMedida(objUnidadMedida_.UmCdgo);
-                    if (UnidadMedidaExiste == false)
-                    {
-                        //Retorna valor del TipoMensaje: RelacionNoExiste
-                        resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.RelacionNoExiste;
-                    }
-                    else
-                    {
-                        //Retorna valor del TipoMensaje: TransaccionExitosa
-                        resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
-                    }
+                    return (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
                 }
-                else
-                {
-                    //Retorna valor del TipoMensaje: NoAceptaValoresNull
-                    resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
-                }
+
+                bool unidadMedidaExiste = await ObjUnidadMedida.VerificarUnidadMedida(objUnidadMedida_.Codigo);
+                return unidadMedidaExiste
+                    ? (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa
+                    : (int)MdloDtos.Utilidades.Constantes.TipoMensaje.RelacionNoExiste;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                //Retorna valor del TipoMensaje: TransaccionIncorrecta
-                resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
+                return (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             }
-            return resultado;
         }
         #endregion
 
         #region Validacion de UnidadMedida , metodo Actualizar
-        public async Task<int> ValidarActualizacion(MdloDtos.UnidadMedidum objUnidadMedida)
+        public async Task<int> ValidarActualizacion(MdloDtos.DTO.UnidadMedidumDTO objUnidadMedida)
         {
-            int resultado = 0;
             try
             {
-                //Validar los campos Obligatorios.
-                if (!string.IsNullOrEmpty(objUnidadMedida.UmCdgo) && !string.IsNullOrEmpty(objUnidadMedida.UmNmbre) && objUnidadMedida.UmGrnel != null && objUnidadMedida.UmActvo != null)
+                if (string.IsNullOrEmpty(objUnidadMedida.Codigo) ||
+                    string.IsNullOrEmpty(objUnidadMedida.Nombre) ||
+                    objUnidadMedida.EsGranel == null ||
+                    objUnidadMedida.Activo == null)
                 {
-                    //Validar que el codigo/Llave No exista.
-                    var UnidadMedidaExiste = await ObjUnidadMedida.VerificarUnidadMedida(objUnidadMedida.UmCdgo);
-                    if (UnidadMedidaExiste == false)
-                    {
-                        //Retorna valor del TipoMensaje: RelacionNoExiste
-                        resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.RelacionNoExiste;
-                    }
-                    else
-                    {
-                        //Retorna valor del TipoMensaje: TransaccionExitosa
-                        resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
-                    }
+                    return (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
                 }
-                else
-                {
-                    //Retorna valor del TipoMensaje: NoAceptaValoresNull
-                    resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
-                }
+
+                bool unidadMedidaExiste = await ObjUnidadMedida.VerificarUnidadMedida(objUnidadMedida.Codigo);
+                return unidadMedidaExiste
+                    ? (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa
+                    : (int)MdloDtos.Utilidades.Constantes.TipoMensaje.RelacionNoExiste;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                //Retorna valor del TipoMensaje: TransaccionIncorrecta
-                resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
+                return (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             }
-            return resultado;
         }
         #endregion
 
         #region Validacion de UnidadMedida Validar Busquedas ( Filtros)
         public async Task<int> ValidarFiltroBusquedas(string? Busqueda)
         {
-            int resultado = 0;
             try
             {
-                if ((!string.IsNullOrEmpty(Busqueda)) || Busqueda.Length > 0)
+                if (!string.IsNullOrEmpty(Busqueda))
                 {
-                    //Retorna valor del TipoMensaje: TransaccionExitosa
-                    resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
+                    return (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
                 }
-                else
-                {
-                    //Retorna valor del TipoMensaje: NoAceptaValoresNull
-                    resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
-                }
+                return (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                //Retorna valor del TipoMensaje: TransaccionIncorrecta
-                resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
+                return (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             }
-            return resultado;
         }
         #endregion
     }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AccsoDtos.Mappings;
+using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,233 +13,104 @@ namespace VldcionDtos
     /// </summary>
     public  class ValidacionZona
     {
-        AccsoDtos.Parametrizacion.ZonaCd ObjZonaCd = new AccsoDtos.Parametrizacion.ZonaCd();
+        private readonly IMapper _mapper;
+
+        AccsoDtos.Parametrizacion.ZonaCd ObjZonaCd;
         AccsoDtos.Parametrizacion.Sede ObjSede = new AccsoDtos.Parametrizacion.Sede();
 
-        #region Validacion de zonas , metodo Ingreso
-        public async Task<int> ValidarIngreso(MdloDtos.ZonaCd objZonaCd)
+        public ValidacionZona()
         {
-
-            int resultado = 0;
-            try
+            var configuration = new MapperConfiguration(cfg =>
             {
-                //Validar los campos Obligatorios.
-                if ((!string.IsNullOrEmpty(objZonaCd.ZcdCdgo)) && (objZonaCd.ZcdRowidSde>0) 
-                    )
-                {
-                    //Validar la llave relacional.
-                    var ListaSede = await ObjSede.FiltrarSedeId(Convert.ToInt32(objZonaCd.ZcdRowidSde));
+                cfg.AddProfile<MappingProfile>();
+            });
 
-                    if (ListaSede == null || ListaSede.Count == 0)
-                    {
-                        //Retorna valor del TipoMensaje: RelacionNoExiste
-                        resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.RelacionNoExiste;
-                    }
-                    else
-                    {
+            _mapper = configuration.CreateMapper();
+            ObjZonaCd = new AccsoDtos.Parametrizacion.ZonaCd(_mapper);
+        }
 
-                        //Validar que el codigo/Llave  No exista.
-                        var ZonaCodigo = await ObjZonaCd.VerificarZonaCodigo(objZonaCd.ZcdCdgo);
-                        if (ZonaCodigo == true)
-                        {
-                            //Retorna valor del TipoMensaje: CodigoExiste
-                            resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.CodigoExiste;
-                        }
-                        else
-                        {
-                            var NombreExiste = ObjZonaCd.ValidacionZonaNombreIngresar(objZonaCd);
-                            //validar si el nombre existe
-                            if (NombreExiste == true)
-                            {
-                                //Retorna el valor del tipo de mensaje: Nombre existe
-                                resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NombreExiste;
-                            }
-                            else {
-
-                                //Retorna valor del TipoMensaje: TransaccionExitosa
-                                resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
-                            }
-                            
-
-                        }
-                    }
-                }
-                else
-                {
-                    //Retorna valor del TipoMensaje: NoAceptaValoresNull
-                    resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
-                }
-
-
-            }
-            catch (Exception ex)
+        #region Validacion de zonas , metodo Ingreso
+        public async Task<int> ValidarIngreso(MdloDtos.DTO.ZonaCdDTO objZonaCd)
+        {
+            if (string.IsNullOrEmpty(objZonaCd.Codigo) || objZonaCd.IdSede <= 0)
             {
-                //Retorna valor del TipoMensaje: TransaccionIncorrecta
-                resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
-
+                return (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
             }
 
-            return resultado;
+            var listaSede = await ObjSede.FiltrarSedeId(Convert.ToInt32(objZonaCd.IdSede));
+            if (listaSede == null || listaSede.Count == 0)
+            {
+                return (int)MdloDtos.Utilidades.Constantes.TipoMensaje.RelacionNoExiste;
+            }
+
+            if (await ObjZonaCd.VerificarZonaCodigo(objZonaCd.Codigo))
+            {
+                return (int)MdloDtos.Utilidades.Constantes.TipoMensaje.CodigoExiste;
+            }
+
+            return ObjZonaCd.ValidacionZonaNombreIngresar(objZonaCd)
+                ? (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NombreExiste
+                : (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
         }
         #endregion
 
         #region Validacion de zonas , metodo Eliminar
-        public async Task<int> ValidarEliminar(MdloDtos.ZonaCd objZonaCd)
+        public async Task<int> ValidarEliminar(MdloDtos.DTO.ZonaCdDTO objZonaCd)
         {
-
-            int resultado = 0;
-            try
+            if (objZonaCd.IdZona <= 0)
             {
-                int? Id = objZonaCd.ZcdRowid;
-                if (Id > 0)
-                {
-                    //Validar que el codigo/Llave  exista.
-                    var ZonaExiste = await ObjZonaCd.VerificarZonaId(objZonaCd.ZcdRowid);
-                    if (ZonaExiste == false)
-                    {
-                        //Retorna valor del TipoMensaje: CodigoExiste
-                        resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.CodigoExiste;
-                    }
-                    else
-                    {
-                        //Retorna valor del TipoMensaje: TransaccionExitosa
-                        resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
-
-                    }
-                }
-
-                else
-                {
-                    //Retorna valor del TipoMensaje: NoAceptaValoresNull
-                    resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
-                }
+                return (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
             }
-            catch (Exception ex)
-            {
-                //Retorna valor del TipoMensaje: TransaccionIncorrecta
-                resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
-
-            }
-            return resultado;
+            var ZonaExiste = await ObjZonaCd.VerificarZonaId(objZonaCd.IdZona);
+            return ZonaExiste
+                    ? (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa
+                    : (int)MdloDtos.Utilidades.Constantes.TipoMensaje.CodigoExiste;                                
         }
         #endregion
 
         #region Validacion de zonas , metodo Actualizar
-        public async Task<int> ValidarActualizacion(MdloDtos.ZonaCd objZonaCd)
+        public async Task<int> ValidarActualizacion(MdloDtos.DTO.ZonaCdDTO objZonaCd)
         {
-
-            int resultado = 0;
-            try
-            {
-                //Validar los campos Obligatorios.
-                if ((!string.IsNullOrEmpty(objZonaCd.ZcdCdgo)) && (objZonaCd.ZcdRowidSde > 0)
-                    )
-                {
-                    //Validar la llave relacional.
-
-                    var ZonaExiste = await ObjZonaCd.VerificarZonaId(objZonaCd.ZcdRowid);
-                    if (ZonaExiste == false)
-                    {
-                        //Retorna valor del TipoMensaje: CodigoExiste
-                        resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.CodigoExiste;
-                    }
-                    else
-                    {
-
-                        //Validar que el codigo/Llave  No exista.
-                        var SedeExiste = await ObjSede.FiltrarSedeId(Convert.ToInt32(objZonaCd.ZcdRowidSde));
-                        if (SedeExiste ==null || SedeExiste.Count==0)
-                        {
-                            //Retorna valor del TipoMensaje: CodigoExiste
-                            resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.CodigoExiste;
-                        }
-                        else
-                        {
-                            var NombreExiste = ObjZonaCd.ValidacionZonaNombreActualizar(objZonaCd);
-                            //validar si el nombre existe
-                            if (NombreExiste == true)
-                            {
-                                //Retorna el valor del tipo de mensaje: Nombre existe
-                                resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NombreExiste;
-                            }
-                            else
-                            {
-
-                                //Retorna valor del TipoMensaje: TransaccionExitosa
-                                resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
-                            }
-
-                        }
-                    }
-                }
-                else
-                {
-                    //Retorna valor del TipoMensaje: NoAceptaValoresNull
-                    resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
-                }
-
-
-            }
-            catch (Exception ex)
-            {
-                //Retorna valor del TipoMensaje: TransaccionIncorrecta
-                resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
-
+            if ((string.IsNullOrEmpty(objZonaCd.Codigo)) || (objZonaCd.IdSede <= 0))
+            { 
+                return (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
             }
 
-            return resultado;
+            var ZonaExiste = await ObjZonaCd.VerificarZonaId(objZonaCd.IdZona);
+            if (ZonaExiste == false)
+            {
+                return (int)MdloDtos.Utilidades.Constantes.TipoMensaje.CodigoExiste;
+            }
+            var SedeExiste = await ObjSede.FiltrarSedeId(Convert.ToInt32(objZonaCd.IdSede));
+            if (SedeExiste == null || SedeExiste.Count == 0)
+            {
+                return (int)MdloDtos.Utilidades.Constantes.TipoMensaje.CodigoExiste;
+            }
+            else
+            {
+                var NombreExiste = ObjZonaCd.ValidacionZonaNombreActualizar(objZonaCd);
+                return NombreExiste
+                     ? (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NombreExiste
+                     : (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
+            }
         }
         #endregion
 
         #region Validacion de zonas,  Validar Busquedas ( Filtros)
         public async Task<int> ValidarFiltroBusquedas(string? Busqueda)
         {
-            int resultado = 0;
-            try
-            {
-                if ((!string.IsNullOrEmpty(Busqueda)) || Busqueda.Length > 0)
-                {
-                    //Retorna valor del TipoMensaje: TransaccionExitosa
-                    resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
-                }
-                else
-                {
-                    //Retorna valor del TipoMensaje: NoAceptaValoresNull
-                    resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
-                }
-            }
-            catch (Exception e)
-            {
-                //Retorna valor del TipoMensaje: TransaccionIncorrecta
-                resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
-            }
-            return resultado;
+            return (!string.IsNullOrEmpty(Busqueda)) 
+                ? (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa
+                : (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
         }
         #endregion
 
         #region Validacion de Zona, Validar Busquedas por IdSede ( Filtros)
         public async Task<int> ValidarFiltroBusquedasPorIdSede(int IdSede)
         {
-            int resultado = 0;
-            try
-            {
-                if (IdSede != null && IdSede > 0)
-                {
-                    //Retorna valor del TipoMensaje: TransaccionExitosa
-                    resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
-                }
-                else
-                {
-                    //Retorna valor del TipoMensaje: NoAceptaValoresNull
-                    resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
-                }
-            }
-            catch (Exception e)
-            {
-                //Retorna valor del TipoMensaje: TransaccionIncorrecta
-                resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
-            }
-            return resultado;
+            return (IdSede > 0) 
+                ? (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa
+                : (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
         }
         #endregion
 
