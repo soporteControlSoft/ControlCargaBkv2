@@ -8,16 +8,16 @@ namespace MdloDtos.IModelos
 {
     public interface ITipoIdentificacion
     {
-        public Task<List<MdloDtos.TipoIdentificacion>> ListarTipoIdentificacion();
+        public Task<List<MdloDtos.DTO.TipoIdentificacionDTO>> ListarTipoIdentificacion();
 
-        public Task<List<MdloDtos.TipoIdentificacion>> FiltrarTipoIdentificacionGeneral(String Codigo);
+        public Task<List<MdloDtos.DTO.TipoIdentificacionDTO>> FiltrarTipoIdentificacionGeneral(String Codigo);
 
-        public Task<List<MdloDtos.TipoIdentificacion>> FiltrarTipoIdentificacionEspecifico(String Codigo);
+        public Task<List<MdloDtos.DTO.TipoIdentificacionDTO>> FiltrarTipoIdentificacionEspecifico(String Codigo);
 
-        public Task<MdloDtos.TipoIdentificacion> IngresarTipoIdentificacion(MdloDtos.TipoIdentificacion ObjTipoIdentificacion);
+        public Task<dynamic> IngresarTipoIdentificacion(MdloDtos.DTO.TipoIdentificacionDTO ObjTipoIdentificacion);
 
-        public Task<MdloDtos.TipoIdentificacion> EditarTipoIdentificacion(MdloDtos.TipoIdentificacion ObjTipoIdentificacion);
+        public Task<MdloDtos.DTO.TipoIdentificacionDTO> EditarTipoIdentificacion(MdloDtos.DTO.TipoIdentificacionDTO ObjTipoIdentificacion);
 
-        public Task<MdloDtos.TipoIdentificacion> EliminarTipoIdentificacion(String Codigo);
+        public Task<dynamic> EliminarTipoIdentificacion(String Codigo);
     }
 }

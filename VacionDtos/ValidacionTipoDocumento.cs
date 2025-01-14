@@ -1,5 +1,8 @@
-﻿using System;
+﻿using AccsoDtos.Mappings;
+using AutoMapper;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,170 +10,94 @@ using System.Threading.Tasks;
 namespace VldcionDtos
 {
     /// <summary>
-    /// Daniel Alejandro Lopez
-    /// Fecha: 30/04/2024
+    /// Wilbert Rivas Granados
     /// Validar el crud del tipo de documento 
     /// </summary>
     public class ValidacionTipoDocumento
     {
-       AccsoDtos.Parametrizacion.TipoDocumento _TipoDocumento = new AccsoDtos.Parametrizacion.TipoDocumento();
+        private readonly IMapper _mapper;
+        AccsoDtos.Parametrizacion.TipoDocumento _TipoDocumento;
+
+        public ValidacionTipoDocumento()
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
+
+            _mapper = configuration.CreateMapper();
+            _TipoDocumento = new AccsoDtos.Parametrizacion.TipoDocumento(_mapper);
+        }
+
 
         #region Validacion de vehiculos , metodo Ingreso
-        public async Task<int> ValidarIngreso(MdloDtos.TipoDocumento ObjTipoDocumento)
+        public async Task<int> ValidarIngreso(MdloDtos.DTO.TipoDocumentoDTO ObjTipoDocumento)
         {
-            int resultado = 0;
-            try
+            if (string.IsNullOrEmpty(ObjTipoDocumento.IdTipoDocumento) ||
+                string.IsNullOrEmpty(ObjTipoDocumento.Nombre) ||
+                string.IsNullOrEmpty(ObjTipoDocumento.Origen) ||
+                string.IsNullOrEmpty(ObjTipoDocumento.Asignar))
             {
-                //Validar los campos Obligatorios.
-                if ((!string.IsNullOrEmpty(ObjTipoDocumento.TdCdgo)) && (ObjTipoDocumento.TdCdgo.Length > 0)
-                    &&
-                    (!string.IsNullOrEmpty(ObjTipoDocumento.TdNmbre)) && (ObjTipoDocumento.TdNmbre.Length > 0)
-                    &&
-                    (!string.IsNullOrEmpty(ObjTipoDocumento.TdOrgen)) && (ObjTipoDocumento.TdOrgen.Length > 0)
-                    &&
-                    (!string.IsNullOrEmpty(ObjTipoDocumento.TdNmbreAAsgnar)) && (ObjTipoDocumento.TdNmbreAAsgnar.Length > 0)
-                    )
-                {
-                    
-                        //Validar que el codigo/Llave  No exista.
-                        var VehiculoExiste = await _TipoDocumento.VerificarTipoDocumento(ObjTipoDocumento.TdCdgo);
-                        if (VehiculoExiste == true)
-                        {
-                            //Retorna valor del TipoMensaje: CodigoExiste
-                            resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.CodigoExiste;
-                        }
-                        else
-                        {
-                            //Retorna valor del TipoMensaje: TransaccionExitosa
-                            resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
-                        }
-                    
-                }
-                else
-                {
-                    //Retorna valor del TipoMensaje: NoAceptaValoresNull
-                    resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
-                }
-            }
-            catch (Exception ex)
-            {
-                //Retorna valor del TipoMensaje: TransaccionIncorrecta
-                resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
-
+                return (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
             }
 
-            return resultado;
+            bool vehiculoExiste = await _TipoDocumento.VerificarTipoDocumento(ObjTipoDocumento.IdTipoDocumento);
+            return vehiculoExiste
+                ? (int)MdloDtos.Utilidades.Constantes.TipoMensaje.CodigoExiste
+                : (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
         }
         #endregion
 
         #region Validacion de Tipo Documento , metodo Eliminar
-        public async Task<int> ValidarEliminar(MdloDtos.TipoDocumento ObjTipoDocumento)
+        public async Task<int> ValidarEliminar(MdloDtos.DTO.TipoDocumentoDTO ObjTipoDocumento)
         {
-            int resultado = 0;
-            try
+            if (string.IsNullOrEmpty(ObjTipoDocumento.IdTipoDocumento))
             {
-                string? Id = ObjTipoDocumento.TdCdgo;
-                if (!string.IsNullOrEmpty(Id))
-                {
-                    //Validar que el codigo/Llave  exista.
-                    var VehiculoExiste = await _TipoDocumento.VerificarTipoDocumento(Id);
-                    if (VehiculoExiste == false)
-                    {
-                        //Retorna valor del TipoMensaje: TransaccionIncorrecta
-                        resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.CodigoExiste;
-                    }
-                    else
-                    {
-                        //Retorna valor del TipoMensaje: TransaccionExitosa
-                        resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
-                    }
-                }
-                else
-                {
-                    //Retorna valor del TipoMensaje: NoAceptaValoresNull
-                    resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
-                }
+                return (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
             }
-            catch (Exception ex)
-            {
-                //Retorna valor del TipoMensaje: TransaccionIncorrecta
-                resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
 
-            }
-            return resultado;
+            bool vehiculoExiste = await _TipoDocumento.VerificarTipoDocumento(ObjTipoDocumento.IdTipoDocumento);
+            return vehiculoExiste
+                ? (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa
+                : (int)MdloDtos.Utilidades.Constantes.TipoMensaje.CodigoExiste;
         }
         #endregion
 
         #region Validacion de Tipo Vehiculo , metodo Actualizar
-        public async Task<int> ValidarActualizacion(MdloDtos.TipoDocumento ObjTipoDocumento)
+        public async Task<int> ValidarActualizacion(MdloDtos.DTO.TipoDocumentoDTO ObjTipoDocumento)
         {
-            int resultado = 0;
-            try
+            if (!SonCamposValidos(ObjTipoDocumento))
             {
-                //Validar los campos Obligatorios.
-                if ((!string.IsNullOrEmpty(ObjTipoDocumento.TdCdgo)) && (ObjTipoDocumento.TdCdgo.Length > 0)
-                   &&
-                   (!string.IsNullOrEmpty(ObjTipoDocumento.TdNmbre)) && (ObjTipoDocumento.TdNmbre.Length > 0)
-                   &&
-                   (!string.IsNullOrEmpty(ObjTipoDocumento.TdOrgen)) && (ObjTipoDocumento.TdOrgen.Length > 0)
-                   &&
-                   (!string.IsNullOrEmpty(ObjTipoDocumento.TdNmbreAAsgnar)) && (ObjTipoDocumento.TdNmbreAAsgnar.Length > 0)
-                   )
-                {
-                    
-                        //Validar que el codigo/Llave  No exista.
-                        var VehiculoExiste = await _TipoDocumento.VerificarTipoDocumento(ObjTipoDocumento.TdCdgo);
-                        if (VehiculoExiste == false)
-                        {
-                            //Retorna valor del TipoMensaje: CodigoExiste
-                            resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.CodigoExiste;
-                        }
-                        else
-                        {
-                            //Retorna valor del TipoMensaje: TransaccionExitosa
-                            resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
-                        }
-                    
-                }
-                else
-                {
-                    //Retorna valor del TipoMensaje: NoAceptaValoresNull
-                    resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
-                }
-            }
-            catch (Exception ex)
-            {
-                //Retorna valor del TipoMensaje: TransaccionIncorrecta
-                resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
+                return (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
             }
 
-            return resultado;
+            try
+            {
+                bool vehiculoExiste = await _TipoDocumento.VerificarTipoDocumento(ObjTipoDocumento.IdTipoDocumento);
+                return vehiculoExiste
+                    ? (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa
+                    : (int)MdloDtos.Utilidades.Constantes.TipoMensaje.CodigoExiste;
+            }
+            catch (Exception)
+            {
+                return (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
+            }
+        }
+        private bool SonCamposValidos(MdloDtos.DTO.TipoDocumentoDTO objTipoDocumento)
+        {
+            return !string.IsNullOrEmpty(objTipoDocumento.IdTipoDocumento) &&
+                   !string.IsNullOrEmpty(objTipoDocumento.Nombre) &&
+                   !string.IsNullOrEmpty(objTipoDocumento.Origen) &&
+                   !string.IsNullOrEmpty(objTipoDocumento.Asignar);
         }
         #endregion
 
-        #region Validacion de vehiculo,  Validar Busquedas ( Filtros)
+        #region Validacion de TipoDocumento,  Validar Filtros
         public async Task<int> ValidarFiltroBusquedas(string? Busqueda)
         {
-            int resultado = 0;
-            try
-            {
-                if ((!string.IsNullOrEmpty(Busqueda)) || Busqueda.Length > 0)
-                {
-                    //Retorna valor del TipoMensaje: TransaccionExitosa
-                    resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
-                }
-                else
-                {
-                    //Retorna valor del TipoMensaje: NoAceptaValoresNull
-                    resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull;
-                }
-            }
-            catch (Exception e)
-            {
-                //Retorna valor del TipoMensaje: TransaccionIncorrecta
-                resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
-            }
-            return resultado;
+            return  string.IsNullOrEmpty(Busqueda)
+                ? (int)MdloDtos.Utilidades.Constantes.TipoMensaje.NoAceptaValoresNull
+                : (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
         }
         #endregion
     }

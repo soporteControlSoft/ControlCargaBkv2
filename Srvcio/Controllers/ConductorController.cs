@@ -26,73 +26,19 @@ namespace Srvcio.Controllers
             _mapper = mapper;
         }
 
-
         /// <summary>
         /// Clase para validar los datos.
         /// </summary>
         VldcionDtos.ValidacionConductor validacionConductor = new VldcionDtos.ValidacionConductor();
 
-        /*#region Ingresar conductor
-        [HttpPost("ingresar-conductor")]
-        public async Task<ActionResult<dynamic>> IngresarConductor([FromBody] MdloDtos.DTO.ConductorDTO2 conductorDTO2)
-        {
-            int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
-            int validacion = 0; // para sacar el mensaje de la operacion del crud.
-            try
-            {
-                //var conductor = _mapper.Map<MdloDtos.Conductor>(conductorDTO2);//aquí se hace el mapeo
-                var ObConductor = await this._dbContex.IngresarConductor(conductorDTO2);
-
-                /*validacion = await validacionConductor.ValidarIngreso(objConductor);
-                if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa) //si fue exito)
-                {
-                    var ObConductor = await this._dbContex.IngresarConductor(objConductor);
-                    if (ObConductor != null)
-                    {
-                respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
-                respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                respuesta.datos = ObConductor;
-                 }
-                 else
-                 {
-                     //Error en la transaccion.
-                     validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
-                     respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
-                     respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                     respuesta.datos = objConductor;
-                 }
-             }
-             else
-             {
-                 //regresa el error
-                 respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
-                 respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                 respuesta.datos = objConductor;
-             }
-            }
-            catch (Exception ex)
-            {
-                respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
-                respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                respuesta.datos = conductorDTO2;
-                return BadRequest(respuesta);
-            }
-            return respuesta;
-        }
-        #endregion
-        */
-
         #region Ingresar conductor
         [HttpPost("ingresar-conductor")]
-        public async Task<ActionResult<dynamic>> IngresarConductor([FromBody] MdloDtos.Conductor conductor)
+        public async Task<ActionResult<dynamic>> IngresarConductor([FromBody] MdloDtos.DTO.ConductorDTO conductor)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
             int validacion = 0; 
             try
             {
-                //var conductor = _mapper.Map<MdloDtos.Conductor>(conductorDTO2);//aquí se hace el mapeo
-                //var ObConductor = await this._dbContex.IngresarConductor(conductor);
-
                 validacion = await validacionConductor.ValidarIngreso(conductor);
                 if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa)
                 {
@@ -259,7 +205,7 @@ namespace Srvcio.Controllers
 
         #region Actualizar conductor
         [HttpPut("actualizar-conductor")]
-        public async Task<ActionResult<dynamic>> EditarConductor([FromBody] MdloDtos.Conductor objConductor)
+        public async Task<ActionResult<dynamic>> EditarConductor([FromBody] MdloDtos.DTO.ConductorDTO objConductor)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Actualizacion);
             int validacion = 0;
@@ -304,7 +250,7 @@ namespace Srvcio.Controllers
 
         #region Eliminar conductor
         [HttpDelete("eliminar-conductor")]
-        public async Task<ActionResult<dynamic>> EliminarConductor([FromBody] MdloDtos.Conductor objConductor)
+        public async Task<ActionResult<dynamic>> EliminarConductor([FromBody] MdloDtos.DTO.ConductorDTO objConductor)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Eliminacion);
             int validacion = 0; 
@@ -313,7 +259,7 @@ namespace Srvcio.Controllers
                 validacion = await validacionConductor.ValidarEliminar(objConductor);
                 if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa) //si fue exito)
                 {
-                    var ObConductor = await _dbContex.EliminarConductor(objConductor.CnIdntfccion.ToString());
+                    var ObConductor = await _dbContex.EliminarConductor(objConductor.Identificacion.ToString());
                     if (ObConductor != null)
                     {
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;

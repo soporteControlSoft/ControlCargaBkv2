@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AccsoDtos.Mappings;
+using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,17 +13,28 @@ namespace VldcionDtos
     /// </summary>
     public class ValidacionConductor
     {
+        private readonly IMapper _mapper;
 
-        AccsoDtos.Parametrizacion.Conductor ObjConductor = new AccsoDtos.Parametrizacion.Conductor();
+        AccsoDtos.Parametrizacion.Conductor ObjConductor;
+        public ValidacionConductor()
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
+
+            _mapper = configuration.CreateMapper();
+            ObjConductor = new AccsoDtos.Parametrizacion.Conductor(_mapper);
+        }
 
         #region Validacion de Conductor , metodo Ingreso
-        public async Task<int> ValidarIngreso(MdloDtos.Conductor objConductor) {
+        public async Task<int> ValidarIngreso(MdloDtos.DTO.ConductorDTO objConductor) {
             int resultado = 0;
             try 
             {
-                if ((!string.IsNullOrEmpty(objConductor.CnIdntfccion)) && (!string.IsNullOrEmpty(objConductor.CnNmbre)))
+                if ((!string.IsNullOrEmpty(objConductor.Identificacion)) && (!string.IsNullOrEmpty(objConductor.Nombre)))
                 {
-                        bool ConductorExiste = await ObjConductor.VerificarExistenciaConductor(objConductor.CnIdntfccion);
+                        bool ConductorExiste = await ObjConductor.VerificarExistenciaConductor(objConductor.Identificacion);
                         resultado = ConductorExiste ?  (int)MdloDtos.Utilidades.Constantes.TipoMensaje.CodigoExiste :
                                                     (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
                 }
@@ -39,15 +52,15 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de Conductor , metodo Eliminar
-        public async Task<int> ValidarEliminar(MdloDtos.Conductor objConductor)
+        public async Task<int> ValidarEliminar(MdloDtos.DTO.ConductorDTO objConductor)
         {
             int resultado = 0;
             try
             {
-                if(objConductor.CnIdntfccion != null)
+                if(objConductor.Identificacion != null)
                 {
-                    bool CconductorExiste = await ObjConductor.VerificarExistenciaConductor(objConductor.CnIdntfccion);
-                    resultado = CconductorExiste ?  (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa :
+                    bool ConductorExiste = await ObjConductor.VerificarExistenciaConductor(objConductor.Identificacion);
+                    resultado = ConductorExiste ?  (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa :
                                                     (int)MdloDtos.Utilidades.Constantes.TipoMensaje.RelacionNoExiste;
                 }
                 else
@@ -64,14 +77,14 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de Conductor , metodo Actualizar
-        public async Task<int> ValidarActualizacion(MdloDtos.Conductor objConductor)
+        public async Task<int> ValidarActualizacion(MdloDtos.DTO.ConductorDTO objConductor)
         {
             int resultado = 0;
             try
             {
-                if ((!string.IsNullOrEmpty(objConductor.CnIdntfccion)) && (!string.IsNullOrEmpty(objConductor.CnNmbre)))
+                if ((!string.IsNullOrEmpty(objConductor.Identificacion)) && (!string.IsNullOrEmpty(objConductor.Nombre)))
                 {
-                    bool ConductorExiste = await ObjConductor.VerificarExistenciaConductor(objConductor.CnIdntfccion);
+                    bool ConductorExiste = await ObjConductor.VerificarExistenciaConductor(objConductor.Identificacion);
                     resultado = !ConductorExiste ? (int)MdloDtos.Utilidades.Constantes.TipoMensaje.RelacionNoExiste :
                                                 (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
                 }

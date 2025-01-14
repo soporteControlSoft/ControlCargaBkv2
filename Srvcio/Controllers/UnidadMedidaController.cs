@@ -1,4 +1,5 @@
-﻿using MdloDtos.Utilidades;
+﻿using AutoMapper;
+using MdloDtos.Utilidades;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata.Ecma335;
@@ -14,11 +15,13 @@ namespace Srvcio.Controllers
     public class UnidadMedidaController : Controller
     {
         private readonly MdloDtos.IModelos.IUnidadMedida _dbContext;
+        private readonly IMapper _mapper;
 
         MdloDtos.Utilidades.RespuestaServicios respuesta = new MdloDtos.Utilidades.RespuestaServicios();
-        public UnidadMedidaController(MdloDtos.IModelos.IUnidadMedida dbContext)
+        public UnidadMedidaController(MdloDtos.IModelos.IUnidadMedida dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -28,10 +31,10 @@ namespace Srvcio.Controllers
 
         #region Consultar todas las UnidadMedida
         [HttpGet("listar-unidadMedida")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.UnidadMedidum>>> ListarUnidadMedida()
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.UnidadMedidumDTO>>> ListarUnidadMedida()
         {
 
-            var ObjUnidadMedida = new List<MdloDtos.UnidadMedidum>();
+            var ObjUnidadMedida = new List<MdloDtos.DTO.UnidadMedidumDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             try
@@ -59,9 +62,9 @@ namespace Srvcio.Controllers
 
         #region Filtrar UnidadMedida por codigo general
         [HttpGet("filtrar-unidadMedida-general")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.UnidadMedidum>>> FiltrarUnidadMedidaGeneral(string FiltroBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.UnidadMedidumDTO>>> FiltrarUnidadMedidaGeneral(string FiltroBusqueda)
         {
-            var ObjUnidadMedida = new List<MdloDtos.UnidadMedidum>();
+            var ObjUnidadMedida = new List<MdloDtos.DTO.UnidadMedidumDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -107,10 +110,10 @@ namespace Srvcio.Controllers
 
         #region Filtrar UnidadMedida por codigo especifico
         [HttpGet("filtrar-unidadMedida-especifico")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.UnidadMedidum>>> FiltrarUnidadMedidumEspecifico(string CodigoBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.UnidadMedidumDTO>>> FiltrarUnidadMedidumEspecifico(string CodigoBusqueda)
         {
 
-            var ObjUnidadMedidum = new List<MdloDtos.UnidadMedidum>();
+            var ObjUnidadMedidum = new List<MdloDtos.DTO.UnidadMedidumDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -156,7 +159,7 @@ namespace Srvcio.Controllers
 
         #region Ingresa UnidadMedida
         [HttpPost("ingresar-unidadMedida")]
-        public async Task<ActionResult<dynamic>> IngresarUnidadMedida([FromBody] MdloDtos.UnidadMedidum objUnidadMedida)
+        public async Task<ActionResult<dynamic>> IngresarUnidadMedida([FromBody] MdloDtos.DTO.UnidadMedidumDTO objUnidadMedida)
         {
 
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
@@ -205,7 +208,7 @@ namespace Srvcio.Controllers
 
         #region Actualizar UnidadMedida
         [HttpPut("actualizar-unidadMedida")]
-        public async Task<ActionResult<dynamic>> EditarUnidadMedida([FromBody] MdloDtos.UnidadMedidum objUnidadMedida)
+        public async Task<ActionResult<dynamic>> EditarUnidadMedida([FromBody] MdloDtos.DTO.UnidadMedidumDTO objUnidadMedida)
         {
 
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Actualizacion);
@@ -256,7 +259,7 @@ namespace Srvcio.Controllers
 
         #region Eliminar UnidadMedida por codigo 
         [HttpDelete("eliminar-unidadMedida")]
-        public async Task<ActionResult<dynamic>> EliminarUnidadMedida([FromBody] MdloDtos.UnidadMedidum objUnidadMedida)
+        public async Task<ActionResult<dynamic>> EliminarUnidadMedida([FromBody] MdloDtos.DTO.UnidadMedidumDTO objUnidadMedida)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Eliminacion);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -266,7 +269,7 @@ namespace Srvcio.Controllers
                 validacion = await _ObjvalidacionUnidadMedida.ValidarEliminar(objUnidadMedida);
                 if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa)
                 {  
-                    var ObjUnidadMedida = await _dbContext.EliminarUnidadMedida(objUnidadMedida.UmCdgo.ToString());
+                    var ObjUnidadMedida = await _dbContext.EliminarUnidadMedida(objUnidadMedida.Codigo.ToString());
                     if (ObjUnidadMedida != null)
                     {
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;

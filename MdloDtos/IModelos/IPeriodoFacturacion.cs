@@ -8,16 +8,16 @@ namespace MdloDtos.IModelos
 {
     public interface IPeriodoFacturacion
     {
-        public Task<List<MdloDtos.PeriodoFacturacion>> ListarPeriodoFacturacion();
+        public Task<List<MdloDtos.DTO.PeriodoFacturacionDTO>> ListarPeriodoFacturacion();
 
-        public Task<List<MdloDtos.PeriodoFacturacion>> FiltrarPeriodoFacturacionGeneral(String Codigo);
+        public Task<List<MdloDtos.DTO.PeriodoFacturacionDTO>> FiltrarPeriodoFacturacionGeneral(String Codigo);
 
-        public Task<List<MdloDtos.PeriodoFacturacion>> FiltrarPeriodoFacturacionEspecifico(String Codigo);
+        public Task<List<MdloDtos.DTO.PeriodoFacturacionDTO>> FiltrarPeriodoFacturacionEspecifico(String Codigo);
 
-        public Task<MdloDtos.PeriodoFacturacion> IngresarPeriodoFacturacion(MdloDtos.PeriodoFacturacion ObjMotonave);
+        public Task<dynamic> IngresarPeriodoFacturacion(MdloDtos.DTO.PeriodoFacturacionDTO ObjMotonave);
 
-        public Task<MdloDtos.PeriodoFacturacion> EditarPeriodoFacturacion(MdloDtos.PeriodoFacturacion ObjMotonave);
+        public Task<dynamic> EditarPeriodoFacturacion(MdloDtos.DTO.PeriodoFacturacionDTO ObjMotonave);
 
-        public Task<MdloDtos.PeriodoFacturacion> EliminarPeriodoFacturacion(String Codigo);
+        public Task<dynamic> EliminarPeriodoFacturacion(String Codigo);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AccsoDtos.AccesoSistema;
+using AutoMapper;
 using Azure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ namespace Srvcio.Controllers
     public class ReservaController : Controller
     {
         private readonly MdloDtos.IModelos.IReserva _dbContex;
+        private readonly IMapper _mapper;
 
         MdloDtos.Utilidades.RespuestaServicios respuesta = new MdloDtos.Utilidades.RespuestaServicios();
 
@@ -27,18 +29,19 @@ namespace Srvcio.Controllers
         VldcionDtos.ValidacionVisitaMotonave validacionVisitaMotonave = new VldcionDtos.ValidacionVisitaMotonave();
         VldcionDtos.ValidacionReserva validacionReserva = new VldcionDtos.ValidacionReserva();
 
-        public ReservaController(MdloDtos.IModelos.IReserva dbContex)
+        public ReservaController(MdloDtos.IModelos.IReserva dbContex, IMapper mapper)
         {
             _dbContex = dbContex;
+            _mapper = mapper;
         }
 
 
 
         #region consultar las visitas de motonaves para una compañia en particular
         [HttpGet("listar-visita-motonave-reserva")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.VwMdloRsrvaLstarVstaMtnve>>> ConsultarVisitaMotonave(string codigoCompania)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.VwMdloRsrvaLstarVstaMtnveDTO>>> ConsultarVisitaMotonave(string codigoCompania)
         {
-            var lista = new List<MdloDtos.VwMdloRsrvaLstarVstaMtnve>();
+            var lista = new List<MdloDtos.DTO.VwMdloRsrvaLstarVstaMtnveDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; 
             try
@@ -81,9 +84,9 @@ namespace Srvcio.Controllers
 
         #region consultar las visitas de motonaves para una compañia en particular
         [HttpGet("listar-deposito-reserva")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.VwMdloRsrvaLstarDpsto>>> ConsultarDeposito(int idVisitaMotonave)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.VwMdloRsrvaLstarDpstoDTO>>> ConsultarDeposito(int idVisitaMotonave)
         {
-            var lista = new List<MdloDtos.VwMdloRsrvaLstarDpsto>();
+            var lista = new List<MdloDtos.DTO.VwMdloRsrvaLstarDpstoDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0;
             try
@@ -183,9 +186,9 @@ namespace Srvcio.Controllers
 
         #region consultar todas las solicitudes de retiro que pertenecen a un deposito particula y una transportadora particular.
         [HttpGet("listar-detalle-solicitud-retiro-reserva")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.SpMdloRsrvaDtlleSlctudRtro>>> ListarDetalleSolicitudRetiro(int IdSolicitudRetiro, int idTransportadora)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.SpMdloRsrvaDtlleSlctudRtroDTO>>> ListarDetalleSolicitudRetiro(int IdSolicitudRetiro, int idTransportadora)
         {
-            var lista = new List<MdloDtos.SpMdloRsrvaDtlleSlctudRtro>();
+            var lista = new List<MdloDtos.DTO.SpMdloRsrvaDtlleSlctudRtroDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0;
             try
@@ -240,9 +243,9 @@ namespace Srvcio.Controllers
 
         #region consultar todas las solicitudes de retiro que pertenecen a un deposito particula y una transportadora particular.
         [HttpGet("listar-detalle-orden-reserva")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.SpMdloRsrvaDtlleOrden>>> ListarDetalleOrden(int CodigoOrden)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.SpMdloRsrvaDtlleOrdenDTO>>> ListarDetalleOrden(int CodigoOrden)
         {
-            var lista = new List<MdloDtos.SpMdloRsrvaDtlleOrden>();
+            var lista = new List<MdloDtos.DTO.SpMdloRsrvaDtlleOrdenDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0;
             try
@@ -285,7 +288,7 @@ namespace Srvcio.Controllers
         #endregion
         #region Ingresa una reserva
         [HttpPost("ingresar-reserva")]
-        public async Task<ActionResult<dynamic>> RegistrarOrden([FromBody] MdloDtos.Orden _Orden)
+        public async Task<ActionResult<dynamic>> RegistrarOrden([FromBody] MdloDtos.DTO.OrdenDTO _Orden)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
             int validacion = 0;
@@ -294,21 +297,21 @@ namespace Srvcio.Controllers
                 String respuestaValidacionManifiesto = await validacionReserva.ValidarManifiesto(_Orden);
                 if (respuestaValidacionManifiesto.Equals("OK"))
                 {
-                    validacion = await validacionTercero.ValidarExistenciaTercero(_Orden.OrRowidTrnsprtdra);
+                    validacion = await validacionTercero.ValidarExistenciaTercero(_Orden.IdTransportadora);
 
                     if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa)
                     {
                         DateTime hoy = DateTime.Now;
-                        _Orden.OrFchaRsrva = hoy;
-                        _Orden.OrFchaRgstroRsrva = hoy;
-                        _Orden.OrObsrvcnes = null;
+                        _Orden.FechaReserva = hoy;
+                        _Orden.FechaRegistroReserva = hoy;
+                        _Orden.Observaciones = null;
                         string response = await this._dbContex.RegistrarOrden(_Orden);
                         if (response.Equals("OK"))
                         {
-                            int codigoOrden = await _dbContex.ConsultarOrdenEspecifica(_Orden.OrRowidTrnsprtdra, (DateTime)_Orden.OrFchaRsrva, (DateTime)_Orden.OrFchaRgstroRsrva, _Orden.OrPlca, _Orden.OrMnfsto);
+                            int codigoOrden = await _dbContex.ConsultarOrdenEspecifica(_Orden.IdTransportadora, (DateTime)_Orden.FechaReserva, (DateTime)_Orden.FechaRegistroReserva, _Orden.Placa, _Orden.Manifiesto);
                             if (codigoOrden != -1)
                             {
-                                List<MdloDtos.SpMdloRsrvaDtlleOrden> detalleOrden = await _dbContex.ListarDetalleOrden(codigoOrden);
+                                List<MdloDtos.DTO.SpMdloRsrvaDtlleOrdenDTO> detalleOrden = await _dbContex.ListarDetalleOrden(codigoOrden);
                                 respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
                                 respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
                                 respuesta.datos = detalleOrden;

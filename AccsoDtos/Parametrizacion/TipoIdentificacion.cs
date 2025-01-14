@@ -1,4 +1,6 @@
-﻿using MdloDtos.Utilidades;
+﻿using AutoMapper;
+using MdloDtos.DTO;
+using MdloDtos.Utilidades;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,30 +12,33 @@ namespace AccsoDtos.Parametrizacion
 {
     public class TipoIdentificacion : MdloDtos.IModelos.ITipoIdentificacion
     {
+        private readonly IMapper _mapper;
+
+        public TipoIdentificacion(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
 
         #region Ingresar datos a la entidad Tipo Identificacion
-        public async Task<MdloDtos.TipoIdentificacion> IngresarTipoIdentificacion(MdloDtos.TipoIdentificacion _TipoIdentificacion)
+        public async Task<dynamic> IngresarTipoIdentificacion(MdloDtos.DTO.TipoIdentificacionDTO _TipoIdentificacion)
         {
             var ObjTipoIdentificacion = new MdloDtos.TipoIdentificacion();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 try
                 {
-                    var TipoIdentificacionExiste = await this.VerificarTipoIdentificacion(_TipoIdentificacion.TiCdgo);
-
+                    var TipoIdentificacionExiste = await this.VerificarTipoIdentificacion(_TipoIdentificacion.Codigo);
                     if (TipoIdentificacionExiste == true)
                     {
                         throw new Exception(MdloDtos.Utilidades.Mensajes.Error + " al momento de hacer un :" + MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
                     }
                     else
                     {
-                        ObjTipoIdentificacion.TiCdgo = _TipoIdentificacion.TiCdgo;
-                        ObjTipoIdentificacion.TiNmbre = _TipoIdentificacion.TiNmbre;
+                        ObjTipoIdentificacion.TiCdgo = _TipoIdentificacion.Codigo;
+                        ObjTipoIdentificacion.TiNmbre = _TipoIdentificacion.Nombre;
                         var res = await _dbContex.TipoIdentificacions.AddAsync(ObjTipoIdentificacion);
                         await _dbContex.SaveChangesAsync();
                     }
-
-                    
                 }
                 catch (Exception ex)
                 {
@@ -47,7 +52,7 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Consultar todos los datos de Tipo de identificacion mediante un parametro Codigo general
-        public async Task<List<MdloDtos.TipoIdentificacion>> FiltrarTipoIdentificacionGeneral(String Codigo)
+        public async Task<List<MdloDtos.DTO.TipoIdentificacionDTO>> FiltrarTipoIdentificacionGeneral(String Codigo)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
@@ -55,14 +60,15 @@ namespace AccsoDtos.Parametrizacion
                                  where p.TiCdgo.Contains(Codigo) || p.TiNmbre.Contains(Codigo)
                                  select p).ToListAsync();
                 _dbContex.Dispose();
-                return lst;
+                var result = (lst.Count > 0) ? _mapper.Map<List<TipoIdentificacionDTO>>(lst) : new List<TipoIdentificacionDTO>();
+                return result;
             }
 
         }
         #endregion
 
         #region Consultar todos los datos de Tipo de identificacion mediante un parametro Codigo Especifico
-        public async Task<List<MdloDtos.TipoIdentificacion>> FiltrarTipoIdentificacionEspecifico(String Codigo)
+        public async Task<List<MdloDtos.DTO.TipoIdentificacionDTO>> FiltrarTipoIdentificacionEspecifico(String Codigo)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
@@ -70,31 +76,30 @@ namespace AccsoDtos.Parametrizacion
                                  where p.TiCdgo == Codigo
                                  select p).ToListAsync();
                 _dbContex.Dispose();
-                return lst;
+                var result = (lst.Count > 0) ? _mapper.Map<List<TipoIdentificacionDTO>>(lst) : new List<TipoIdentificacionDTO>();
+                return result;
             }
 
         }
         #endregion
 
         #region Actualizar Tipo Identificacion pasando el objeto _TipoIdentificacion
-        public async Task<MdloDtos.TipoIdentificacion> EditarTipoIdentificacion(MdloDtos.TipoIdentificacion _TipoIdentificacion)
+        public async Task<MdloDtos.DTO.TipoIdentificacionDTO> EditarTipoIdentificacion(MdloDtos.DTO.TipoIdentificacionDTO _TipoIdentificacion)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 try
                 {
-                    MdloDtos.TipoIdentificacion TipoIdentificacionExiste = await _dbContex.TipoIdentificacions.FindAsync(_TipoIdentificacion.TiCdgo);
+                    MdloDtos.TipoIdentificacion TipoIdentificacionExiste = await _dbContex.TipoIdentificacions.FindAsync(_TipoIdentificacion.Codigo);
                     if (TipoIdentificacionExiste != null)
                     {
-
-                        TipoIdentificacionExiste.TiCdgo = _TipoIdentificacion.TiCdgo;
-                        TipoIdentificacionExiste.TiNmbre = _TipoIdentificacion.TiNmbre;
+                        TipoIdentificacionExiste.TiCdgo = _TipoIdentificacion.Codigo;
+                        TipoIdentificacionExiste.TiNmbre = _TipoIdentificacion.Nombre;
                         _dbContex.Entry(TipoIdentificacionExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                         await _dbContex.SaveChangesAsync();
-
                     }
                     _dbContex.Dispose();
-                    return TipoIdentificacionExiste;
+                    return _TipoIdentificacion;
                 }
                 catch (Exception ex)
                 {
@@ -106,13 +111,14 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Consultar todos los datos de Tipo identificacion
-        public async Task<List<MdloDtos.TipoIdentificacion>> ListarTipoIdentificacion()
+        public async Task<List<MdloDtos.DTO.TipoIdentificacionDTO>> ListarTipoIdentificacion()
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 var lst = await _dbContex.TipoIdentificacions.ToListAsync();
                 _dbContex.Dispose();
-                return lst;
+                var result = (lst.Count > 0) ? _mapper.Map<List<TipoIdentificacionDTO>>(lst) : new List<TipoIdentificacionDTO>();
+                return result;
             }
 
         }
@@ -120,7 +126,7 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Eliminar tipo Identificacion
-        public async Task<MdloDtos.TipoIdentificacion> EliminarTipoIdentificacion(string Codigo)
+        public async Task<dynamic> EliminarTipoIdentificacion(string Codigo)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
@@ -159,16 +165,7 @@ namespace AccsoDtos.Parametrizacion
                 try
                 {
                     var ObjTipoIdentificacion = await _dbContex.TipoIdentificacions.FindAsync(Codigo);
-                    if (ObjTipoIdentificacion == null)
-                    {
-
-                        respuesta = false;
-                    }
-                    else
-                    {
-
-                        respuesta = true;
-                    }
+                    respuesta = (ObjTipoIdentificacion == null) ? false : true;
                     _dbContex.Dispose();
                     return respuesta;
                 }
@@ -177,9 +174,7 @@ namespace AccsoDtos.Parametrizacion
                     throw new Exception(ex.Message);
                 }
             }
-
         }
-
         #endregion
     }
 }
