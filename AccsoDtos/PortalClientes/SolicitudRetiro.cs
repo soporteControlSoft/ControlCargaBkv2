@@ -333,12 +333,12 @@ namespace AccsoDtos.PortalClientes
             {
                 try
                 {
-
+                    DateTime dat = DateTime.Today;
                     ObjSolicituAutorizacion.SraRowidSlctudRtro = _SolicitudAutorizacion.SraRowidSlctudRtro;
                     ObjSolicituAutorizacion.SraRowidTrnsprtdra = _SolicitudAutorizacion.SraRowidTrnsprtdra;
                     ObjSolicituAutorizacion.SraAutrzdoKlos = _SolicitudAutorizacion.SraAutrzdoKlos;
                     ObjSolicituAutorizacion.SraAutrzdoUnddes = _SolicitudAutorizacion.SraAutrzdoUnddes;
-                    ObjSolicituAutorizacion.SraFcha = _SolicitudAutorizacion.SraFcha;
+                    ObjSolicituAutorizacion.SraFcha = dat;
                     ObjSolicituAutorizacion.SraCdgoUsrio = _SolicitudAutorizacion.SraCdgoUsrio;
                     var res = await _dbContex.SolicitudRetiroAutorizacions.AddAsync(ObjSolicituAutorizacion);
                     await _dbContex.SaveChangesAsync();
@@ -483,7 +483,6 @@ namespace AccsoDtos.PortalClientes
         }
         #endregion
 
-       
 
         #region Consultar solicitud de retiros Trasnportadora  por ID retiros Autorizacion.
         public async Task<List<MdloDtos.SolicitudRetiroTransportadora>> ConsultarSolicitudRetiroIdRetiroTrasnportadora(int IdSolicitudRetiro)
