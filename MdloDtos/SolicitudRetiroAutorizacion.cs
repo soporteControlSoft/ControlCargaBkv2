@@ -46,6 +46,7 @@ public partial class SolicitudRetiroAutorizacion
     [NotMapped]
     public virtual Tercero? SraRowidTrnsprtdraNavigation { get; set; } = null!;
 
+    [NotMapped]
     public string? Nombretercero { get; set; }
 
     public SolicitudRetiroAutorizacion() { }

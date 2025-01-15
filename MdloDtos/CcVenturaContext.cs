@@ -4389,30 +4389,30 @@ public async Task<List<MdloDtos.Sp_IngresarSolicitudRetiro_>> Ingresar_Solicitud
     var param19 = new SqlParameter("@sr_entrgar_pso_excto", sr_entrgar_pso_excto);
     return await this.Sp_IngresarSolicitudRetiro_.FromSqlRaw("EXEC sp_Ingresar_SolicitudRetiro @sr_cia ,@sr_cdgo,@sr_rowid_dpsto,@sr_rowid_cdad,@sr_plnta_dstno,@sr_fcha_aprtra,@sr_autrzdo_klos,@sr_autrzdo_cntdad,@sr_dspchdo_klos,@sr_dspchdo_cntdad,@sr_actva,@sr_abrta,@sr_entrga_sspndda,@sr_obsrvcnes,@sr_cmpo_prsnlzdo1,@sr_cmpo_prsnlzdo2,@sr_cmpo_prsnlzdo3,@sr_rowid_zna_cd,@sr_entrgar_pso_excto", param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11, param12, param13, param14, param15, param16, param17, param18, param19).ToListAsync();
 }
-public DbSet<MdloDtos.sp_Cerrar_SolicitudRetiro> sp_Cerrar_SolicitudRetiro { get; set; }
-public async Task<List<MdloDtos.sp_Cerrar_SolicitudRetiro>> Cerrar_SolicitudRetiro(int sr_rowid)
-{
-    var param1 = new SqlParameter("@sr_rowid", sr_rowid);
-    return await this.sp_Cerrar_SolicitudRetiro.FromSqlRaw("EXEC sp_Cerrar_SolicitudRetiro sr_rowid", param1).ToListAsync();
-}
-/*public async Task<List<MdloDtos.SpListaDocumentosAprobacionCargue>> DspstoAdmnstrcion_LstarBls(int rowidDeposito)
-{
-    try
+    public DbSet<MdloDtos.sp_Cerrar_SolicitudRetiro> sp_Cerrar_SolicitudRetiro { get; set; }
+    public async Task<List<MdloDtos.sp_Cerrar_SolicitudRetiro>> Cerrar_SolicitudRetiro(int sr_rowid)
     {
-        var param1 = new SqlParameter("@de_rowid", rowidDeposito);
-
-        return await this.SpListaVisitaMotonaveBlCrearDepositos.FromSqlRaw("EXEC sp_MdloDpstoCrcion_LstarBls @de_rowid", param1).ToListAsync();
-
+        var param1 = new SqlParameter("@sr_rowid", sr_rowid);
+        return await this.sp_Cerrar_SolicitudRetiro.FromSqlRaw("EXEC sp_Cerrar_SolicitudRetiro @sr_rowid", param1).ToListAsync();
     }
-    catch (Exception ex)
+    /*public async Task<List<MdloDtos.SpListaDocumentosAprobacionCargue>> DspstoAdmnstrcion_LstarBls(int rowidDeposito)
     {
-        Console.WriteLine(ex.StackTrace.ToString());
-        return null;
-    }
-}
+        try
+        {
+            var param1 = new SqlParameter("@de_rowid", rowidDeposito);
 
-*/
-public async Task<List<MdloDtos.SpInvntrioBdgaDpsto>> DpsitoAdmnstrcion_InvntrioBdga(int IdDeposito)
+            return await this.SpListaVisitaMotonaveBlCrearDepositos.FromSqlRaw("EXEC sp_MdloDpstoCrcion_LstarBls @de_rowid", param1).ToListAsync();
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.StackTrace.ToString());
+            return null;
+        }
+    }
+
+    */
+    public async Task<List<MdloDtos.SpInvntrioBdgaDpsto>> DpsitoAdmnstrcion_InvntrioBdga(int IdDeposito)
     {
         var param1 = new SqlParameter("@rowDpsto", IdDeposito);
         return await this.SpInvntrioBdgaDpsto
