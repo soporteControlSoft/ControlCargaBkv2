@@ -11,17 +11,17 @@ namespace VldcionDtos
     /// </summary>
     public class ValidacionSector
     {
-        AccsoDtos.EstadoHechos.Sector ObjSector = new AccsoDtos.EstadoHechos.Sector();
+        AccsoDtos.EstadoHechos.Sector ObjSector = new AccsoDtos.EstadoHechos.Sector(null, null);
  
 
         #region Validacion de Clasificacion , metodo Ingreso
-        public async Task<int> ValidarIngreso(MdloDtos.Sector objSector) {
+        public async Task<int> ValidarIngreso(MdloDtos.DTO.SectorDTO objSector) {
 
             int resultado = 0;
             try {
                 //Validar los campos Obligatorios.
                 if (
-                    !string.IsNullOrEmpty(objSector.SeNmbre) 
+                    !string.IsNullOrEmpty(objSector.IdNombreSector) 
                    )
                 {
                     //Validar la llave exitosa.

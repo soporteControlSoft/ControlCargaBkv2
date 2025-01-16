@@ -31,10 +31,10 @@ namespace Srvcio.Controllers
 
         #region Consultar lista estado de hechos motonave
         [HttpGet("listar-MotonaveVisitaEstadoHcho")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.VwEstdoHchoLstarVstaMtnve>>> ListarMotonaveVisitaEstadoHecho()
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.ListadoEstadoHechosDTO>>> ListarMotonaveVisitaEstadoHecho()
         {
            
-            var ObjVisitaMotonave  = new List<MdloDtos.VwEstdoHchoLstarVstaMtnve>();
+            var ObjVisitaMotonave  = new List<MdloDtos.DTO.ListadoEstadoHechosDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             try
@@ -249,10 +249,10 @@ namespace Srvcio.Controllers
 
         #region Consultar lista estado de hechos motonave por codigo o nombre
         [HttpGet("listar-MotonaveVisitaEstadoHcho-busqueda")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.VwEstdoHchoLstarVstaMtnve>>> ListarMotonaveVisitaEstadoHechoBusqueda(string FiltroBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.ListadoEstadoHechosDTO>>> ListarMotonaveVisitaEstadoHechoBusqueda(string FiltroBusqueda)
         {
 
-            var ObjListarEstadosHechoBusqueda = new List<MdloDtos.VwEstdoHchoLstarVstaMtnve>();
+            var ObjListarEstadosHechoBusqueda = new List<MdloDtos.DTO.ListadoEstadoHechosDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try

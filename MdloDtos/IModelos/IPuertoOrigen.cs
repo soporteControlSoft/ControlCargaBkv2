@@ -8,16 +8,16 @@ namespace MdloDtos.IModelos
 {
     public interface IPuertoOrigen
     {
-        public Task<List<MdloDtos.PuertoOrigen>> ListarPuertoOrigen();
+        public Task<List<MdloDtos.DTO.PuertoOrigenDTO>> ListarPuertoOrigen();
 
-        public Task<List<MdloDtos.PuertoOrigen>> FiltrarPuertoOrigenGeneral(String Codigo);
+        public Task<List<MdloDtos.DTO.PuertoOrigenDTO>> FiltrarPuertoOrigenGeneral(String Codigo);
 
-        public Task<List<MdloDtos.PuertoOrigen>> FiltrarPuertoOrigenEspecifico(String Codigo);
+        public Task<List<MdloDtos.DTO.PuertoOrigenDTO>> FiltrarPuertoOrigenEspecifico(String Codigo);
 
-        public Task<MdloDtos.PuertoOrigen> IngresarPuertoOrigen(MdloDtos.PuertoOrigen ObjPuertoOrigen);
+        public Task<MdloDtos.DTO.PuertoOrigenDTO> IngresarPuertoOrigen(MdloDtos.DTO.PuertoOrigenDTO ObjPuertoOrigen);
 
-        public Task<MdloDtos.PuertoOrigen> EditarPuertoOrigen(MdloDtos.PuertoOrigen ObjPuertoOrigen);
+        public Task<MdloDtos.DTO.PuertoOrigenDTO> EditarPuertoOrigen(MdloDtos.DTO.PuertoOrigenDTO ObjPuertoOrigen);
 
-        public Task<MdloDtos.PuertoOrigen> EliminarPuertoOrigen(String Codigo);
+        public Task<dynamic> EliminarPuertoOrigen(String Codigo);
     }
 }

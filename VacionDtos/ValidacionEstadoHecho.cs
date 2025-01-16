@@ -16,7 +16,7 @@ namespace VldcionDtos
        
         AccsoDtos.EstadoHechos.EstadoHecho ObjEstadoHecho = new AccsoDtos.EstadoHechos.EstadoHecho();
         AccsoDtos.EstadoHechos.Evento _ObjEvento = new AccsoDtos.EstadoHechos.Evento(null, null);
-        AccsoDtos.EstadoHechos.Sector _ObjSector = new AccsoDtos.EstadoHechos.Sector();
+        AccsoDtos.EstadoHechos.Sector _ObjSector = new AccsoDtos.EstadoHechos.Sector(null, null);
         AccsoDtos.Parametrizacion.Usuario _ObjUsuario = new AccsoDtos.Parametrizacion.Usuario();
 
         #region Validacion de EstsadoHecho , metodo Ingreso

@@ -30,9 +30,9 @@ namespace Srvcio.Controllers
 
         #region Consultar productos
         [HttpGet("listar-producto")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Producto>>> ListarProducto()
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.ProductoDTO>>> ListarProducto()
         {     
-            var ObjProducto = new List<MdloDtos.Producto>();
+            var ObjProducto = new List<MdloDtos.DTO.ProductoDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             try
@@ -60,10 +60,10 @@ namespace Srvcio.Controllers
 
         #region Filtrar Producto por codigo general
         [HttpGet("filtrar-producto-general")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Producto>>> FiltrarProductoGeneral(string FiltroBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.ProductoDTO>>> FiltrarProductoGeneral(string FiltroBusqueda)
         {
 
-            var ObjProductoExiste = new List<MdloDtos.Producto>();
+            var ObjProductoExiste = new List<MdloDtos.DTO.ProductoDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -110,10 +110,10 @@ namespace Srvcio.Controllers
 
         #region Filtrar Producto por codigo general
         [HttpGet("filtrar-producto-especifico")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Producto>>> FiltrarProductoEspecifico(string CodigoBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.ProductoDTO>>> FiltrarProductoEspecifico(string CodigoBusqueda)
         {
 
-            var ObjProductoExiste = new List<MdloDtos.Producto>();
+            var ObjProductoExiste = new List<MdloDtos.DTO.ProductoDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
 
@@ -163,7 +163,7 @@ namespace Srvcio.Controllers
         #region Ingresa Producto
 
         [HttpPost("ingresar-producto")]
-        public async Task<ActionResult<dynamic>> IngresarProducto([FromBody] MdloDtos.Producto objProducto)
+        public async Task<ActionResult<dynamic>> IngresarProducto([FromBody] MdloDtos.DTO.ProductoDTO objProducto)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -212,7 +212,7 @@ namespace Srvcio.Controllers
 
         #region Actualizar Producto
         [HttpPut("actualizar-producto")]
-        public async Task<ActionResult<dynamic>> EditarProducto([FromBody] MdloDtos.Producto objProducto)
+        public async Task<ActionResult<dynamic>> EditarProducto([FromBody] MdloDtos.DTO.ProductoDTO objProducto)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Actualizacion);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.

@@ -12,9 +12,9 @@ namespace VldcionDtos
     public class ValidacionDeposito
     {
         AccsoDtos.PortalClientes.Deposito _ObjDeposito = new AccsoDtos.PortalClientes.Deposito();
-        AccsoDtos.Parametrizacion.Compania _ObjCompania = new AccsoDtos.Parametrizacion.Compania();
+        AccsoDtos.Parametrizacion.Compania _ObjCompania = new AccsoDtos.Parametrizacion.Compania(null);
         AccsoDtos.Parametrizacion.Tercero _ObjTercero = new AccsoDtos.Parametrizacion.Tercero();
-        AccsoDtos.Parametrizacion.Producto _ObjProducto = new AccsoDtos.Parametrizacion.Producto();
+        AccsoDtos.Parametrizacion.Producto _ObjProducto = new AccsoDtos.Parametrizacion.Producto(null);
         AccsoDtos.Parametrizacion.Usuario _ObjUsuario = new AccsoDtos.Parametrizacion.Usuario();
 
         #region Validacion de creación Deposito , metodo Ingreso
@@ -322,8 +322,6 @@ namespace VldcionDtos
         }
         #endregion
 
-        
-
         #region valida que un deposito esté en estado de cargado
         public async Task<int> ValidarEstadoDeposito(MdloDtos.Deposito objDeposito)
         {
@@ -346,6 +344,7 @@ namespace VldcionDtos
             }
         }
         #endregion
+
         #region valida que un deposito esté en estado de cargado
         public async Task<int> ValidarEstadoAprobadoDeposito(MdloDtos.Deposito objDeposito)
         {

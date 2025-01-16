@@ -11,10 +11,10 @@ namespace VldcionDtos
     /// </summary>
     public class ValidacionProducto
     {
-        AccsoDtos.Parametrizacion.Producto ObjProducto = new AccsoDtos.Parametrizacion.Producto();
+        AccsoDtos.Parametrizacion.Producto ObjProducto = new AccsoDtos.Parametrizacion.Producto(null);
 
         #region Validacion de Producto , metodo Ingreso
-        public async Task<int> ValidarIngreso(MdloDtos.Producto objProducto)
+        public async Task<int> ValidarIngreso(MdloDtos.DTO.ProductoDTO objProducto)
         {
             int resultado = 0;
             try
@@ -99,7 +99,7 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de Producto , metodo Actualizar
-        public async Task<int> ValidarActualizacion(MdloDtos.Producto objProducto)
+        public async Task<int> ValidarActualizacion(MdloDtos.DTO.ProductoDTO objProducto)
         {
             int resultado = 0;
             try

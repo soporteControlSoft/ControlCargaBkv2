@@ -26,10 +26,10 @@ namespace Srvcio.Controllers
 
         #region Consultar compania
         [HttpGet("listar-compania")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Companium>>> ListarCompania()
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.companiaDTO>>> ListarCompania()
         {
             
-            var ObCompania = new List<MdloDtos.Companium>();
+            var ObCompania = new List<MdloDtos.DTO.companiaDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             try
@@ -56,10 +56,10 @@ namespace Srvcio.Controllers
 
         #region Filtrar compania por codigo por codigo general ( Nombre o codigo - contains)
         [HttpGet("filtrar-compania-general")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Companium>>> FiltrarCompaniaGeneral(string FiltroBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.companiaDTO>>> FiltrarCompaniaGeneral(string FiltroBusqueda)
         {
 
-            var ObCompania = new List<MdloDtos.Companium>();
+            var ObCompania = new List<MdloDtos.DTO.companiaDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -107,9 +107,9 @@ namespace Srvcio.Controllers
 
         #region Filtrar compania por codigo por codigo especifico
         [HttpGet("filtrar-compania-especifico")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Companium>>> FiltrarCompaniaEspecifico(string CodigoBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.companiaDTO>>> FiltrarCompaniaEspecifico(string CodigoBusqueda)
         {
-            var ObCompania = new List<MdloDtos.Companium>();
+            var ObCompania = new List<MdloDtos.DTO.companiaDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -157,7 +157,7 @@ namespace Srvcio.Controllers
 
         #region Ingresar compania
         [HttpPost("ingresar-compania")]
-        public async Task<ActionResult<dynamic>> IngresarCompania([FromBody] MdloDtos.Companium ObjCompania)
+        public async Task<ActionResult<dynamic>> IngresarCompania([FromBody] MdloDtos.DTO.companiaDTO ObjCompania)
         {
            
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
@@ -207,7 +207,7 @@ namespace Srvcio.Controllers
 
         #region Actualizar compania
         [HttpPut("actualizar-compania")]
-        public async Task<ActionResult<dynamic>> EditarCompania([FromBody] MdloDtos.Companium ObjCompania)
+        public async Task<ActionResult<dynamic>> EditarCompania([FromBody] MdloDtos.DTO.companiaDTO ObjCompania)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Actualizacion);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -255,7 +255,7 @@ namespace Srvcio.Controllers
 
         #region Eliminar compania
         [HttpDelete("eliminar-compania")]
-        public async Task<ActionResult<dynamic>> EliminarCompania([FromBody] MdloDtos.Companium ObjCompania)
+        public async Task<ActionResult<dynamic>> EliminarCompania([FromBody] MdloDtos.DTO.companiaDTO ObjCompania)
         {
 
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Eliminacion);
