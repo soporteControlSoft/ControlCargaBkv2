@@ -7,6 +7,7 @@ using MdloDtos.IModelos;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -233,6 +234,9 @@ namespace AccsoDtos.PortalClientes
                         ObjPSolicitudRetiroTransportadora.SrtDspchdoUnddes = 0;
                         ObjPSolicitudRetiroTransportadora.SrtActva = _SolicitudRetiroTransportadora.SrtActva;
 
+                        await _dbContex.SolicitudRetiroTransportadoras.AddAsync(ObjPSolicitudRetiroTransportadora);
+                        await _dbContex.SaveChangesAsync();
+
                         //actualizart la solicitud , re caulculando las cantidades y kilos. abierta
                         if (SolicitudRetiroExiste != null)
                         {
@@ -241,21 +245,77 @@ namespace AccsoDtos.PortalClientes
                                             select p).ToListAsync();
                             int? sumaKilos = 0;
                             int? sumaUnidades = 0;
-                            foreach (var item in lst) {
 
-                                sumaKilos = item.SrtAutrzdoKlos + ObjPSolicitudRetiroTransportadora.SrtAutrzdoKlos + sumaKilos;
-                                sumaUnidades = item.SrtAutrzdoUnddes + +sumaUnidades;
+                            foreach (var item in lst) {
+                                if (lst.Count == 1)
+                                {
+                                    sumaKilos = ObjPSolicitudRetiroTransportadora.SrtAutrzdoKlos;
+                                    sumaUnidades = ObjPSolicitudRetiroTransportadora.SrtAutrzdoUnddes;
+                                }
+                                else {
+
+                                    sumaKilos = item.SrtAutrzdoKlos + sumaKilos;
+                                    sumaUnidades = item.SrtAutrzdoUnddes + sumaUnidades;
+
+                                }
+
+                             
 
                             }
+
                             SolicitudRetiroExiste.SrAutrzdoKlos = sumaKilos;
                             SolicitudRetiroExiste.SrAutrzdoCntdad = sumaUnidades;
                            
                             _dbContex.SolicitudRetiros.Entry(SolicitudRetiroExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                             await _dbContex.SaveChangesAsync();
+
+                            //actualizar solicitud de autorizacion.
+                            MdloDtos.SolicitudRetiroAutorizacion SolicitudAutorizacion_ = new MdloDtos.SolicitudRetiroAutorizacion();
+
+
+                            var pr = await (from p in _dbContex.SolicitudRetiroAutorizacions
+                                                                       where (p.SraRowidSlctudRtro == ObjPSolicitudRetiroTransportadora.SrtRowidSlctudRtro)
+                                                                       select p).ToListAsync();
+
+                            SolicitudAutorizacion_.SraRowidSlctudRtro = _SolicitudRetiroTransportadora.SrtRowidSlctudRtro;
+                            SolicitudAutorizacion_.SraAutrzdoKlos = _SolicitudRetiroTransportadora.SrtAutrzdoKlos;
+                            SolicitudAutorizacion_.SraAutrzdoUnddes = _SolicitudRetiroTransportadora.SrtAutrzdoUnddes;
+                            SolicitudAutorizacion_.SraFcha = System.DateTime.Now;
+                            SolicitudAutorizacion_.SraCdgoUsrio = "100";
+                            await _dbContex.SolicitudRetiroAutorizacions.AddAsync(SolicitudAutorizacion_);
+                            await _dbContex.SaveChangesAsync();
+                            /*
+                            if (pr.Count > 0)
+                            {
+                                foreach (var item in pr)
+                                {
+
+                                    SolicitudAutorizacion_.SraRowid = item.SraRowid;
+                                    SolicitudAutorizacion_.SraRowidSlctudRtro = _SolicitudRetiroTransportadora.SrtRowidSlctudRtro;
+                                    SolicitudAutorizacion_.SraAutrzdoKlos = SolicitudRetiroExiste.SrAutrzdoKlos;
+                                    SolicitudAutorizacion_.SraAutrzdoUnddes = SolicitudRetiroExiste.SrAutrzdoCntdad;
+                                    SolicitudAutorizacion_.SraFcha = System.DateTime.Now;
+                                    SolicitudAutorizacion_.SraCdgoUsrio = "100";
+                                    _dbContex.SolicitudRetiroAutorizacions.Entry(SolicitudAutorizacion_).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                                    await _dbContex.SaveChangesAsync();
+                                }
+                            }
+                            else {
+
+
+                                SolicitudAutorizacion_.SraRowidSlctudRtro = _SolicitudRetiroTransportadora.SrtRowidSlctudRtro;
+                                SolicitudAutorizacion_.SraAutrzdoKlos = _SolicitudRetiroTransportadora.SrtAutrzdoKlos;
+                                SolicitudAutorizacion_.SraAutrzdoUnddes = _SolicitudRetiroTransportadora.SrtAutrzdoUnddes;
+                                SolicitudAutorizacion_.SraFcha = System.DateTime.Now;
+                                SolicitudAutorizacion_.SraCdgoUsrio = "100";
+                                await _dbContex.SolicitudRetiroAutorizacions.AddAsync(SolicitudAutorizacion_);
+                                await _dbContex.SaveChangesAsync();
+                            }
+                            */
+
                         }
                     }
-                    var res = await _dbContex.SolicitudRetiroTransportadoras.AddAsync(ObjPSolicitudRetiroTransportadora);
-                    await _dbContex.SaveChangesAsync();
+                    
                 }
                 catch (Exception ex)
                 {
@@ -333,12 +393,12 @@ namespace AccsoDtos.PortalClientes
             {
                 try
                 {
-
+                    DateTime dat = DateTime.Today;
                     ObjSolicituAutorizacion.SraRowidSlctudRtro = _SolicitudAutorizacion.SraRowidSlctudRtro;
                     ObjSolicituAutorizacion.SraRowidTrnsprtdra = _SolicitudAutorizacion.SraRowidTrnsprtdra;
                     ObjSolicituAutorizacion.SraAutrzdoKlos = _SolicitudAutorizacion.SraAutrzdoKlos;
                     ObjSolicituAutorizacion.SraAutrzdoUnddes = _SolicitudAutorizacion.SraAutrzdoUnddes;
-                    ObjSolicituAutorizacion.SraFcha = _SolicitudAutorizacion.SraFcha;
+                    ObjSolicituAutorizacion.SraFcha = dat;
                     ObjSolicituAutorizacion.SraCdgoUsrio = _SolicitudAutorizacion.SraCdgoUsrio;
                     var res = await _dbContex.SolicitudRetiroAutorizacions.AddAsync(ObjSolicituAutorizacion);
                     await _dbContex.SaveChangesAsync();
@@ -483,7 +543,6 @@ namespace AccsoDtos.PortalClientes
         }
         #endregion
 
-       
 
         #region Consultar solicitud de retiros Trasnportadora  por ID retiros Autorizacion.
         public async Task<List<MdloDtos.SolicitudRetiroTransportadora>> ConsultarSolicitudRetiroIdRetiroTrasnportadora(int IdSolicitudRetiro)

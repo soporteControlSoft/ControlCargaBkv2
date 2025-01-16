@@ -133,7 +133,7 @@ namespace Srvcio.Controllers
 
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                         respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                        respuesta.datos = ObSubdeposito;
+                        respuesta.datos = _SolicitudRetiro;
                     }
                 }
                 else
@@ -141,7 +141,7 @@ namespace Srvcio.Controllers
                     //regresa el error
                     respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                     respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                    respuesta.datos = "null";
+                    respuesta.datos = _SolicitudRetiro;
                 }
 
             }
@@ -149,7 +149,7 @@ namespace Srvcio.Controllers
             {
                 respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                 respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                respuesta.datos = "null";
+                respuesta.datos = _SolicitudRetiro;
                 return BadRequest(respuesta);
             }
 
@@ -567,7 +567,7 @@ namespace Srvcio.Controllers
 
                 if ((_SolicitudAutorizacion.SraRowidSlctudRtro >0) && (_SolicitudAutorizacion.SraRowidTrnsprtdra >0) &&
                      (!string.IsNullOrEmpty(_SolicitudAutorizacion.SraAutrzdoKlos.ToString())) && (!string.IsNullOrEmpty(_SolicitudAutorizacion.SraAutrzdoUnddes.ToString()))
-                     && (!string.IsNullOrEmpty(_SolicitudAutorizacion.SraFcha.ToString())) && (_SolicitudAutorizacion.SraCdgoUsrio is not null)) // exito
+                     && (_SolicitudAutorizacion.SraCdgoUsrio is not null)) // exito
 
                 {
                     var ObSubdeposito = await this._dbContex.IngresarSolicitudRetirosAutorizacion(_SolicitudAutorizacion);
@@ -725,8 +725,7 @@ namespace Srvcio.Controllers
         }
         #endregion
 
-      
-
+     
         #region Consultar solicitud de retiros Trasnportadora  por ID retiros Autorizacion.
         [HttpGet("listar-solicitudRetiro-Trasmportadora-historia-IdRetiro")]
         public async Task<ActionResult<IEnumerable<MdloDtos.SolicitudRetiroTransportadoraHistorial>>> ConsultarSolicitudRetiroTrasnportadoraHistorialIdRetiro(int IdSolicitudRetiroTrasnportadora)

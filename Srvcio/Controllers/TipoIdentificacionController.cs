@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
 
 namespace Srvcio.Controllers
@@ -10,12 +11,14 @@ namespace Srvcio.Controllers
     public class TipoIdentificacionController : Controller
     {
         private readonly MdloDtos.IModelos.ITipoIdentificacion _dbContex;
+        private readonly IMapper _mapper;
 
         MdloDtos.Utilidades.RespuestaServicios respuesta = new MdloDtos.Utilidades.RespuestaServicios();
 
-        public TipoIdentificacionController(MdloDtos.IModelos.ITipoIdentificacion dbContex)
+        public TipoIdentificacionController(MdloDtos.IModelos.ITipoIdentificacion dbContex, IMapper mapper)
         {
             _dbContex = dbContex;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -26,10 +29,10 @@ namespace Srvcio.Controllers
 
         #region Consultar Tipo Identificacion
         [HttpGet("listar-tipoIdentificacion")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.TipoIdentificacion>>> ListarTipoIdentificacion()
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.TipoIdentificacionDTO>>> ListarTipoIdentificacion()
         {
            
-            var ObTipoIdentificacion = new List<MdloDtos.TipoIdentificacion>();
+            var ObTipoIdentificacion = new List<MdloDtos.DTO.TipoIdentificacionDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             try
@@ -57,10 +60,10 @@ namespace Srvcio.Controllers
 
         #region Filtrar tipo Identificacion por codigo
         [HttpGet("filtrar-tipoIdentificacion-general")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.TipoIdentificacion>>> FiltrarTipoIdentificacionGeneral(string FiltroBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.TipoIdentificacionDTO>>> FiltrarTipoIdentificacionGeneral(string FiltroBusqueda)
         {
             
-            var ObTipoIdentificacion = new List<MdloDtos.TipoIdentificacion>();
+            var ObTipoIdentificacion = new List<MdloDtos.DTO.TipoIdentificacionDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -108,10 +111,10 @@ namespace Srvcio.Controllers
 
         #region Filtrar tipo Identificacion por codigo
         [HttpGet("filtrar-tipoIdentificacion-especifico")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.TipoIdentificacion>>> FiltrarTipoIdentificacionEspecifico(string CodigoBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.TipoIdentificacionDTO>>> FiltrarTipoIdentificacionEspecifico(string CodigoBusqueda)
         {
 
-            var ObTipoIdentificacion = new List<MdloDtos.TipoIdentificacion>();
+            var ObTipoIdentificacion = new List<MdloDtos.DTO.TipoIdentificacionDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -162,7 +165,7 @@ namespace Srvcio.Controllers
 
         #region Ingresar Tipo Identificacion
         [HttpPost("ingresar-tipoIdentificacion")]
-        public async Task<ActionResult<dynamic>> IngresarTipoIdentificacion([FromBody] MdloDtos.TipoIdentificacion _objTipoIdentificacion)
+        public async Task<ActionResult<dynamic>> IngresarTipoIdentificacion([FromBody] MdloDtos.DTO.TipoIdentificacionDTO _objTipoIdentificacion)
         {
 
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
@@ -214,7 +217,7 @@ namespace Srvcio.Controllers
 
         #region Actualizar Tipo Identificacion
         [HttpPut("actualizar-tipoIdentificacion")]
-        public async Task<ActionResult<dynamic>> EditarTipoIdentificacion( [FromBody] MdloDtos.TipoIdentificacion _objTipoIdentificacion)
+        public async Task<ActionResult<dynamic>> EditarTipoIdentificacion( [FromBody] MdloDtos.DTO.TipoIdentificacionDTO _objTipoIdentificacion)
         {
 
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
@@ -265,7 +268,7 @@ namespace Srvcio.Controllers
 
         #region Eliminar Tipo de identificacion
         [HttpDelete("eliminar-tipoIdentificacion")]
-        public async Task<ActionResult<dynamic>> EliminarTipoIdentificacion([FromBody] MdloDtos.TipoIdentificacion _objTipoIdentificacion)
+        public async Task<ActionResult<dynamic>> EliminarTipoIdentificacion([FromBody] MdloDtos.DTO.TipoIdentificacionDTO _objTipoIdentificacion)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Eliminacion);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -274,7 +277,7 @@ namespace Srvcio.Controllers
                 validacion = await _ValidacionTipoIdentificacion.ValidarEliminar(_objTipoIdentificacion);
                 if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa) //si fue exito
                 {
-                    var ObTipoIdentificacion = await _dbContex.EliminarTipoIdentificacion(_objTipoIdentificacion.TiCdgo);
+                    var ObTipoIdentificacion = await _dbContex.EliminarTipoIdentificacion(_objTipoIdentificacion.Codigo);
                     if (ObTipoIdentificacion != null)
                     {
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;

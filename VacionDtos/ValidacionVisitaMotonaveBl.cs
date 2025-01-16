@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AccsoDtos.Mappings;
+using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,12 +13,25 @@ namespace VldcionDtos
     /// </summary>
     public class ValidacionVisitaMotonaveBl
     {
+        private readonly IMapper _mapper;
 
         AccsoDtos.VisitaMotonave.VisitaMotonaveDetalle ObjVisitaMotonaveDetalle = new AccsoDtos.VisitaMotonave.VisitaMotonaveDetalle();
         AccsoDtos.VisitaMotonave.VisitaMotonave ObjVisitaMotonave = new AccsoDtos.VisitaMotonave.VisitaMotonave();
-        AccsoDtos.Parametrizacion.UnidadMedida ObjUnidadMedida = new AccsoDtos.Parametrizacion.UnidadMedida();
+        AccsoDtos.Parametrizacion.UnidadMedida ObjUnidadMedida;
         AccsoDtos.Parametrizacion.Usuario ObjUsuario = new AccsoDtos.Parametrizacion.Usuario();
         AccsoDtos.VisitaMotonave.VisitaMotonaveBl ObjVisitaMotonaveBl = new AccsoDtos.VisitaMotonave.VisitaMotonaveBl();
+
+        public ValidacionVisitaMotonaveBl()
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
+
+            _mapper = configuration.CreateMapper();
+            ObjUnidadMedida = new AccsoDtos.Parametrizacion.UnidadMedida(_mapper);
+
+        }
 
         #region Validacion de  VisitaMotonaveBl , metodo Ingreso
         public async Task<int> ValidarIngreso(MdloDtos.VisitaMotonaveBl objVisitaMotonaveBl)
@@ -73,7 +88,6 @@ namespace VldcionDtos
             return resultado;
         }
         #endregion
-
 
         #region Validacion de VisitaMotonaveBl , metodo Actualizar
         public async Task<int> ValidarActualizacion(MdloDtos.VisitaMotonaveBl objVisitaMotonaveBl_)
@@ -348,7 +362,6 @@ namespace VldcionDtos
             return resultado;
         }
         #endregion
-
 
         #region Validacion de VisitaMotonaveBl , metodo Actualizar estados
         public async Task<int> ValidarActualizacionEstado(MdloDtos.VisitaMotonaveBl objVisitaMotonaveBl_)

@@ -8,16 +8,16 @@ namespace MdloDtos.IModelos
 {
     public interface IUnidadMedida
     {
-        public Task<List<MdloDtos.UnidadMedidum>> ListarUnidadMedida();
+        public Task<List<MdloDtos.DTO.UnidadMedidumDTO>> ListarUnidadMedida();
 
-        public Task<List<MdloDtos.UnidadMedidum>> FiltrarUnidadMedidaEspecifico(String Codigo);
+        public Task<List<MdloDtos.DTO.UnidadMedidumDTO>> FiltrarUnidadMedidaEspecifico(String Codigo);
 
-        public Task<List<MdloDtos.UnidadMedidum>> FiltrarUnidadMedidaGeneral(String Codigo);
+        public Task<List<MdloDtos.DTO.UnidadMedidumDTO>> FiltrarUnidadMedidaGeneral(String Codigo);
 
-        public Task<MdloDtos.UnidadMedidum> IngresarUnidadMedida(MdloDtos.UnidadMedidum ObjUnidadMedida);
+        public Task<dynamic> IngresarUnidadMedida(MdloDtos.DTO.UnidadMedidumDTO ObjUnidadMedida);
 
-        public Task<MdloDtos.UnidadMedidum> EditarUnidadMedida(MdloDtos.UnidadMedidum ObjUnidadMedida);
+        public Task<MdloDtos.DTO.UnidadMedidumDTO> EditarUnidadMedida(MdloDtos.DTO.UnidadMedidumDTO ObjUnidadMedida);
 
-        public Task<MdloDtos.UnidadMedidum> EliminarUnidadMedida(String Codigo);
+        public Task<dynamic> EliminarUnidadMedida(String Codigo);
     }
 }

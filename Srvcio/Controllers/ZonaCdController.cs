@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using VldcionDtos;
 
 namespace Srvcio.Controllers
@@ -11,12 +12,14 @@ namespace Srvcio.Controllers
     public class ZonaCdController : Controller
     {
         private readonly MdloDtos.IModelos.IZonaCd _dbContex;
+        private readonly IMapper _mapper;
 
         MdloDtos.Utilidades.RespuestaServicios respuesta = new MdloDtos.Utilidades.RespuestaServicios();
 
-        public ZonaCdController(MdloDtos.IModelos.IZonaCd dbContex)
+        public ZonaCdController(MdloDtos.IModelos.IZonaCd dbContex, IMapper mapper)
         {
             _dbContex = dbContex;
+            _mapper = mapper;
         }
         /// <summary>
         /// Clase para validar los datos.
@@ -26,10 +29,10 @@ namespace Srvcio.Controllers
 
         #region Consultar ZonaCd
         [HttpGet("listar-zonaCd")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.ZonaCd>>> ListarZonaCd()
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.ZonaCdDTO>>> ListarZonaCd()
         {
             
-            var ObZonaCd = new List<MdloDtos.ZonaCd>();
+            var ObZonaCd = new List<MdloDtos.DTO.ZonaCdDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             try
@@ -57,10 +60,10 @@ namespace Srvcio.Controllers
 
         #region Filtrar Zona por codigo general
         [HttpGet("filtrar-zonaCd-general")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.ZonaCd>>> FiltrarZonaCdGeneral( string FiltroBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.ZonaCdDTO>>> FiltrarZonaCdGeneral( string FiltroBusqueda)
         {
            
-            var ObZonaCd = new List<MdloDtos.ZonaCd>();
+            var ObZonaCd = new List<MdloDtos.DTO.ZonaCdDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -108,10 +111,10 @@ namespace Srvcio.Controllers
 
         #region Filtrar Zona por codigo especifico
         [HttpGet("filtrar-zonaCd-especifico")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.ZonaCd>>> FiltrarZonaCdEspecifico(string CodigoBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.ZonaCdDTO>>> FiltrarZonaCdEspecifico(string CodigoBusqueda)
         {
 
-            var ObZonaCd = new List<MdloDtos.ZonaCd>();
+            var ObZonaCd = new List<MdloDtos.DTO.ZonaCdDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -161,10 +164,10 @@ namespace Srvcio.Controllers
 
         #region Filtrar sede por compania
         [HttpGet("filtrar-zonaCd-Idsede")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.ZonaCd>>> FiltrarZonaCdSede(int IdSede)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.ZonaCdDTO>>> FiltrarZonaCdSede(int IdSede)
         {
            
-            var ObZonaCd = new List<MdloDtos.ZonaCd>();
+            var ObZonaCd = new List<MdloDtos.DTO.ZonaCdDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -213,7 +216,7 @@ namespace Srvcio.Controllers
 
         #region Ingresar Zona Cd
         [HttpPost("ingresar-zonaCd")]
-        public async Task<ActionResult<dynamic>> IngresarZonaCd([FromBody] MdloDtos.ZonaCd objZonaCd)
+        public async Task<ActionResult<dynamic>> IngresarZonaCd([FromBody] MdloDtos.DTO.ZonaCdDTO objZonaCd)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -263,7 +266,7 @@ namespace Srvcio.Controllers
 
         #region Actualizar sede
         [HttpPut("actualizar-zonaCd")]
-        public async Task<ActionResult<dynamic>> EditarZonaCd([FromBody] MdloDtos.ZonaCd objZonaCd)
+        public async Task<ActionResult<dynamic>> EditarZonaCd([FromBody] MdloDtos.DTO.ZonaCdDTO objZonaCd)
         {
 
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
@@ -313,7 +316,7 @@ namespace Srvcio.Controllers
 
         #region Eliminar zonaCd
         [HttpDelete("eliminar-zonaCd")]
-        public async Task<ActionResult<dynamic>> EliminarSede([FromBody] MdloDtos.ZonaCd objZonaCd)
+        public async Task<ActionResult<dynamic>> EliminarSede([FromBody] MdloDtos.DTO.ZonaCdDTO objZonaCd)
         {
 
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Eliminacion);
@@ -323,7 +326,7 @@ namespace Srvcio.Controllers
                 validacion = await validacionZona.ValidarEliminar(objZonaCd);
                 if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa) //si fue exito)
                 {
-                    var ObZonaCd = await _dbContex.EliminarZonaCd((int)objZonaCd.ZcdRowid);
+                    var ObZonaCd = await _dbContex.EliminarZonaCd((int)objZonaCd.IdZona);
                     if (ObZonaCd != null)
                     {
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
@@ -339,7 +342,6 @@ namespace Srvcio.Controllers
                         respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
                         respuesta.datos = objZonaCd;
                     }
-
                 }
                 else
                 {
@@ -373,10 +375,10 @@ namespace Srvcio.Controllers
 
         #region Filtrar Zona por sector
         [HttpGet("filtrar-zonaCd-sector")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.ZonaCd>>> FiltrarZonaSector(string zn)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.ZonaCdDTO>>> FiltrarZonaSector(string zn)
         {
 
-            var ObZonaCd = new List<MdloDtos.ZonaCd>();
+            var ObZonaCd = new List<MdloDtos.DTO.ZonaCdDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -425,10 +427,10 @@ namespace Srvcio.Controllers
 
         #region Filtrar Zona por Sector Y Busqueda
         [HttpGet("filtrar-zonaCd-sectorBusqueda")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.ZonaCd>>> FiltrarZonaSectorBusqueda(string zn, string Busqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.ZonaCdDTO>>> FiltrarZonaSectorBusqueda(string zn, string Busqueda)
         {
 
-            var ObZonaCd = new List<MdloDtos.ZonaCd>();
+            var ObZonaCd = new List<MdloDtos.DTO.ZonaCdDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try

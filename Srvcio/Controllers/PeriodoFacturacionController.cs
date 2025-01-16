@@ -1,4 +1,5 @@
-﻿using MdloDtos.Utilidades;
+﻿using AutoMapper;
+using MdloDtos.Utilidades;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata.Ecma335;
@@ -16,11 +17,13 @@ namespace Srvcio.Controllers
     public class PeriodoFacturacionController : Controller
     {
         private readonly MdloDtos.IModelos.IPeriodoFacturacion _dbContext;
+        private readonly IMapper _mapper;
 
         MdloDtos.Utilidades.RespuestaServicios respuesta = new MdloDtos.Utilidades.RespuestaServicios();
-        public PeriodoFacturacionController(MdloDtos.IModelos.IPeriodoFacturacion dbContext)
+        public PeriodoFacturacionController(MdloDtos.IModelos.IPeriodoFacturacion dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -31,9 +34,9 @@ namespace Srvcio.Controllers
 
         #region Consultar todos los Periodo Facturacion
         [HttpGet("listar-periodoFacturacion")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.PeriodoFacturacion>>> ListarPeriodoFacturacion()
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.PeriodoFacturacionDTO>>> ListarPeriodoFacturacion()
         { 
-            var ObjPeriodoFacturacion = new List<MdloDtos.PeriodoFacturacion>();
+            var ObjPeriodoFacturacion = new List<MdloDtos.DTO.PeriodoFacturacionDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             try
@@ -61,9 +64,9 @@ namespace Srvcio.Controllers
 
         #region Filtrar Periodo Facturacion por codigo general
         [HttpGet("filtrar-periodoFacturacion-general")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.PeriodoFacturacion>>> FiltrarPeriodoFacturacionGeneral(string FiltroBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.PeriodoFacturacionDTO>>> FiltrarPeriodoFacturacionGeneral(string FiltroBusqueda)
         {  
-            var ObjPeriodoFacturacion = new List<MdloDtos.PeriodoFacturacion>();
+            var ObjPeriodoFacturacion = new List<MdloDtos.DTO.PeriodoFacturacionDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -110,10 +113,10 @@ namespace Srvcio.Controllers
 
         #region Filtrar Periodo Facturacion por codigo especifico
         [HttpGet("filtrar-periodoFacturacion-especifico")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.PeriodoFacturacion>>> FiltrarPeriodoFacturacionEspecifico( string CodigoPeriodoFacturacion)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.PeriodoFacturacionDTO>>> FiltrarPeriodoFacturacionEspecifico( string CodigoPeriodoFacturacion)
         {
             
-            var ObjPeriodoFacturacion = new List<MdloDtos.PeriodoFacturacion>();
+            var ObjPeriodoFacturacion = new List<MdloDtos.DTO.PeriodoFacturacionDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -163,7 +166,7 @@ namespace Srvcio.Controllers
         #region Ingresa Periodo Facturacion
 
         [HttpPost("ingresar-periodoFacturacion")]
-        public async Task<ActionResult<dynamic>> IngresarPeriodoFacturacion([FromBody] MdloDtos.PeriodoFacturacion ObjPeriodoFacturacion)
+        public async Task<ActionResult<dynamic>> IngresarPeriodoFacturacion([FromBody] MdloDtos.DTO.PeriodoFacturacionDTO ObjPeriodoFacturacion)
         {
 
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
@@ -213,7 +216,7 @@ namespace Srvcio.Controllers
 
         #region Actualizar Periodo Facturacion
         [HttpPut("actualizar-periodoFacturacion")]
-        public async Task<ActionResult<dynamic>> EditarPeriodoFacturacion([FromBody] MdloDtos.PeriodoFacturacion ObjPeriodoFacturacion)
+        public async Task<ActionResult<dynamic>> EditarPeriodoFacturacion([FromBody] MdloDtos.DTO.PeriodoFacturacionDTO ObjPeriodoFacturacion)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Actualizacion);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -263,7 +266,7 @@ namespace Srvcio.Controllers
 
         #region Eliminar Periodo Facturacion por codigo 
         [HttpDelete("eliminar-periodoFacturacion")]
-        public async Task<ActionResult<dynamic>> EliminarPeriodoFacturacion([FromBody] MdloDtos.PeriodoFacturacion ObjPeriodoFacturacion)
+        public async Task<ActionResult<dynamic>> EliminarPeriodoFacturacion([FromBody] MdloDtos.DTO.PeriodoFacturacionDTO ObjPeriodoFacturacion)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Eliminacion);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -272,7 +275,7 @@ namespace Srvcio.Controllers
                 validacion = await validacionPeriodoFacturacion.ValidarEliminar(ObjPeriodoFacturacion);
                 if (validacion == (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa) //si fue exito)
                 {
-                    var ObPeriodoFacturacion = await _dbContext.EliminarPeriodoFacturacion(ObjPeriodoFacturacion.PfCdgo);
+                    var ObPeriodoFacturacion = await _dbContext.EliminarPeriodoFacturacion(ObjPeriodoFacturacion.Codigo);
                     if (ObPeriodoFacturacion != null)
                     {
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;

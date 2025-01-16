@@ -1,23 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Srvcio.Controllers
 {
     public class EstadoMotonaveController : Controller
     {
         private readonly MdloDtos.IModelos.IEstadosMotonave _dbContext;
+        private readonly IMapper _mapper;
 
         MdloDtos.Utilidades.RespuestaServicios respuesta = new MdloDtos.Utilidades.RespuestaServicios();
-        public EstadoMotonaveController(MdloDtos.IModelos.IEstadosMotonave dbContext)
+        public EstadoMotonaveController(MdloDtos.IModelos.IEstadosMotonave dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         #region Consultar Estados Motonave
         [HttpGet("listar-estadosMotonave")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.EstadoMotonave>>> ListarEstadoMotonave()
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.EstadoMotonaveDTO>>> ListarEstadoMotonave()
         {
 
-            var ObEstadoMotonave = new List<MdloDtos.EstadoMotonave>();
+            var ObEstadoMotonave = new List<MdloDtos.DTO.EstadoMotonaveDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             try
             {
