@@ -379,10 +379,10 @@ public partial class DepositoDTO
     public List<MdloDtos.SpSubDeposito>? SubDepositos { get; set; }
 
 
-    public Deposito() { }
+    public DepositoDTO() { }
 
     //contructor para el subdeposito
-    public Deposito(string DeCia, int deRowidTrcro,int DeRowidSdeDspcho, string DeCdgoDpstoPdre, string DeCdgoPrdcto,
+    public DepositoDTO(string DeCia, int deRowidTrcro,int DeRowidSdeDspcho, string DeCdgoDpstoPdre, string DeCdgoPrdcto,
         string DeCdgoUsrioCrea,int DeCntdad
         ) {
 

@@ -124,7 +124,7 @@ namespace Srvcio.Controllers
                     {
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
                         respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                        respuesta.datos = _SolicitudRetiro;
+                        respuesta.datos = ObSubdeposito;
                     }
                     else
                     {
