@@ -1,10 +1,13 @@
-﻿using MdloDtos.Utilidades;
+﻿using AutoMapper;
+using MdloDtos.DTO;
+using MdloDtos.Utilidades;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace AccsoDtos.Parametrizacion
 {
@@ -15,15 +18,21 @@ namespace AccsoDtos.Parametrizacion
     /// 
     public class Compania:MdloDtos.IModelos.ICompania
     {
+        private readonly IMapper _mapper;
+
+        public Compania(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
         #region Ingresar datos a la entidad Compañia
-        public async Task<MdloDtos.Companium> IngresarCompania(MdloDtos.Companium _Companium)
+        public async Task<MdloDtos.DTO.companiaDTO> IngresarCompania(MdloDtos.DTO.companiaDTO _CompaniumDTO)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 var ObjCompanium = new MdloDtos.Companium();
                 try
                 {
-                    var CompaniumExiste = await this.VerificarCompania(_Companium.CiaCdgo);
+                    var CompaniumExiste = await this.VerificarCompania(_CompaniumDTO.CiaCdgo);
 
                     if (CompaniumExiste == true)
                     {
@@ -31,30 +40,30 @@ namespace AccsoDtos.Parametrizacion
                     }
                     else
                     {
-                        ObjCompanium.CiaCdgo = _Companium.CiaCdgo;
-                        ObjCompanium.CiaIdntfccion = _Companium.CiaIdntfccion;
-                        ObjCompanium.CiaNmbre = _Companium.CiaNmbre;
-                        ObjCompanium.CiaDrccion = _Companium.CiaDrccion;
-                        ObjCompanium.CiaNmbreCntcto = _Companium.CiaNmbreCntcto;
-                        ObjCompanium.CiaEmail = _Companium.CiaEmail;
-                        ObjCompanium.CiaTlfno = _Companium.CiaTlfno;
-                        ObjCompanium.CiaIdSstmaEntrnmnto = _Companium.CiaIdSstmaEntrnmnto;
-                        ObjCompanium.CiaInsideIdUsrio = _Companium.CiaInsideIdUsrio;
-                        ObjCompanium.CiaInsideClveUsrio = _Companium.CiaInsideClveUsrio;
-                        ObjCompanium.CiaInsideUrl1 = _Companium.CiaInsideUrl1;
-                        ObjCompanium.CiaInsideUrl2 = _Companium.CiaInsideUrl2;
-                        ObjCompanium.CiaRndcIdUsrio = _Companium.CiaRndcIdUsrio;
-                        ObjCompanium.CiaRndcClveUsrio = _Companium.CiaRndcClveUsrio;
-                        ObjCompanium.CiaRndcUrl1 = _Companium.CiaRndcUrl1;
-                        ObjCompanium.CiaRndcUrl2 = _Companium.CiaRndcUrl2;
-                        ObjCompanium.CiaActva = _Companium.CiaActva;
-                        ObjCompanium.CiaLgo = _Companium.CiaLgo;
+                        ObjCompanium.CiaCdgo = _CompaniumDTO.CiaCdgo;
+                        ObjCompanium.CiaIdntfccion = _CompaniumDTO.CiaIdntfccion;
+                        ObjCompanium.CiaNmbre = _CompaniumDTO.CiaNmbre;
+                        ObjCompanium.CiaDrccion = _CompaniumDTO.CiaDrccion;
+                        ObjCompanium.CiaNmbreCntcto = _CompaniumDTO.CiaNmbreCntcto;
+                        ObjCompanium.CiaEmail = _CompaniumDTO.CiaEmail;
+                        ObjCompanium.CiaTlfno = _CompaniumDTO.CiaTlfno;
+                        ObjCompanium.CiaIdSstmaEntrnmnto = _CompaniumDTO.CiaIdSstmaEntrnmnto;
+                        ObjCompanium.CiaInsideIdUsrio = _CompaniumDTO.CiaInsideIdUsrio;
+                        ObjCompanium.CiaInsideClveUsrio = _CompaniumDTO.CiaInsideClveUsrio;
+                        ObjCompanium.CiaInsideUrl1 = _CompaniumDTO.CiaInsideUrl1;
+                        ObjCompanium.CiaInsideUrl2 = _CompaniumDTO.CiaInsideUrl2;
+                        ObjCompanium.CiaRndcIdUsrio = _CompaniumDTO.CiaRndcIdUsrio;
+                        ObjCompanium.CiaRndcClveUsrio = _CompaniumDTO.CiaRndcClveUsrio;
+                        ObjCompanium.CiaRndcUrl1 = _CompaniumDTO.CiaRndcUrl1;
+                        ObjCompanium.CiaRndcUrl2 = _CompaniumDTO.CiaRndcUrl2;
+                        ObjCompanium.CiaActva = _CompaniumDTO.CiaActva;
+                        ObjCompanium.CiaLgo = _CompaniumDTO.CiaLgo;
 
                         var res = await _dbContex.Compania.AddAsync(ObjCompanium);
                         await _dbContex.SaveChangesAsync();
                     }
                     _dbContex.Dispose();
-                    return ObjCompanium;
+                    return _CompaniumDTO;
                 }
                 catch (Exception ex)
                 {
@@ -67,12 +76,14 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Listar todos los Compañia
-        public async Task<List<MdloDtos.Companium>> ListarCompania()
+        public async Task<List<MdloDtos.DTO.companiaDTO>> ListarCompania()
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
-                var lst = await _dbContex.Compania.ToListAsync();
+                var query = await _dbContex.Compania.ToListAsync();
                 _dbContex.Dispose();
+                
+                var lst = (query.Count > 0) ? _mapper.Map<List<companiaDTO>>(query) : new List<companiaDTO>();
                 return lst;
             }
         }
@@ -80,41 +91,39 @@ namespace AccsoDtos.Parametrizacion
 
 
         #region Actualizar Compañia por el objeto _Compañia
-        public async Task<MdloDtos.Companium> EditarCompania(MdloDtos.Companium _Companium)
+        public async Task<MdloDtos.DTO.companiaDTO> EditarCompania(MdloDtos.DTO.companiaDTO _CompaniumDTO)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 try
                 {
-                    MdloDtos.Companium CompaniumExiste = await _dbContex.Compania.FindAsync(_Companium.CiaCdgo);
+                    MdloDtos.Companium CompaniumExiste = await _dbContex.Compania.FindAsync(_CompaniumDTO.CiaCdgo);
                     if (CompaniumExiste != null)
                     {
-
-                        CompaniumExiste.CiaCdgo = _Companium.CiaCdgo;
-                        CompaniumExiste.CiaIdntfccion = _Companium.CiaIdntfccion;
-                        CompaniumExiste.CiaNmbre = _Companium.CiaNmbre;
-                        CompaniumExiste.CiaDrccion = _Companium.CiaDrccion;
-                        CompaniumExiste.CiaNmbreCntcto = _Companium.CiaNmbreCntcto;
-                        CompaniumExiste.CiaEmail = _Companium.CiaEmail;
-                        CompaniumExiste.CiaTlfno = _Companium.CiaTlfno;
-                        CompaniumExiste.CiaIdSstmaEntrnmnto = _Companium.CiaIdSstmaEntrnmnto;
-                        CompaniumExiste.CiaInsideIdUsrio = _Companium.CiaInsideIdUsrio;
-                        CompaniumExiste.CiaInsideClveUsrio = _Companium.CiaInsideClveUsrio;
-                        CompaniumExiste.CiaInsideUrl1 = _Companium.CiaInsideUrl1;
-                        CompaniumExiste.CiaInsideUrl2 = _Companium.CiaInsideUrl2;
-                        CompaniumExiste.CiaRndcIdUsrio = _Companium.CiaRndcIdUsrio;
-                        CompaniumExiste.CiaRndcClveUsrio = _Companium.CiaRndcClveUsrio;
-                        CompaniumExiste.CiaRndcUrl1 = _Companium.CiaRndcUrl1;
-                        CompaniumExiste.CiaRndcUrl2 = _Companium.CiaRndcUrl2;
-                        CompaniumExiste.CiaActva = _Companium.CiaActva;
-                        CompaniumExiste.CiaLgo = _Companium.CiaLgo;
+                        CompaniumExiste.CiaCdgo = _CompaniumDTO.CiaCdgo;
+                        CompaniumExiste.CiaIdntfccion = _CompaniumDTO.CiaIdntfccion;
+                        CompaniumExiste.CiaNmbre = _CompaniumDTO.CiaNmbre;
+                        CompaniumExiste.CiaDrccion = _CompaniumDTO.CiaDrccion;
+                        CompaniumExiste.CiaNmbreCntcto = _CompaniumDTO.CiaNmbreCntcto;
+                        CompaniumExiste.CiaEmail = _CompaniumDTO.CiaEmail;
+                        CompaniumExiste.CiaTlfno = _CompaniumDTO.CiaTlfno;
+                        CompaniumExiste.CiaIdSstmaEntrnmnto = _CompaniumDTO.CiaIdSstmaEntrnmnto;
+                        CompaniumExiste.CiaInsideIdUsrio = _CompaniumDTO.CiaInsideIdUsrio;
+                        CompaniumExiste.CiaInsideClveUsrio = _CompaniumDTO.CiaInsideClveUsrio;
+                        CompaniumExiste.CiaInsideUrl1 = _CompaniumDTO.CiaInsideUrl1;
+                        CompaniumExiste.CiaInsideUrl2 = _CompaniumDTO.CiaInsideUrl2;
+                        CompaniumExiste.CiaRndcIdUsrio = _CompaniumDTO.CiaRndcIdUsrio;
+                        CompaniumExiste.CiaRndcClveUsrio = _CompaniumDTO.CiaRndcClveUsrio;
+                        CompaniumExiste.CiaRndcUrl1 = _CompaniumDTO.CiaRndcUrl1;
+                        CompaniumExiste.CiaRndcUrl2 = _CompaniumDTO.CiaRndcUrl2;
+                        CompaniumExiste.CiaActva = _CompaniumDTO.CiaActva;
+                        CompaniumExiste.CiaLgo = _CompaniumDTO.CiaLgo;
                         _dbContex.Entry(CompaniumExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                         await _dbContex.SaveChangesAsync();
-
                     }
                     
                     _dbContex.Dispose();
-                    return CompaniumExiste;
+                    return _CompaniumDTO;
                 }
                 catch (Exception ex)
                 {
@@ -126,35 +135,38 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Filtrar Compañia por codigo General
-        public async Task<List<MdloDtos.Companium>> FiltrarCompaniaGeneral(string Codigo)
+        public async Task<List<MdloDtos.DTO.companiaDTO>> FiltrarCompaniaGeneral(string Codigo)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
-                var lst = await (from p in _dbContex.Compania
+                var query = await (from p in _dbContex.Compania
                                  where p.CiaCdgo.Contains(Codigo) || p.CiaNmbre.Contains(Codigo)
                                  select p).ToListAsync();
                 _dbContex.Dispose();
+
+                var lst = (query.Count > 0) ? _mapper.Map<List<companiaDTO>>(query) : new List<companiaDTO>();
                 return lst;
             }
         }
         #endregion
 
         #region Filtrar Compañia por codigo Especifico
-        public async Task<List<MdloDtos.Companium>> FiltrarCompaniaEspecifico(string Codigo)
+        public async Task<List<MdloDtos.DTO.companiaDTO>> FiltrarCompaniaEspecifico(string Codigo)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
-                var lst = await (from p in _dbContex.Compania
+                var query = await (from p in _dbContex.Compania
                                  where p.CiaCdgo == Codigo
                                  select p).ToListAsync();
                 _dbContex.Dispose();
+                var lst = (query.Count > 0) ? _mapper.Map<List<companiaDTO>>(query) : new List<companiaDTO>();
                 return lst;
             }
         }
         #endregion
 
         #region Eliminar Compañia Por codigo.
-        public async Task<MdloDtos.Companium> EliminarCompania(string RowId)
+        public async Task<dynamic> EliminarCompania(string RowId)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {

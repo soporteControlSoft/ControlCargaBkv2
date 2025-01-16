@@ -12,7 +12,7 @@ namespace VldcionDtos
     public class ValidacionEmpaque
     {
 
-        AccsoDtos.Parametrizacion.Compania ObjCompania = new AccsoDtos.Parametrizacion.Compania();
+        AccsoDtos.Parametrizacion.Compania ObjCompania = new AccsoDtos.Parametrizacion.Compania(null);
         AccsoDtos.Parametrizacion.Empaque ObjEmpaque = new AccsoDtos.Parametrizacion.Empaque();
 
         #region Validacion de Empaque , metodo Ingreso

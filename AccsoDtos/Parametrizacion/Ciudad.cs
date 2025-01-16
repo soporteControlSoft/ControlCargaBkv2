@@ -47,7 +47,6 @@ namespace AccsoDtos.Parametrizacion
                         var res = await _dbContex.Ciudads.AddAsync(ObjCiudad);
                         await _dbContex.SaveChangesAsync();
                     }
-
                     
                 }
                 catch (Exception ex)

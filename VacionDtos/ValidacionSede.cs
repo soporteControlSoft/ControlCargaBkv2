@@ -12,7 +12,7 @@ namespace VldcionDtos
     public class ValidacionSede
     {
 
-        AccsoDtos.Parametrizacion.Compania ObjCompania = new AccsoDtos.Parametrizacion.Compania();
+        AccsoDtos.Parametrizacion.Compania ObjCompania = new AccsoDtos.Parametrizacion.Compania(null);
         AccsoDtos.Parametrizacion.Sede ObjSede = new AccsoDtos.Parametrizacion.Sede();
 
         #region Validacion de Sede , metodo Ingreso

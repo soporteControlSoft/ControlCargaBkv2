@@ -128,6 +128,60 @@ namespace AccsoDtos.Mappings
                 .ForMember(dest => dest.CodigoUsuario, opt => opt.MapFrom((src, _) => src.ReCdgoUsrio))
                 .ForMember(dest => dest.Estado, opt => opt.MapFrom((src, _) => src.ReActvo));
 
+            CreateMap<VwEstdoHchoLstarVstaMtnve, ListadoEstadoHechosDTO>()
+                .ForMember(dest => dest.SpCdgoMtnve, opt => opt.MapFrom((src, _) => src.SpCdgoMtnve))
+                .ForMember(dest => dest.SpRowid, opt => opt.MapFrom((src, _) => src.SpRowid))
+                .ForMember(dest => dest.SpFchaArrbo, opt => opt.MapFrom((src, _) => src.SpFchaArrbo))
+                .ForMember(dest => dest.SpFchaAtrque, opt => opt.MapFrom((src, _) => src.SpFchaAtrque))
+                .ForMember(dest => dest.SpFchaZrpe, opt => opt.MapFrom((src, _) => src.SpFchaZrpe))
+                .ForMember(dest => dest.SpFchaCrcion, opt => opt.MapFrom((src, _) => src.SpFchaCrcion))
+                .ForMember(dest => dest.SpCdgoEstdoMtnve, opt => opt.MapFrom((src, _) => src.SpCdgoEstdoMtnve))
+                .ForMember(dest => dest.VmRowid, opt => opt.MapFrom((src, _) => src.VmRowid))
+                .ForMember(dest => dest.VmScncia, opt => opt.MapFrom((src, _) => src.VmScncia))
+                .ForMember(dest => dest.VmDscrpcion, opt => opt.MapFrom((src, _) => src.VmDscrpcion))
+                .ForMember(dest => dest.MoCntdadEsctllas, opt => opt.MapFrom((src, _) => src.MoCntdadEsctllas))
+                .ForMember(dest => dest.EmCdgo, opt => opt.MapFrom((src, _) => src.EmCdgo))
+                .ForMember(dest => dest.EmNmbre, opt => opt.MapFrom((src, _) => src.EmNmbre));
+
+            CreateMap<Sector, SectorDTO>()
+                .ForMember(dest => dest.IdSector, opt => opt.MapFrom((src, _) => src.SeRowid))
+                .ForMember(dest => dest.IdCodigoSector, opt => opt.MapFrom((src, _) => src.SeCdgo))
+                .ForMember(dest => dest.IdNombreSector, opt => opt.MapFrom((src, _) => src.SeNmbre));
+
+            CreateMap<Companium, companiaDTO>()
+                .ForMember(dest => dest.CiaCdgo, opt => opt.MapFrom((src, _) => src.CiaCdgo))
+                .ForMember(dest => dest.CiaIdntfccion, opt => opt.MapFrom((src, _) => src.CiaIdntfccion))
+                .ForMember(dest => dest.CiaNmbre, opt => opt.MapFrom((src, _) => src.CiaNmbre))
+                .ForMember(dest => dest.CiaDrccion, opt => opt.MapFrom((src, _) => src.CiaDrccion))
+                .ForMember(dest => dest.CiaNmbreCntcto, opt => opt.MapFrom((src, _) => src.CiaNmbreCntcto))
+                .ForMember(dest => dest.CiaEmail, opt => opt.MapFrom((src, _) => src.CiaEmail))
+                .ForMember(dest => dest.CiaTlfno, opt => opt.MapFrom((src, _) => src.CiaTlfno))
+                .ForMember(dest => dest.CiaIdSstmaEntrnmnto, opt => opt.MapFrom((src, _) => src.CiaIdSstmaEntrnmnto))
+                .ForMember(dest => dest.CiaInsideIdUsrio, opt => opt.MapFrom((src, _) => src.CiaInsideIdUsrio))
+                .ForMember(dest => dest.CiaInsideClveUsrio, opt => opt.MapFrom((src, _) => src.CiaInsideClveUsrio))
+                .ForMember(dest => dest.CiaInsideUrl1, opt => opt.MapFrom((src, _) => src.CiaInsideUrl1))
+                .ForMember(dest => dest.CiaInsideUrl2, opt => opt.MapFrom((src, _) => src.CiaInsideUrl2))
+                .ForMember(dest => dest.CiaRndcIdUsrio, opt => opt.MapFrom((src, _) => src.CiaRndcIdUsrio))
+                .ForMember(dest => dest.CiaRndcClveUsrio, opt => opt.MapFrom((src, _) => src.CiaRndcClveUsrio))
+                .ForMember(dest => dest.CiaRndcUrl1, opt => opt.MapFrom((src, _) => src.CiaRndcUrl1))
+                .ForMember(dest => dest.CiaRndcUrl2, opt => opt.MapFrom((src, _) => src.CiaRndcUrl2))
+                .ForMember(dest => dest.CiaActva, opt => opt.MapFrom((src, _) => src.CiaActva))
+                .ForMember(dest => dest.CiaLgo, opt => opt.MapFrom((src, _) => src.CiaLgo))
+                .ForMember(dest => dest.ConceptoPesajes, opt => opt.MapFrom((src, _) => src.ConceptoPesajes));
+
+            CreateMap<Producto, ProductoDTO>()
+                .ForMember(dest => dest.PrCdgo, opt => opt.MapFrom((src, _) => src.PrCdgo))
+                .ForMember(dest => dest.PrNmbre, opt => opt.MapFrom((src, _) => src.PrNmbre))
+                .ForMember(dest => dest.PrActvo, opt => opt.MapFrom((src, _) => src.PrActvo))
+                .ForMember(dest => dest.PrSlctarEmpque, opt => opt.MapFrom((src, _) => src.PrSlctarEmpque))
+                .ForMember(dest => dest.PrCdgoErp, opt => opt.MapFrom((src, _) => src.PrCdgoErp))
+                .ForMember(dest => dest.PrSstnciaCntrlda, opt => opt.MapFrom((src, _) => src.PrSstnciaCntrlda))
+                .ForMember(dest => dest.Depositos, opt => opt.MapFrom((src, _) => src.Depositos));
+
+            CreateMap<PuertoOrigen, PuertoOrigenDTO>()
+                .ForMember(dest => dest.PoCdgo, opt => opt.MapFrom((src, _) => src.PoCdgo))
+                .ForMember(dest => dest.PoDscrpcion, opt => opt.MapFrom((src, _) => src.PoDscrpcion))
+                .ForMember(dest => dest.PoActvo, opt => opt.MapFrom((src, _) => src.PoActvo));
         }
     }
 }

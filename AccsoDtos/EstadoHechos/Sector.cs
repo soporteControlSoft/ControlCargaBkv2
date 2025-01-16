@@ -1,10 +1,14 @@
-﻿using MdloDtos.Utilidades;
+﻿using AutoMapper;
+using MdloDtos;
+using MdloDtos.DTO;
+using MdloDtos.Utilidades;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace AccsoDtos.EstadoHechos
 {
@@ -15,8 +19,17 @@ namespace AccsoDtos.EstadoHechos
     /// 
     public class Sector:MdloDtos.IModelos.ISector
     {
+
+        private readonly CcVenturaContext _dbContext;
+        private readonly IMapper _mapper;
+
+        public Sector(IMapper mapper, MdloDtos.CcVenturaContext dbContext)
+        {
+            _mapper = mapper;
+            _dbContext = dbContext;
+        }
         #region Ingresar datos a la entidad sector
-        public async Task<MdloDtos.Sector> IngresarSector(MdloDtos.Sector _Sector)
+        public async Task<MdloDtos.DTO.SectorDTO> IngresarSector(MdloDtos.DTO.SectorDTO _SectorDTO)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
@@ -24,7 +37,7 @@ namespace AccsoDtos.EstadoHechos
                 try
                 {
                     // Verifica si el sector ya existe
-                    var SectorExiste = await this.VerificarSector(_Sector.SeRowid);
+                    var SectorExiste = await this.VerificarSector(_SectorDTO.IdSector);
 
                     if (SectorExiste == true)
                     {
@@ -48,7 +61,7 @@ namespace AccsoDtos.EstadoHechos
                         }
 
                         // Asignamos el nuevo código convertido a ObjSector.SeCdgo
-                        ObjSector.SeNmbre = _Sector.SeNmbre;
+                        ObjSector.SeNmbre = _SectorDTO.IdNombreSector;
                         ObjSector.SeCdgo = nuevoCodigo.ToString();  // Convertimos de nuevo a string antes de asignarlo
 
                         // Agregar el nuevo sector y guardar los cambios
@@ -64,7 +77,7 @@ namespace AccsoDtos.EstadoHechos
                 {
                     _dbContex.Dispose();
                 }
-                return ObjSector;
+                return _SectorDTO;
             }
 
         }
@@ -72,16 +85,16 @@ namespace AccsoDtos.EstadoHechos
 
 
         #region Listar todos las Sector
-        public async Task<List<MdloDtos.Sector>> ListarSector()
+        public async Task<List<MdloDtos.DTO.SectorDTO>> ListarSector()
         {
-            List<MdloDtos.Sector> listSector = new List<MdloDtos.Sector>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
-                listSector = await _dbContex.Sectors.ToListAsync();
-                _dbContex.Dispose();
+                var query = await _dbContex.Sectors.ToListAsync();
+              
                
+                var listSector = _mapper.Map<List<SectorDTO>>(query);
+                return listSector;
             }
-            return listSector;
         }
         #endregion
 

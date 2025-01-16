@@ -1,4 +1,6 @@
-﻿using MdloDtos;
+﻿using AutoMapper;
+using MdloDtos;
+using MdloDtos.DTO;
 using MdloDtos.Utilidades;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -6,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace AccsoDtos.EstadoHechos
 {
@@ -14,23 +17,36 @@ namespace AccsoDtos.EstadoHechos
     /// Jesus Alberto Calzada
     /// </summary>
     /// 
+
     public class vwEstadoHechosListas : MdloDtos.IModelos.IEstadoHechosListas
     {
-        #region Listar las visitas de motonaves en el estado de hechos
-        public async Task<List<MdloDtos.VwEstdoHchoLstarVstaMtnve>> ListarEstadoHechosVisitaMotonave()
+
+        private readonly CcVenturaContext _dbContext;
+        private readonly IMapper _mapper;
+
+        public vwEstadoHechosListas(IMapper mapper, MdloDtos.CcVenturaContext dbContext)
         {
-            List<MdloDtos.VwEstdoHchoLstarVstaMtnve> ListarEstadoHechosVisitaMotonave = new List<MdloDtos.VwEstdoHchoLstarVstaMtnve>();
+            _mapper = mapper;
+            _dbContext = dbContext;
+        }
+
+
+        #region Listar las visitas de motonaves en el estado de hechos
+        public async Task<List<MdloDtos.DTO.ListadoEstadoHechosDTO>> ListarEstadoHechosVisitaMotonave()
+        {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
-                ListarEstadoHechosVisitaMotonave = await _dbContex.VwEstdoHchoLstarVstaMtnves
+                var query = await _dbContex.VwEstdoHchoLstarVstaMtnves
                     .OrderBy(v => v.EmNmbre == "ATRACADA" ? 1 :
                                   v.EmNmbre == "FONDEADA" ? 2 :
                                   v.EmNmbre == "ANUNCIADA" ? 3 :
                                   v.EmNmbre == "ZARPE" ? 4 : 5) // Ordenar según el valor de EmNmbre
                     .ToListAsync();
-                _dbContex.Dispose();
+            
+                var listarEstadoHechosVisitaMotonave = _mapper.Map<List<ListadoEstadoHechosDTO>>(query);
+                return listarEstadoHechosVisitaMotonave;
             }
-            return ListarEstadoHechosVisitaMotonave;
+         
         }
         #endregion
 
@@ -91,15 +107,15 @@ namespace AccsoDtos.EstadoHechos
         #endregion
 
         #region Filtrar ListaEstadoHechosGeneral por codigo o descripcion general
-        public async Task<List<MdloDtos.VwEstdoHchoLstarVstaMtnve>> FiltrarListarEstadoHechosVisitaMotonaveGeneral(string busqueda)
+        public async Task<List<MdloDtos.DTO.ListadoEstadoHechosDTO>> FiltrarListarEstadoHechosVisitaMotonaveGeneral(string busqueda)
         {
             // Crear una lista vacía para almacenar los resultados
-            List<MdloDtos.VwEstdoHchoLstarVstaMtnve> ListarEstadoHechosVisitaMotonaveBusqueda = new List<MdloDtos.VwEstdoHchoLstarVstaMtnve>();
+            //List<MdloDtos.VwEstdoHchoLstarVstaMtnve> ListarEstadoHechosVisitaMotonaveBusqueda = new List<MdloDtos.VwEstdoHchoLstarVstaMtnve>();
 
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 // Realizar la consulta con el filtro de búsqueda
-                ListarEstadoHechosVisitaMotonaveBusqueda = await _dbContex.VwEstdoHchoLstarVstaMtnves
+                var query = await _dbContex.VwEstdoHchoLstarVstaMtnves
                     .Where(v => string.IsNullOrEmpty(busqueda)  // Verificar si el parámetro de búsqueda está vacío
                                 || v.VmRowid.ToString().Contains(busqueda) // Filtrar por vm_rowid como string
                                 || v.VmDscrpcion.Contains(busqueda)) // Filtrar por vm_dscrpcion
@@ -107,12 +123,12 @@ namespace AccsoDtos.EstadoHechos
                                   v.EmNmbre == "FONDEADA" ? 2 :
                                   v.EmNmbre == "ANUNCIADA" ? 3 :
                                   v.EmNmbre == "ZARPE" ? 4 : 5) // Ordenar según el valor de EmNmbre
-                    .ToListAsync();
+                .ToListAsync();
 
-                // No es necesario llamar a _dbContex.Dispose() explícitamente ya que se usa dentro de un using
+                var listClasificacion = _mapper.Map<List<ListadoEstadoHechosDTO>>(query);
+                return listClasificacion;
             }
 
-            return ListarEstadoHechosVisitaMotonaveBusqueda;
         }
 
         #endregion

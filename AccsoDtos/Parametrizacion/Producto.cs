@@ -1,10 +1,13 @@
-﻿using MdloDtos.Utilidades;
+﻿using AutoMapper;
+using MdloDtos.DTO;
+using MdloDtos.Utilidades;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace AccsoDtos.Parametrizacion
 {
@@ -15,15 +18,21 @@ namespace AccsoDtos.Parametrizacion
     /// 
     public class Producto : MdloDtos.IModelos.IProducto
     {
+        private readonly IMapper _mapper;
+
+        public Producto(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
         #region ingreso de datos a la entidad Producto
-        public async Task<MdloDtos.Producto> IngresarProducto(MdloDtos.Producto _Producto)
+        public async Task<MdloDtos.DTO.ProductoDTO> IngresarProducto(MdloDtos.DTO.ProductoDTO _ProductoDTO)
         {
             var ObjProducto = new MdloDtos.Producto();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 try
                 {
-                    var ProductoExiste = await this.VerificarProducto(_Producto.PrCdgo);
+                    var ProductoExiste = await this.VerificarProducto(_ProductoDTO.PrCdgo);
 
                     if (ProductoExiste == true)
                     {
@@ -31,12 +40,12 @@ namespace AccsoDtos.Parametrizacion
                     }
                     else
                     {
-                        ObjProducto.PrCdgo = _Producto.PrCdgo;
-                        ObjProducto.PrNmbre = _Producto.PrNmbre;
-                        ObjProducto.PrActvo = _Producto.PrActvo;
-                        ObjProducto.PrSlctarEmpque = _Producto.PrSlctarEmpque;
-                        ObjProducto.PrCdgoErp = _Producto.PrCdgoErp;
-                        ObjProducto.PrSstnciaCntrlda = _Producto.PrSstnciaCntrlda;
+                        ObjProducto.PrCdgo = _ProductoDTO.PrCdgo;
+                        ObjProducto.PrNmbre = _ProductoDTO.PrNmbre;
+                        ObjProducto.PrActvo = _ProductoDTO.PrActvo;
+                        ObjProducto.PrSlctarEmpque = _ProductoDTO.PrSlctarEmpque;
+                        ObjProducto.PrCdgoErp = _ProductoDTO.PrCdgoErp;
+                        ObjProducto.PrSstnciaCntrlda = _ProductoDTO.PrSstnciaCntrlda;
 
                         var res = await _dbContex.Productos.AddAsync(ObjProducto);
                         await _dbContex.SaveChangesAsync();
@@ -47,7 +56,7 @@ namespace AccsoDtos.Parametrizacion
                     throw new Exception(ex.ToString());
                 }
                 _dbContex.Dispose();
-                return ObjProducto;
+                return _ProductoDTO;
             }
         }
         #endregion
@@ -75,7 +84,7 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region valida si existe un Producto validando codigo, nombre pasando como parámetro un Objeto Producto
-        public bool ValidacionProductoNombreActualizar(MdloDtos.Producto objProducto)
+        public bool ValidacionProductoNombreActualizar(MdloDtos.DTO.ProductoDTO objProducto)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
@@ -100,35 +109,37 @@ namespace AccsoDtos.Parametrizacion
 
 
         #region consultar los datos de Producto mediante un parámetro Codigo General
-        public async Task<List<MdloDtos.Producto>> FiltrarProductoGeneral(string Codigo)
+        public async Task<List<MdloDtos.DTO.ProductoDTO>> FiltrarProductoGeneral(string Codigo)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
-                var lst = await (from p in _dbContex.Productos
+                var query = await (from p in _dbContex.Productos
                                  where p.PrCdgo.Contains(Codigo) || p.PrNmbre.Contains(Codigo)
                                  select p).ToListAsync();
                 _dbContex.Dispose();
+                var lst = (query.Count > 0) ? _mapper.Map<List<ProductoDTO>>(query) : new List<ProductoDTO>();
                 return lst;
             }
         }
         #endregion
 
         #region consultar los datos de Producto mediante un parámetro Codigo Especifico
-        public async Task<List<MdloDtos.Producto>> FiltrarProductoEspecifico(string Codigo)
+        public async Task<List<MdloDtos.DTO.ProductoDTO>> FiltrarProductoEspecifico(string Codigo)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
-                var lst = await (from p in _dbContex.Productos
+                var query = await (from p in _dbContex.Productos
                                  where p.PrCdgo == Codigo
                                  select p).ToListAsync();
                 _dbContex.Dispose();
+                var lst = (query.Count > 0) ? _mapper.Map<List<ProductoDTO>>(query) : new List<ProductoDTO>();
                 return lst;
             }
         }
         #endregion
 
         #region Actualiza un Producto pasando un parámetro _Producto
-        public async Task<MdloDtos.Producto> EditarProducto(MdloDtos.Producto _Producto)
+        public async Task<MdloDtos.DTO.ProductoDTO> EditarProducto(MdloDtos.DTO.ProductoDTO _Producto)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
@@ -147,7 +158,7 @@ namespace AccsoDtos.Parametrizacion
                         await _dbContex.SaveChangesAsync();
                     }
                     _dbContex.Dispose();
-                    return ProductoExiste;
+                    return _Producto;
                 }
                 catch (Exception ex)
                 {
@@ -159,19 +170,21 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region consultar todos los datos de Productos
-        public async Task<List<MdloDtos.Producto>> ListarProducto()
+        public async Task<List<MdloDtos.DTO.ProductoDTO>> ListarProducto()
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
-                var lst = await _dbContex.Productos.ToListAsync();
+                var query = await _dbContex.Productos.ToListAsync();
                 _dbContex.Dispose();
+
+                var lst = (query.Count > 0) ? _mapper.Map<List<ProductoDTO>>(query) : new List<ProductoDTO>();
                 return lst;
             }
         }
         #endregion
 
         #region Elimina un Producto mediante parámetro Codigo
-        public async Task<MdloDtos.Producto> EliminarProducto(string Codigo)
+        public async Task<dynamic> EliminarProducto(string Codigo)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {

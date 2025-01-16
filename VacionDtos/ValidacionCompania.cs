@@ -11,10 +11,10 @@ namespace VldcionDtos
     /// </summary>
     public class ValidacionCompania
     {
-        AccsoDtos.Parametrizacion.Compania ObjCompania = new AccsoDtos.Parametrizacion.Compania();
+        AccsoDtos.Parametrizacion.Compania ObjCompania = new AccsoDtos.Parametrizacion.Compania(null);
 
         #region Validacion de AuditoriaMotivo , metodo Ingreso
-        public async Task<int> ValidarIngreso(MdloDtos.Companium objCompania)
+        public async Task<int> ValidarIngreso(MdloDtos.DTO.companiaDTO objCompania)
         {
             int resultado = 0;
             try
@@ -53,7 +53,7 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de Compania , metodo Eliminar
-        public async Task<int> ValidarEliminar(MdloDtos.Companium objCompania_)
+        public async Task<int> ValidarEliminar(MdloDtos.DTO.companiaDTO objCompania_)
         {
             int resultado = 0;
             try
@@ -89,7 +89,7 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de Compania , metodo Actualizar
-        public async Task<int> ValidarActualizacion(MdloDtos.Companium objCompania)
+        public async Task<int> ValidarActualizacion(MdloDtos.DTO.companiaDTO objCompania)
         {
             int resultado = 0;
             try

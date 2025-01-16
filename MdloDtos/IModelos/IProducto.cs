@@ -8,16 +8,16 @@ namespace MdloDtos.IModelos
 {
     public interface IProducto
     {
-        public Task<List<MdloDtos.Producto>> ListarProducto();
+        public Task<List<MdloDtos.DTO.ProductoDTO>> ListarProducto();
 
-        public Task<List<MdloDtos.Producto>> FiltrarProductoGeneral(String Codigo);
-        public Task<List<MdloDtos.Producto>> FiltrarProductoEspecifico(String Codigo);
+        public Task<List<MdloDtos.DTO.ProductoDTO>> FiltrarProductoGeneral(String Codigo);
+        public Task<List<MdloDtos.DTO.ProductoDTO>> FiltrarProductoEspecifico(String Codigo);
 
-        public Task<MdloDtos.Producto> IngresarProducto (MdloDtos.Producto ObjProducto);   
+        public Task<MdloDtos.DTO.ProductoDTO> IngresarProducto (MdloDtos.DTO.ProductoDTO ObjProducto);   
 
-        public Task<MdloDtos.Producto> EditarProducto(MdloDtos.Producto ObjProducto);
+        public Task<MdloDtos.DTO.ProductoDTO> EditarProducto(MdloDtos.DTO.ProductoDTO ObjProducto);
 
-        public Task<MdloDtos.Producto> EliminarProducto(String codigo);
+        public Task<dynamic> EliminarProducto(String codigo);
 
     }
 }

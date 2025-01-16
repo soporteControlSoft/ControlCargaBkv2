@@ -1,24 +1,33 @@
-﻿using MdloDtos.Utilidades;
+﻿using AutoMapper;
+using MdloDtos.DTO;
+using MdloDtos.Utilidades;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace AccsoDtos.Parametrizacion
 {
     public class PuertoOrigen : MdloDtos.IModelos.IPuertoOrigen
     {
+        private readonly IMapper _mapper;
+
+        public PuertoOrigen(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
         #region Ingresar datos a la entidad Puerto Origen
-        public async Task<MdloDtos.PuertoOrigen> IngresarPuertoOrigen(MdloDtos.PuertoOrigen _PuertoOrigen)
+        public async Task<MdloDtos.DTO.PuertoOrigenDTO> IngresarPuertoOrigen(MdloDtos.DTO.PuertoOrigenDTO _PuertoOrigenDTO)
         {
             var ObjPuertoOrigen = new MdloDtos.PuertoOrigen();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 try
                 {
-                    var PuertoOrigenExiste = await this.VerificarPuertoOrigen(_PuertoOrigen.PoCdgo);
+                    var PuertoOrigenExiste = await this.VerificarPuertoOrigen(_PuertoOrigenDTO.PoCdgo);
 
                     if (PuertoOrigenExiste == true)
                     {
@@ -26,9 +35,9 @@ namespace AccsoDtos.Parametrizacion
                     }
                     else
                     {
-                        ObjPuertoOrigen.PoCdgo = _PuertoOrigen.PoCdgo;
-                        ObjPuertoOrigen.PoDscrpcion = _PuertoOrigen.PoDscrpcion;
-                        ObjPuertoOrigen.PoActvo = _PuertoOrigen.PoActvo;
+                        ObjPuertoOrigen.PoCdgo = _PuertoOrigenDTO.PoCdgo;
+                        ObjPuertoOrigen.PoDscrpcion = _PuertoOrigenDTO.PoDscrpcion;
+                        ObjPuertoOrigen.PoActvo = _PuertoOrigenDTO.PoActvo;
                         var res = await _dbContex.PuertoOrigens.AddAsync(ObjPuertoOrigen);
                         await _dbContex.SaveChangesAsync();
                     }
@@ -39,21 +48,23 @@ namespace AccsoDtos.Parametrizacion
                     throw new Exception(ex.ToString());
                 }
                 _dbContex.Dispose();
-                return ObjPuertoOrigen;
+                return _PuertoOrigenDTO;
             }
 
         }
         #endregion
 
         #region Consultar todos los datos de Puerto Origen mediante un parametro Codigo
-        public async Task<List<MdloDtos.PuertoOrigen>> FiltrarPuertoOrigenGeneral(String Codigo)
+        public async Task<List<MdloDtos.DTO.PuertoOrigenDTO>> FiltrarPuertoOrigenGeneral(String Codigo)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
-                var lst = await (from p in _dbContex.PuertoOrigens
+                var query = await (from p in _dbContex.PuertoOrigens
                                  where p.PoCdgo.Contains(Codigo) || p.PoDscrpcion.Contains(Codigo)
                                  select p).ToListAsync();
                 _dbContex.Dispose();
+
+                var lst = (query.Count > 0) ? _mapper.Map<List<PuertoOrigenDTO>>(query) : new List<PuertoOrigenDTO>();
                 return lst;
             }
 
@@ -61,14 +72,15 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Consultar todos los datos de Puerto Origen mediante un parametro Codigo especifico
-        public async Task<List<MdloDtos.PuertoOrigen>> FiltrarPuertoOrigenEspecifico(String Codigo)
+        public async Task<List<MdloDtos.DTO.PuertoOrigenDTO>> FiltrarPuertoOrigenEspecifico(String Codigo)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
-                var lst = await (from p in _dbContex.PuertoOrigens
+                var query = await (from p in _dbContex.PuertoOrigens
                                  where p.PoCdgo == Codigo
                                  select p).ToListAsync();
                 _dbContex.Dispose();
+                var lst = (query.Count > 0) ? _mapper.Map<List<PuertoOrigenDTO>>(query) : new List<PuertoOrigenDTO>();
                 return lst;
             }
 
@@ -76,25 +88,25 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Actualizar Puerto Origen pasando el objeto _PuertoOrigen
-        public async Task<MdloDtos.PuertoOrigen> EditarPuertoOrigen(MdloDtos.PuertoOrigen _PuertoOrigen)
+        public async Task<MdloDtos.DTO.PuertoOrigenDTO> EditarPuertoOrigen(MdloDtos.DTO.PuertoOrigenDTO _PuertoOrigenDTO)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 try
                 {
-                    MdloDtos.PuertoOrigen PuertoOrigenExiste = await _dbContex.PuertoOrigens.FindAsync(_PuertoOrigen.PoCdgo);
+                    MdloDtos.PuertoOrigen PuertoOrigenExiste = await _dbContex.PuertoOrigens.FindAsync(_PuertoOrigenDTO.PoCdgo);
                     if (PuertoOrigenExiste != null)
                     {
 
-                        PuertoOrigenExiste.PoCdgo = _PuertoOrigen.PoCdgo;
-                        PuertoOrigenExiste.PoDscrpcion = _PuertoOrigen.PoDscrpcion;
-                        PuertoOrigenExiste.PoActvo = _PuertoOrigen.PoActvo;
+                        PuertoOrigenExiste.PoCdgo = _PuertoOrigenDTO.PoCdgo;
+                        PuertoOrigenExiste.PoDscrpcion = _PuertoOrigenDTO.PoDscrpcion;
+                        PuertoOrigenExiste.PoActvo = _PuertoOrigenDTO.PoActvo;
                         _dbContex.Entry(PuertoOrigenExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                         await _dbContex.SaveChangesAsync();
 
                     }
                     _dbContex.Dispose();
-                    return PuertoOrigenExiste;
+                    return _PuertoOrigenDTO;
                 }
                 catch (Exception ex)
                 {
@@ -106,12 +118,14 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Consultar todos los datos de Puerto Origen
-        public async Task<List<MdloDtos.PuertoOrigen>> ListarPuertoOrigen()
+        public async Task<List<MdloDtos.DTO.PuertoOrigenDTO>> ListarPuertoOrigen()
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
-                var lst = await _dbContex.PuertoOrigens.ToListAsync();
+                var query = await _dbContex.PuertoOrigens.ToListAsync();
                 _dbContex.Dispose();
+
+                var lst = (query.Count > 0) ? _mapper.Map<List<PuertoOrigenDTO>>(query) : new List<PuertoOrigenDTO>();
                 return lst;
             }
 
@@ -120,7 +134,7 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Eliminar Puerto Origen
-        public async Task<MdloDtos.PuertoOrigen> EliminarPuertoOrigen(string Codigo)
+        public async Task<dynamic> EliminarPuertoOrigen(string Codigo)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {

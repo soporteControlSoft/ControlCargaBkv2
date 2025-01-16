@@ -8,15 +8,15 @@ namespace MdloDtos.IModelos
 {
     public interface ICompania
     {
-        public Task<List<MdloDtos.Companium>> ListarCompania();
+        public Task<List<MdloDtos.DTO.companiaDTO>> ListarCompania();
 
-        public Task<MdloDtos.Companium> IngresarCompania(MdloDtos.Companium ObjCiudad);
+        public Task<MdloDtos.DTO.companiaDTO> IngresarCompania(MdloDtos.DTO.companiaDTO ObjCiudad);
 
-        public Task<MdloDtos.Companium> EditarCompania(MdloDtos.Companium ObjCiudad);
+        public Task<MdloDtos.DTO.companiaDTO> EditarCompania(MdloDtos.DTO.companiaDTO ObjCiudad);
 
-        public Task<List<MdloDtos.Companium>> FiltrarCompaniaGeneral(String Codigo);
-        public Task<List<MdloDtos.Companium>> FiltrarCompaniaEspecifico(String Codigo);
-        public Task<MdloDtos.Companium> EliminarCompania(string Codigo);
+        public Task<List<MdloDtos.DTO.companiaDTO>> FiltrarCompaniaGeneral(String Codigo);
+        public Task<List<MdloDtos.DTO.companiaDTO>> FiltrarCompaniaEspecifico(String Codigo);
+        public Task<dynamic> EliminarCompania(string Codigo);
 
     }
 }

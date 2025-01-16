@@ -13,7 +13,7 @@ namespace VldcionDtos
     public class ValidacionTercero
     {
         AccsoDtos.Parametrizacion.Tercero ObjTercero = new AccsoDtos.Parametrizacion.Tercero();
-        AccsoDtos.Parametrizacion.Compania ObjCompania = new AccsoDtos.Parametrizacion.Compania();
+        AccsoDtos.Parametrizacion.Compania ObjCompania = new AccsoDtos.Parametrizacion.Compania(null);
        
         #region Validacion de Tercero , metodo Ingreso
         public async Task<int> ValidarIngreso(MdloDtos.Tercero objTercero) {

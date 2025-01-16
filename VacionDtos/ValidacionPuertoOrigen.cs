@@ -11,10 +11,10 @@ namespace VldcionDtos
     /// </summary>
     public class ValidacionPuertoOrigen
     {
-        AccsoDtos.Parametrizacion.PuertoOrigen ObjPuertoOrigen = new AccsoDtos.Parametrizacion.PuertoOrigen();
+        AccsoDtos.Parametrizacion.PuertoOrigen ObjPuertoOrigen = new AccsoDtos.Parametrizacion.PuertoOrigen(null);
 
         #region Validacion de PuertoOrigen , metodo Ingreso
-        public async Task<int> ValidarIngreso(MdloDtos.PuertoOrigen objPuertoOrigen)
+        public async Task<int> ValidarIngreso(MdloDtos.DTO.PuertoOrigenDTO objPuertoOrigen)
         {
             int resultado = 0;
             try
@@ -87,7 +87,7 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de PuertoOrigen , metodo Actualizar
-        public async Task<int> ValidarActualizacion(MdloDtos.PuertoOrigen objPuertoOrigen)
+        public async Task<int> ValidarActualizacion(MdloDtos.DTO.PuertoOrigenDTO objPuertoOrigen)
         {
             int resultado = 0;
             try

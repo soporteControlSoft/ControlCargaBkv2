@@ -8,8 +8,8 @@ namespace MdloDtos.IModelos
 {
     public interface ISector
     {
-        public Task<MdloDtos.Sector> IngresarSector(MdloDtos.Sector ObjSector);
-        public Task<List<MdloDtos.Sector>> ListarSector();
+        public Task<MdloDtos.DTO.SectorDTO> IngresarSector(MdloDtos.DTO.SectorDTO ObjSector);
+        public Task<List<MdloDtos.DTO.SectorDTO>> ListarSector();
         public Task<bool> VerificarSector(int Codigo);
 
     }

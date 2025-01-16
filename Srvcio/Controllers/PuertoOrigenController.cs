@@ -28,10 +28,10 @@ namespace Srvcio.Controllers
 
         #region Consultar Puerto Origen
         [HttpGet("listar-puertoOrigen")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.PuertoOrigen>>> ListarPuertoOrigen()
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.PuertoOrigenDTO>>> ListarPuertoOrigen()
         {
            
-            var ObPuertoOrigen = new List<MdloDtos.PuertoOrigen>();
+            var ObPuertoOrigen = new List<MdloDtos.DTO.PuertoOrigenDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             try
@@ -59,9 +59,9 @@ namespace Srvcio.Controllers
 
         #region Filtrar puerto Origen por codigo
         [HttpGet("filtrar-puertoOrigen-general")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.PuertoOrigen>>> FiltrarPuertoOrigenGeneral(string FiltroBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.PuertoOrigenDTO>>> FiltrarPuertoOrigenGeneral(string FiltroBusqueda)
         {   
-            var ObPuertoOrigen = new List<MdloDtos.PuertoOrigen>();
+            var ObPuertoOrigen = new List<MdloDtos.DTO.PuertoOrigenDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -109,10 +109,10 @@ namespace Srvcio.Controllers
 
         #region Filtrar puerto Origen por codigo
         [HttpGet("filtrar-puertoOrigen-especifico")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.PuertoOrigen>>> FiltrarPuertoOrigenEspecifico(string CodigoBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.PuertoOrigenDTO>>> FiltrarPuertoOrigenEspecifico(string CodigoBusqueda)
         {
 
-            var ObPuertoOrigen = new List<MdloDtos.PuertoOrigen>();
+            var ObPuertoOrigen = new List<MdloDtos.DTO.PuertoOrigenDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -161,7 +161,7 @@ namespace Srvcio.Controllers
 
         #region Ingresar grupo Tercero
         [HttpPost("ingresar-puertoOrigen")]
-        public async Task<ActionResult<dynamic>> IngresarPuertoOrigen([FromBody] MdloDtos.PuertoOrigen ObjPuertoOrigen)
+        public async Task<ActionResult<dynamic>> IngresarPuertoOrigen([FromBody] MdloDtos.DTO.PuertoOrigenDTO ObjPuertoOrigen)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -210,7 +210,7 @@ namespace Srvcio.Controllers
 
         #region Actualizar Puerto Origen
         [HttpPut("actualizar-puertoOrigen")]
-        public async Task<ActionResult<dynamic>> EditarPuertoOrigen([FromBody] MdloDtos.PuertoOrigen ObjPuertoOrigen)
+        public async Task<ActionResult<dynamic>> EditarPuertoOrigen([FromBody] MdloDtos.DTO.PuertoOrigenDTO ObjPuertoOrigen)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Actualizacion);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.

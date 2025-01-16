@@ -29,10 +29,10 @@ namespace Srvcio.Controllers
 
         #region Consultar clasificacion
         [HttpGet("listar-sector")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Sector>>> ListarSector()
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.SectorDTO>>> ListarSector()
         {
            
-            var ObjSector = new List<MdloDtos.Sector>();
+            var ObjSector = new List<MdloDtos.DTO.SectorDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             try
@@ -60,7 +60,7 @@ namespace Srvcio.Controllers
 
         #region Ingresar clasificacion
         [HttpPost("ingresar-sector")]
-        public async Task<ActionResult<dynamic>> IngresarSector([FromBody] MdloDtos.Sector objSector)
+        public async Task<ActionResult<dynamic>> IngresarSector([FromBody] MdloDtos.DTO.SectorDTO objSector)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.

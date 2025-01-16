@@ -9,7 +9,7 @@ namespace MdloDtos.IModelos
     public interface IEstadoHechosListas
     {
 
-        public Task<List<MdloDtos.VwEstdoHchoLstarVstaMtnve>> ListarEstadoHechosVisitaMotonave();
+        public Task<List<MdloDtos.DTO.ListadoEstadoHechosDTO>> ListarEstadoHechosVisitaMotonave();
 
         public Task<List<MdloDtos.SpListarEstadosHecho>> ListarEstadoHechosEventos(SpListarEstadosHecho spListarEstadosHecho);
 
@@ -17,7 +17,7 @@ namespace MdloDtos.IModelos
 
         public Task<List<MdloDtos.SpListarEstadosHecho>> ListarEstadoHechosEventosZonaGeneral(SpListarEstadosHecho spListarEstadosHecho);
 
-        public Task<List<MdloDtos.VwEstdoHchoLstarVstaMtnve>> FiltrarListarEstadoHechosVisitaMotonaveGeneral(string busqueda);
+        public Task<List<MdloDtos.DTO.ListadoEstadoHechosDTO>> FiltrarListarEstadoHechosVisitaMotonaveGeneral(string busqueda);
                                                          
 
         //Task<DateTime> ObtenerHoraSistemaAsync();
