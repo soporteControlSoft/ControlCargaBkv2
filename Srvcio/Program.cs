@@ -145,7 +145,8 @@ builder.Services.AddSwaggerGen();
 
 //Daniel Lopez 30/12/2024
 builder.Services.AddScoped<MdloDtos.IModelos.IConsecutivo, AccsoDtos.ControlPesajes.Consecutivo>();
-
+builder.Services.AddScoped<MdloDtos.IModelos.ITiposConceptos, AccsoDtos.ControlPasajes.TipoConcepto>();
+builder.Services.AddScoped<MdloDtos.IModelos.IConceptosPesajes, AccsoDtos.ControlPasajes.ConceptosPesajes>();
 
 
 

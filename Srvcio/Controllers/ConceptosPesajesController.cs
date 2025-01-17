@@ -1,44 +1,40 @@
 ﻿using AutoMapper;
 using MdloDtos.DTO;
-using MdloDtos.Utilidades;
 using Microsoft.AspNetCore.Mvc;
-using VldcionDtos;
 
 namespace Srvcio.Controllers
 {
-    //[Route("api/[controller]")]
-    [ApiController]
-    public class ConsecutivoController : Controller
+    public class ConceptosPesajesController : Controller
     {
 
-        private readonly MdloDtos.IModelos.IConsecutivo _dbContex;
+        private readonly MdloDtos.IModelos.IConceptosPesajes _dbContex;
         private readonly IMapper _Mapper;
-
 
         MdloDtos.Utilidades.RespuestaServicios respuesta = new MdloDtos.Utilidades.RespuestaServicios();
 
-        public ConsecutivoController(MdloDtos.IModelos.IConsecutivo dbContex)
+        public ConceptosPesajesController(MdloDtos.IModelos.IConceptosPesajes dbContex)
         {
             _dbContex = dbContex;
-
         }
+
+
 
         //validacion de datos.
         VldcionDtos.ValidacionCiudad validacionCiudad = new VldcionDtos.ValidacionCiudad();
 
-        #region Lista de consectivos ( todos)
-        [HttpGet("listar-consecutivos-pesaje")]
+        #region Lista de conceptos de pesaje ( todos)
+        [HttpGet("listar-conceptosPesaje")]
         [ProducesResponseType<string>(StatusCodes.Status404NotFound)]
-        public async Task<dynamic> ConsultarConsecutivo()
+        public async Task<dynamic> ConsultarConceptosPesajes()
         {
 
             try
             {
                 int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
                 int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
-                var result = new List<MdloDtos.DTO.ConsecutivoDTO>();
+                var result = new List<MdloDtos.DTO.ConceptoPesajeDTO>();
 
-                result = await this._dbContex.ConsultarConsecutivo();
+                result = await this._dbContex.ConsultarConceptosPesajes();
 
                 if (result.Count > 0)
                 {
@@ -56,19 +52,19 @@ namespace Srvcio.Controllers
         }
         #endregion
 
-        #region Lista de consectivos ( por compañia)
-        [HttpGet("buscar-consecutivos-compania")]
+        #region Lista de conceptos de pesaje ( por compañia)
+        [HttpGet("buscar-conceptosPesaje-compania")]
         [ProducesResponseType<string>(StatusCodes.Status404NotFound)]
-        public async Task<dynamic> FiltrarConsecutivoPorCompania(string CodigoCompania)
+        public async Task<dynamic> FiltrarConceptosPesajesPorCompania(string CodigoCompania)
         {
 
             try
             {
                 int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
                 int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
-                var result = new List<MdloDtos.DTO.ConsecutivoDTO>();
+                var result = new List<MdloDtos.DTO.ConceptoPesajeDTO>();
 
-                result = await this._dbContex.FiltrarConsecutivoPorCompania(CodigoCompania);
+                result = await this._dbContex.FiltrarConceptosPesajesPorCompania(CodigoCompania);
 
                 if (result.Count > 0)
                 {
@@ -86,19 +82,19 @@ namespace Srvcio.Controllers
         }
         #endregion
 
-        #region Lista de consectivos ( por id)
-        [HttpGet("buscar-consecutivos-id")]
+        #region Lista de conceptos de pesaje  ( por codigo)
+        [HttpGet("buscar-conceptosPesaje-codigo")]
         [ProducesResponseType<string>(StatusCodes.Status404NotFound)]
-        public async Task<dynamic> FiltrarConsecutivoId(int Id)
+        public async Task<dynamic> FiltrarConceptosPesajesCodigo(string Codigo)
         {
 
             try
             {
                 int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
                 int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
-                var result = new List<MdloDtos.DTO.ConsecutivoDTO>();
+                var result = new List<MdloDtos.DTO.ConceptoPesajeDTO>();
 
-                result = await this._dbContex.FiltrarConsecutivoId(Id);
+                result = await this._dbContex.FiltrarConceptosPesajesCodigo(Codigo);
 
                 if (result.Count > 0)
                 {
@@ -116,10 +112,10 @@ namespace Srvcio.Controllers
         }
         #endregion
 
-        #region Ingresa consectivo
+        #region Ingresa conceptos de pesaje
 
-        [HttpPost("ingresar-consecutivo")]
-        public async Task<ActionResult<dynamic>> IngresarConsecutivo([FromBody] ConsecutivoDTO ObjConsecutivo)
+        [HttpPost("ingresar-conceptosPesaje")]
+        public async Task<ActionResult<dynamic>> IngresarConceptosPesajes([FromBody] ConceptoPesajeDTO ObjConceptoPesaje)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -128,12 +124,12 @@ namespace Srvcio.Controllers
                 validacion = 5;
                 if (validacion == 5) //si fue exito)
                 {
-                    var ObConsecutivo = await this._dbContex.IngresarConsecutivo(ObjConsecutivo);
+                    var ObConsecutivo = await this._dbContex.IngresarConceptosPesajes(ObjConceptoPesaje);
                     if (ObConsecutivo != null)
                     {
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
                         respuesta.mensaje = "exito en la transaccíon";
-                        respuesta.datos = ObConsecutivo;
+                        respuesta.datos = ObjConceptoPesaje;
                     }
                     else
                     {
@@ -142,7 +138,7 @@ namespace Srvcio.Controllers
 
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                         respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                        respuesta.datos = ObjConsecutivo;
+                        respuesta.datos = ObjConceptoPesaje;
                     }
                 }
                 else
@@ -150,7 +146,7 @@ namespace Srvcio.Controllers
                     //regresa el error
                     respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                     respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                    respuesta.datos = ObjConsecutivo;
+                    respuesta.datos = ObjConceptoPesaje;
                 }
 
             }
@@ -158,7 +154,7 @@ namespace Srvcio.Controllers
             {
                 respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                 respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                respuesta.datos = ObjConsecutivo;
+                respuesta.datos = ObjConceptoPesaje;
                 return BadRequest(respuesta);
             }
 
@@ -167,8 +163,8 @@ namespace Srvcio.Controllers
         #endregion
 
 
-        [HttpPut("actualizar-consecutivo")]
-        public async Task<ActionResult<dynamic>> EditarConsecutivo([FromBody] ConsecutivoDTO ObjConsecutivo)
+        [HttpPut("actualizar-conceptosPesaje")]
+        public async Task<ActionResult<dynamic>> EditarConceptosPesajes([FromBody] ConceptoPesajeDTO ObjConceptosPesajes)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -177,7 +173,7 @@ namespace Srvcio.Controllers
                 validacion = 5;
                 if (validacion == 5) //si fue exito)
                 {
-                    var ObConsecutivo = await this._dbContex.EditarConsecutivo(ObjConsecutivo);
+                    var ObConsecutivo = await this._dbContex.EditarConceptosPesajes(ObjConceptosPesajes);
                     if (ObConsecutivo != null)
                     {
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
@@ -191,7 +187,7 @@ namespace Srvcio.Controllers
 
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                         respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                        respuesta.datos = ObjConsecutivo;
+                        respuesta.datos = ObjConceptosPesajes;
                     }
                 }
                 else
@@ -199,7 +195,7 @@ namespace Srvcio.Controllers
                     //regresa el error
                     respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                     respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                    respuesta.datos = ObjConsecutivo;
+                    respuesta.datos = ObjConceptosPesajes;
                 }
 
             }
@@ -207,7 +203,7 @@ namespace Srvcio.Controllers
             {
                 respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                 respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                respuesta.datos = ObjConsecutivo;
+                respuesta.datos = ObjConceptosPesajes;
                 return BadRequest(respuesta);
             }
 
@@ -215,8 +211,8 @@ namespace Srvcio.Controllers
         }
 
 
-        [HttpDelete("eliminar-consecutivo")]
-        public async Task<ActionResult<dynamic>> EliminarConsecutivo([FromBody] MdloDtos.DTO.ConsecutivoDTO ObjConsecutivo)
+        [HttpDelete("eliminar-conceptosPesaje")]
+        public async Task<ActionResult<dynamic>> EliminarConceptosPesajes([FromBody] MdloDtos.DTO.ConceptoPesajeDTO ObjConceptosPesajes)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -225,7 +221,7 @@ namespace Srvcio.Controllers
                 validacion = 5;
                 if (validacion == 5) //si fue exito)
                 {
-                    var ObConsecutivo = await this._dbContex.EliminarConsecutivo(ObjConsecutivo.Id);
+                    var ObConsecutivo = await this._dbContex.EliminarConceptosPesajes(ObjConceptosPesajes.CodigoCompania, ObjConceptosPesajes.CodigoConceptoPesaje);
                     if (ObConsecutivo != null)
                     {
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoExito;
@@ -239,7 +235,7 @@ namespace Srvcio.Controllers
 
                         respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                         respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                        respuesta.datos = ObjConsecutivo;
+                        respuesta.datos = ObjConceptosPesajes;
                     }
                 }
                 else
@@ -247,7 +243,7 @@ namespace Srvcio.Controllers
                     //regresa el error
                     respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                     respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                    respuesta.datos = ObjConsecutivo;
+                    respuesta.datos = ObjConceptosPesajes;
                 }
 
             }
@@ -255,15 +251,12 @@ namespace Srvcio.Controllers
             {
                 respuesta.exito = MdloDtos.Utilidades.Constantes.RetornoError;
                 respuesta.mensaje = MdloDtos.Utilidades.Mensajes.MensajeRespuesta(operacion) + ", " + MdloDtos.Utilidades.Mensajes.MensajeOperacion(validacion);
-                respuesta.datos = ObjConsecutivo;
+                respuesta.datos = ObjConceptosPesajes;
                 return BadRequest(respuesta);
             }
 
             return respuesta;
         }
-
-
-
 
     }
 }

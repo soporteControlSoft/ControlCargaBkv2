@@ -4418,7 +4418,7 @@ public partial class CcVenturaContext : DbContext
     public async Task<List<MdloDtos.sp_Cerrar_SolicitudRetiro>> Cerrar_SolicitudRetiro(int sr_rowid)
     {
         var param1 = new SqlParameter("@sr_rowid", sr_rowid);
-        return await this.sp_Cerrar_SolicitudRetiro.FromSqlRaw("EXEC sp_Cerrar_SolicitudRetiro sr_rowid", param1).ToListAsync();
+        return await this.sp_Cerrar_SolicitudRetiro.FromSqlRaw("EXEC sp_Cerrar_SolicitudRetiro @sr_rowid", param1).ToListAsync();
     }
 
 

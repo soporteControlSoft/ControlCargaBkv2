@@ -13,7 +13,7 @@ public partial class Consecutivo
 
     public string CoNmbre { get; set; } = null!;
 
-    public int CoCntdor { get; set; }
+    public int CoCntdor { get; set; } 
 
     public virtual Companium CoCdgoCiaNavigation { get; set; } = null!;
 
