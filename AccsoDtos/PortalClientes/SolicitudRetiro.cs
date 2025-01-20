@@ -114,8 +114,8 @@ namespace AccsoDtos.PortalClientes
 
 
                     var res = await _dbContex.Ingresar_SolicitudRetiro(sr_cia, sr_cdgo, sr_rowid_dpsto, DeRowisr_rowid_cdaddTrcro, sr_plnta_dstno, sr_fcha_aprtra,
-                       sr_autrzdo_klos, sr_autrzdo_cntdad, sr_dspchdo_klos, sr_dspchdo_cntdad, sr_actva, sr_entrga_sspndda,
-                       sr_abrta, sr_obsrvcnes, sr_cmpo_prsnlzdo1, SrCmpoPrsnlzdo2, SrCmpoPrsnlzdo3, sr_rowid_zna_cd, sr_entrgar_pso_excto);
+                       sr_autrzdo_klos, sr_autrzdo_cntdad, sr_dspchdo_klos, sr_dspchdo_cntdad,sr_actva,
+                       sr_abrta, sr_entrga_sspndda, sr_obsrvcnes, sr_cmpo_prsnlzdo1, SrCmpoPrsnlzdo2, SrCmpoPrsnlzdo3, sr_rowid_zna_cd, sr_entrgar_pso_excto);
 
 
 
