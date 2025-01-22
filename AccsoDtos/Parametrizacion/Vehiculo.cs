@@ -1,4 +1,5 @@
-﻿using MdloDtos.Utilidades;
+﻿using AutoMapper;
+using MdloDtos.Utilidades;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
 using System;
@@ -16,8 +17,15 @@ namespace AccsoDtos.Parametrizacion
     /// 
     public class Vehiculo :MdloDtos.IModelos.IVehiculo
     {
+        private readonly IMapper _mapper;
+
+        public Vehiculo(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
         #region ingreso de datos a la entidad Vehiculo
-        public async Task<MdloDtos.Vehiculo> IngresarVehiculo(MdloDtos.Vehiculo _Vehiculo)
+        public async Task<dynamic> IngresarVehiculo(MdloDtos.DTO.VehiculoDTO _Vehiculo)
         {
             var ObjVehiculo = new MdloDtos.Vehiculo();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
@@ -53,9 +61,9 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Consulta todos los datos de Vehiculo.
-        public async Task<List<MdloDtos.Vehiculo>> ListarVehiculo()
+        public async Task<List<MdloDtos.DTO.VehiculoDTO>> ListarVehiculo()
         {
-            List<MdloDtos.Vehiculo> listadoVehiculo = new List<MdloDtos.Vehiculo>();
+            List<MdloDtos.DTO.VehiculoDTO> listadoVehiculo = new List<MdloDtos.DTO.VehiculoDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
 
@@ -84,7 +92,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Vehículos para agregar a la lista
-                    MdloDtos.Vehiculo objVehiculo = new MdloDtos.Vehiculo(
+                    MdloDtos.DTO.VehiculoDTO objVehiculo = new MdloDtos.DTO.VehiculoDTO(
                                                                 //Atributos Vehículo
                                                                 item.VeMtrcla != null ? item.VeMtrcla : String.Empty,
                                                                 item.VeFchaSgro != null ? Convert.ToDateTime(item.VeFchaSgro) : null,
@@ -109,9 +117,9 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Consulta los datos de vehiculos mediante un parámetro Codigo general
-        public async Task<List<MdloDtos.Vehiculo>> FiltrarVehiculoGeneral(string Codigo)
+        public async Task<List<MdloDtos.DTO.VehiculoDTO>> FiltrarVehiculoGeneral(string Codigo)
         {
-            List<MdloDtos.Vehiculo> listadoVehiculo = new List<MdloDtos.Vehiculo>();
+            List<MdloDtos.DTO.VehiculoDTO> listadoVehiculo = new List<MdloDtos.DTO.VehiculoDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
 
@@ -140,7 +148,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Vehículos para agregar a la lista
-                    MdloDtos.Vehiculo objVehiculo = new MdloDtos.Vehiculo(
+                    MdloDtos.DTO.VehiculoDTO objVehiculo = new MdloDtos.DTO.VehiculoDTO(
                                                                 //Atributos Vehículo
                                                                 item.VeMtrcla != null ? item.VeMtrcla : String.Empty,
                                                                 item.VeFchaSgro != null ? Convert.ToDateTime(item.VeFchaSgro) : null,
@@ -165,9 +173,9 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Consulta los datos de vehiculos mediante un parámetro Codigo Especifico
-        public async Task<List<MdloDtos.Vehiculo>> FiltrarVehiculoEspecifico(string Codigo)
+        public async Task<List<MdloDtos.DTO.VehiculoDTO>> FiltrarVehiculoEspecifico(string Codigo)
         {
-            List<MdloDtos.Vehiculo> listadoVehiculo = new List<MdloDtos.Vehiculo>();
+            List<MdloDtos.DTO.VehiculoDTO> listadoVehiculo = new List<MdloDtos.DTO.VehiculoDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
 
@@ -196,7 +204,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Vehículos para agregar a la lista
-                    MdloDtos.Vehiculo objVehiculo = new MdloDtos.Vehiculo(
+                    MdloDtos.DTO.VehiculoDTO objVehiculo = new MdloDtos.DTO.VehiculoDTO(
                                                                 //Atributos Vehículo
                                                                 item.VeMtrcla != null ? item.VeMtrcla : String.Empty,
                                                                 item.VeFchaSgro != null ? Convert.ToDateTime(item.VeFchaSgro) : null,
@@ -222,7 +230,7 @@ namespace AccsoDtos.Parametrizacion
 
 
         #region Actualiza Vehiculo pasando un objeto _Vehiculo
-        public async Task<MdloDtos.Vehiculo> EditarVehiculo(MdloDtos.Vehiculo _Vehiculo)
+        public async Task<MdloDtos.DTO.VehiculoDTO> EditarVehiculo(MdloDtos.DTO.VehiculoDTO _Vehiculo)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
@@ -242,7 +250,7 @@ namespace AccsoDtos.Parametrizacion
                         await _dbContex.SaveChangesAsync();
                     }
                     _dbContex.Dispose();
-                    return VehiculoExiste;
+                    return _Vehiculo;
                 }
                 catch (Exception ex)
                 {
@@ -255,7 +263,7 @@ namespace AccsoDtos.Parametrizacion
         
 
         #region Elimina un Vehiculo pasando como parámetro Codigo
-        public async Task<MdloDtos.Vehiculo> EliminarVehiculo(string Codigo)
+        public async Task<dynamic> EliminarVehiculo(string Codigo)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {

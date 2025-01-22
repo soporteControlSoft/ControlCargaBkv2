@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AccsoDtos.Mappings;
+using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,10 +13,22 @@ namespace VldcionDtos
     /// </summary>
     public class ValidacionPais
     {
-        AccsoDtos.Parametrizacion.Pais _ObjPai = new AccsoDtos.Parametrizacion.Pais();
+        private readonly IMapper _mapper;
+        AccsoDtos.Parametrizacion.Pais _ObjPai ;
+
+        public ValidacionPais()
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
+
+            _mapper = configuration.CreateMapper();
+            _ObjPai = new AccsoDtos.Parametrizacion.Pais(_mapper);
+        }
 
         #region Validacion de Pais , metodo Ingreso
-        public async Task<int> ValidarIngreso(MdloDtos.Pai ObjPai)
+        public async Task<int> ValidarIngreso(MdloDtos.DTO.PaisDTO ObjPai)
         {
             int resultado = 0;
             try
@@ -88,7 +102,7 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de Pais , metodo Actualizar
-        public async Task<int> ValidarActualizacion(MdloDtos.Pai ObjPai)
+        public async Task<int> ValidarActualizacion(MdloDtos.DTO.PaisDTO ObjPai)
         {
             int resultado = 0;
             try

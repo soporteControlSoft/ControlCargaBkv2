@@ -1,4 +1,6 @@
-﻿using MdloDtos;
+﻿using AutoMapper;
+using MdloDtos;
+using MdloDtos.DTO;
 using MdloDtos.Utilidades;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -6,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace AccsoDtos.Parametrizacion
 {
@@ -16,15 +19,22 @@ namespace AccsoDtos.Parametrizacion
         /// Daniel Alejandro Lopez
         /// </summary>
         /// 
-         #region Ingresar datos a la entidad Pais
-        public async Task<MdloDtos.Pai> IngresarPais(MdloDtos.Pai _Pais)
+
+        private readonly IMapper _mapper;
+
+        public Pais(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+        #region Ingresar datos a la entidad Pais
+        public async Task<dynamic> IngresarPais(MdloDtos.DTO.PaisDTO _PaisDTO)
         {
             var ObjPäis= new MdloDtos.Pai();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 try
                 {
-                    var PäisExiste = await this.VerificarPais(_Pais.PaCdgo);
+                    var PäisExiste = await this.VerificarPais(_PaisDTO.PaCdgo);
 
                     if (PäisExiste == true)
                     {
@@ -32,14 +42,12 @@ namespace AccsoDtos.Parametrizacion
                     }
                     else
                     {
-                        ObjPäis.PaCdgo = _Pais.PaCdgo;
-                        ObjPäis.PaNmbre = _Pais.PaNmbre;
+                        ObjPäis.PaCdgo = _PaisDTO.PaCdgo;
+                        ObjPäis.PaNmbre = _PaisDTO.PaNmbre;
                         var res = await _dbContex.Pais.AddAsync(ObjPäis);
                         await _dbContex.SaveChangesAsync();
 
-                    }
-
-                    
+                    }                    
                 }
                 catch (Exception ex)
                 {
@@ -53,14 +61,16 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Consultar todos los datos de Pais mediante un parametro Codigo General
-        public async Task<List<MdloDtos.Pai>> FiltrarPaisGeneral(String Codigo)
+        public async Task<List<MdloDtos.DTO.PaisDTO>> FiltrarPaisGeneral(String Codigo)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
-                var lst = await (from p in _dbContex.Pais
+                var query = await (from p in _dbContex.Pais
                                  where p.PaCdgo.Contains(Codigo) || p.PaNmbre.Contains(Codigo)
                                  select p).ToListAsync();
                 _dbContex.Dispose();
+
+                var lst = _mapper.Map<List<MdloDtos.DTO.PaisDTO>>(query);
                 return lst;
             }
 
@@ -68,40 +78,39 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Consultar todos los datos de Pais mediante un parametro Codigo Especifico
-        public async Task<List<MdloDtos.Pai>> FiltrarPaisEspecifico(String Codigo)
+        public async Task<List<MdloDtos.DTO.PaisDTO>> FiltrarPaisEspecifico(String Codigo)
         { 
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
-            {    var lst = await (from p in _dbContex.Pais
+            {    var query = await (from p in _dbContex.Pais
                               where p.PaCdgo == Codigo
                               select p).ToListAsync();
 
                  _dbContex.Dispose();
-                 return lst;
+                var lst = _mapper.Map<List<MdloDtos.DTO.PaisDTO>>(query);
+                return lst;
             }
         }
-
-
         #endregion
 
         #region Actualizar Pais pasando el objeto _Pais
-        public async Task<MdloDtos.Pai> EditarPais(MdloDtos.Pai _Pais)
+        public async Task<MdloDtos.DTO.PaisDTO> EditarPais(MdloDtos.DTO.PaisDTO _PaisDTO)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 try
                 {
-                    MdloDtos.Pai PäisExiste = await _dbContex.Pais.FindAsync(_Pais.PaCdgo);
+                    MdloDtos.Pai PäisExiste = await _dbContex.Pais.FindAsync(_PaisDTO.PaCdgo);
                     if (PäisExiste != null)
                     {
 
-                        PäisExiste.PaCdgo = _Pais.PaCdgo;
-                        PäisExiste.PaNmbre = _Pais.PaNmbre;
+                        PäisExiste.PaCdgo = _PaisDTO.PaCdgo;
+                        PäisExiste.PaNmbre = _PaisDTO.PaNmbre;
                         _dbContex.Entry(PäisExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                         await _dbContex.SaveChangesAsync();
 
                     }
                     _dbContex.Dispose();
-                    return PäisExiste;
+                    return _PaisDTO;
                 }
                 catch (Exception ex)
                 {
@@ -114,12 +123,13 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Consultar todos los datos de Pais
-        public async Task<List<MdloDtos.Pai>> ListarPais()
+        public async Task<List<MdloDtos.DTO.PaisDTO>> ListarPais()
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
-                var lst = await _dbContex.Pais.ToListAsync();
+                var query = await _dbContex.Pais.ToListAsync();
                 _dbContex.Dispose();
+                var lst = _mapper.Map<List<MdloDtos.DTO.PaisDTO>>(query);
                 return lst;
             }
 
@@ -128,7 +138,7 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Eliminar Pais
-        public async Task<MdloDtos.Pai> EliminarPais(string Codigo)
+        public async Task<dynamic> EliminarPais(string Codigo)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {

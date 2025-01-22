@@ -8,16 +8,16 @@ namespace MdloDtos.IModelos
 {
     public interface IVehiculo
     {
-        public Task<MdloDtos.Vehiculo> IngresarVehiculo(MdloDtos.Vehiculo _Vehiculo);
+        public Task<dynamic> IngresarVehiculo(MdloDtos.DTO.VehiculoDTO _Vehiculo);
 
-        public Task<List<MdloDtos.Vehiculo>> ListarVehiculo();
+        public Task<List<MdloDtos.DTO.VehiculoDTO>> ListarVehiculo();
 
-        public Task<MdloDtos.Vehiculo> EditarVehiculo(MdloDtos.Vehiculo _Vehiculo);
+        public Task<MdloDtos.DTO.VehiculoDTO> EditarVehiculo(MdloDtos.DTO.VehiculoDTO _Vehiculo);
 
-        public Task<List<MdloDtos.Vehiculo>> FiltrarVehiculoEspecifico(String Codigo);
+        public Task<List<MdloDtos.DTO.VehiculoDTO>> FiltrarVehiculoEspecifico(String Codigo);
 
-        public Task<List<MdloDtos.Vehiculo>> FiltrarVehiculoGeneral(String Codigo);
+        public Task<List<MdloDtos.DTO.VehiculoDTO>> FiltrarVehiculoGeneral(String Codigo);
 
-        public Task<MdloDtos.Vehiculo> EliminarVehiculo(string Codigo);
+        public Task<dynamic> EliminarVehiculo(string Codigo);
     }
 }

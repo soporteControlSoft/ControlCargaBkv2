@@ -8,18 +8,17 @@ namespace MdloDtos.IModelos
 {
     public interface IDepartamento
     {
-        public Task<List<MdloDtos.Departamento>> ListarDepartamento();
+        public Task<List<MdloDtos.DTO.DepartamentoDTO>> ListarDepartamento();
 
-        public Task<List<MdloDtos.Departamento>> FiltrarDepartamentoPorPais(String Codigo);
+        public Task<List<MdloDtos.DTO.DepartamentoDTO>> FiltrarDepartamentoPorPais(String Codigo);
 
-        public Task<MdloDtos.Departamento> IngresarDepartamento(MdloDtos.Departamento ObjDepartamento);
+        public Task<dynamic> IngresarDepartamento(MdloDtos.DTO.DepartamentoDTO ObjDepartamento);
 
-        public Task<MdloDtos.Departamento> EditarDepartamento(MdloDtos.Departamento ObjDepartamento);
+        public Task<MdloDtos.DTO.DepartamentoDTO> EditarDepartamento(MdloDtos.DTO.DepartamentoDTO ObjDepartamento);
 
-        public Task<List<MdloDtos.Departamento>> FiltrarDepartamentoGeneral(String Codigo);
-        public Task<List<MdloDtos.Departamento>> FiltrarDepartamentoEspecifico(String Codigo);
+        public Task<List<MdloDtos.DTO.DepartamentoDTO>> FiltrarDepartamentoGeneral(String Codigo);
+        public Task<List<MdloDtos.DTO.DepartamentoDTO>> FiltrarDepartamentoEspecifico(String Codigo);
 
-
-        public Task<MdloDtos.Departamento> EliminarDepartamento(int Codigo);
+        public Task<dynamic> EliminarDepartamento(int Codigo);
     }
 }

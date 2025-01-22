@@ -16,7 +16,7 @@ namespace VldcionDtos
         private readonly IMapper _mapper;
 
         AccsoDtos.Parametrizacion.ZonaCd ObjZonaCd;
-        AccsoDtos.Parametrizacion.Sede ObjSede = new AccsoDtos.Parametrizacion.Sede();
+        AccsoDtos.Parametrizacion.Sede ObjSede;
 
         public ValidacionZona()
         {
@@ -27,6 +27,7 @@ namespace VldcionDtos
 
             _mapper = configuration.CreateMapper();
             ObjZonaCd = new AccsoDtos.Parametrizacion.ZonaCd(_mapper);
+            ObjSede = new AccsoDtos.Parametrizacion.Sede(_mapper);
         }
 
         #region Validacion de zonas , metodo Ingreso

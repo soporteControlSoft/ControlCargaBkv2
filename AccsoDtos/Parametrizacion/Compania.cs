@@ -82,8 +82,8 @@ namespace AccsoDtos.Parametrizacion
             {
                 var query = await _dbContex.Compania.ToListAsync();
                 _dbContex.Dispose();
-                
-                var lst = (query.Count > 0) ? _mapper.Map<List<companiaDTO>>(query) : new List<companiaDTO>();
+
+                var lst = _mapper.Map<List<companiaDTO>>(query);
                 return lst;
             }
         }
@@ -144,7 +144,7 @@ namespace AccsoDtos.Parametrizacion
                                  select p).ToListAsync();
                 _dbContex.Dispose();
 
-                var lst = (query.Count > 0) ? _mapper.Map<List<companiaDTO>>(query) : new List<companiaDTO>();
+                var lst = _mapper.Map<List<companiaDTO>>(query);
                 return lst;
             }
         }
@@ -159,7 +159,8 @@ namespace AccsoDtos.Parametrizacion
                                  where p.CiaCdgo == Codigo
                                  select p).ToListAsync();
                 _dbContex.Dispose();
-                var lst = (query.Count > 0) ? _mapper.Map<List<companiaDTO>>(query) : new List<companiaDTO>();
+
+                var lst = _mapper.Map<List<companiaDTO>>(query);
                 return lst;
             }
         }

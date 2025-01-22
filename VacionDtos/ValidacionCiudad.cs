@@ -15,8 +15,8 @@ namespace VldcionDtos
     {
         private readonly IMapper _mapper;
 
-        AccsoDtos.Parametrizacion.Departamento ObjDepartamento = new AccsoDtos.Parametrizacion.Departamento();
         AccsoDtos.Parametrizacion.Ciudad ObjCiudad;
+        AccsoDtos.Parametrizacion.Departamento ObjDepartamento;
 
         public ValidacionCiudad()
         {
@@ -27,6 +27,7 @@ namespace VldcionDtos
 
             _mapper = configuration.CreateMapper();
             ObjCiudad = new AccsoDtos.Parametrizacion.Ciudad(_mapper);
+            ObjDepartamento = new AccsoDtos.Parametrizacion.Departamento(_mapper);
         }
 
 

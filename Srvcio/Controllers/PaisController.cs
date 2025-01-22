@@ -28,7 +28,7 @@ namespace Srvcio.Controllers
 
         #region Consultar pais
         [HttpGet("listar-pais")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Pai>>> ListarPais()
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.PaisDTO>>> ListarPais()
         {
             //Para validar el token
             var identity=HttpContext.User.Identity as ClaimsIdentity;
@@ -47,7 +47,7 @@ namespace Srvcio.Controllers
             //   foreach (var item in lstPermisos)
             //    {
             //        if (item.PpPrmso == VarPermiso) {
-            var ObPais = new List<MdloDtos.Pai>();
+            var ObPais = new List<MdloDtos.DTO.PaisDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             try
@@ -83,10 +83,10 @@ namespace Srvcio.Controllers
 
         #region Filtrar pais por codigo general
         [HttpGet("filtrar-pais-general")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Pai>>> FiltrarPaisGeneral(string FiltroBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.PaisDTO>>> FiltrarPaisGeneral(string FiltroBusqueda)
         {
             
-            var ObPais = new List<MdloDtos.Pai>();
+            var ObPais = new List<MdloDtos.DTO.PaisDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -133,9 +133,9 @@ namespace Srvcio.Controllers
 
         #region Filtrar pais por codigo por codigo especifico
         [HttpGet("filtrar-pais-especifico")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Pai>>> FiltrarPaisEspecifico(string CodigoBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.PaisDTO>>> FiltrarPaisEspecifico(string CodigoBusqueda)
         {
-            var ObPais = new List<MdloDtos.Pai>();
+            var ObPais = new List<MdloDtos.DTO.PaisDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -184,7 +184,7 @@ namespace Srvcio.Controllers
 
         #region Ingresar pais
         [HttpPost("ingresar-pais")]
-        public async Task<ActionResult<dynamic>> IngresarPais( [FromBody] MdloDtos.Pai objPai)
+        public async Task<ActionResult<dynamic>> IngresarPais( [FromBody] MdloDtos.DTO.PaisDTO objPai)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -231,7 +231,7 @@ namespace Srvcio.Controllers
 
         #region Actualizar pais
         [HttpPut("actualizar-pais")]
-        public async Task<ActionResult<dynamic>> EditarPais([FromBody] MdloDtos.Pai objPai)
+        public async Task<ActionResult<dynamic>> EditarPais([FromBody] MdloDtos.DTO.PaisDTO objPai)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.

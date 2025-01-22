@@ -29,10 +29,10 @@ namespace Srvcio.Controllers
 
         #region Consultar todos los Vehiculos
         [HttpGet("listar-vehiculos")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Vehiculo>>> ListarVehiculo()
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.VehiculoDTO>>> ListarVehiculo()
         { 
             
-            var ObjVehiculo = new List<MdloDtos.Vehiculo>();
+            var ObjVehiculo = new List<MdloDtos.DTO.VehiculoDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             try
@@ -60,10 +60,10 @@ namespace Srvcio.Controllers
 
         #region Filtrar Vehiculo por codigo general
         [HttpGet("filtrar-vehiculo-general")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Vehiculo>>> FiltrarVehiculoGeneral(string FiltroBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.VehiculoDTO>>> FiltrarVehiculoGeneral(string FiltroBusqueda)
         { 
             
-            var ObjVehiculo = new List<MdloDtos.Vehiculo>();
+            var ObjVehiculo = new List<MdloDtos.DTO.VehiculoDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -110,10 +110,10 @@ namespace Srvcio.Controllers
 
         #region Filtrar Vehiculo por codigo general
         [HttpGet("filtrar-vehiculo-especifico")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Vehiculo>>> FiltrarVehiculoEspecifico(string CodigoBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.VehiculoDTO>>> FiltrarVehiculoEspecifico(string CodigoBusqueda)
         {
 
-            var ObjVehiculo = new List<MdloDtos.Vehiculo>();
+            var ObjVehiculo = new List<MdloDtos.DTO.VehiculoDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -162,7 +162,7 @@ namespace Srvcio.Controllers
         #region Ingresa vehiculo
 
         [HttpPost("ingresar-vehiculo")]
-        public async Task<ActionResult<dynamic>> IngresarVehiculo([FromBody] MdloDtos.Vehiculo _objVehiculo)
+        public async Task<ActionResult<dynamic>> IngresarVehiculo([FromBody] MdloDtos.DTO.VehiculoDTO _objVehiculo)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -213,7 +213,7 @@ namespace Srvcio.Controllers
 
         #region Actualizar Vehiculo
         [HttpPut("actualizar-vehiculo")]
-        public async Task<ActionResult<dynamic>> EditarVehiculo([FromBody] MdloDtos.Vehiculo _objVehiculo)
+        public async Task<ActionResult<dynamic>> EditarVehiculo([FromBody] MdloDtos.DTO.VehiculoDTO _objVehiculo)
         {
 
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
@@ -264,7 +264,7 @@ namespace Srvcio.Controllers
 
         #region Eliminar Vehiculo por codigo 
         [HttpDelete("eliminar-vehiculo")]
-        public async Task<ActionResult<dynamic>> EliminarVehiculo([FromBody] MdloDtos.Vehiculo _objVehiculo)
+        public async Task<ActionResult<dynamic>> EliminarVehiculo([FromBody] MdloDtos.DTO.VehiculoDTO _objVehiculo)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Eliminacion);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.

@@ -27,9 +27,9 @@ namespace Srvcio.Controllers
 
         #region Consultar departamento
         [HttpGet("listar-departamento")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Departamento>>> ListarDepartamento()
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.DepartamentoDTO>>> ListarDepartamento()
         {
-            var ObjDepartamento = new List<MdloDtos.Departamento>();
+            var ObjDepartamento = new List<MdloDtos.DTO.DepartamentoDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             try
@@ -57,10 +57,10 @@ namespace Srvcio.Controllers
 
         #region Filtrar departamento por codigo Nombre , Codigo (like)
         [HttpGet("filtrar-departamento-general")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Departamento>>> FiltrarDepartamentoGeneral( string FiltroBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.DepartamentoDTO>>> FiltrarDepartamentoGeneral( string FiltroBusqueda)
         {
 
-            var ObjDepartamento= new List<MdloDtos.Departamento>();
+            var ObjDepartamento= new List<MdloDtos.DTO.DepartamentoDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             
@@ -110,10 +110,10 @@ namespace Srvcio.Controllers
 
         #region Filtrar departamento por codigo especifico de departamento
         [HttpGet("filtrar-departamento-especifico")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Departamento>>> FiltrarDepartamentoEspecifico(string CodigoBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.DepartamentoDTO>>> FiltrarDepartamentoEspecifico(string CodigoBusqueda)
         {
 
-            var ObjDepartamento = new List<MdloDtos.Departamento>();
+            var ObjDepartamento = new List<MdloDtos.DTO.DepartamentoDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -161,10 +161,10 @@ namespace Srvcio.Controllers
 
         #region Filtrar departamento por Pais
         [HttpGet("filtrar-departamento-pais")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Departamento>>> FiltrarDepartamentoPorPais(string CodigoPais)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.DepartamentoDTO>>> FiltrarDepartamentoPorPais(string CodigoPais)
         {
 
-            var ObjDepartamento = new List<MdloDtos.Departamento>();
+            var ObjDepartamento = new List<MdloDtos.DTO.DepartamentoDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -212,7 +212,7 @@ namespace Srvcio.Controllers
 
         #region Ingresar departamento
         [HttpPost("ingresar-departamento")]
-        public async Task<ActionResult<dynamic>> IngresarDepartamento([FromBody] MdloDtos.Departamento objDepartamento)
+        public async Task<ActionResult<dynamic>> IngresarDepartamento([FromBody] MdloDtos.DTO.DepartamentoDTO objDepartamento)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -261,7 +261,7 @@ namespace Srvcio.Controllers
 
         #region Actualizar Departamento
         [HttpPut("actualizar-departamento")]
-        public async Task<ActionResult<dynamic>> EditarDepartamento([FromBody]  MdloDtos.Departamento objDepartamento)
+        public async Task<ActionResult<dynamic>> EditarDepartamento([FromBody]  MdloDtos.DTO.DepartamentoDTO objDepartamento)
         {
 
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
@@ -311,7 +311,7 @@ namespace Srvcio.Controllers
 
         #region Eliminar Departamento
         [HttpDelete("eliminar-departamento")]
-        public async Task<ActionResult<dynamic>> EliminarDepartamento([FromBody] MdloDtos.Departamento ObjDepartamento)
+        public async Task<ActionResult<dynamic>> EliminarDepartamento([FromBody] MdloDtos.DTO.DepartamentoDTO ObjDepartamento)
         {
 
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Eliminacion);

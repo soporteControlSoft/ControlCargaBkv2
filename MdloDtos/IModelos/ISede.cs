@@ -8,19 +8,18 @@ namespace MdloDtos.IModelos
 {
     public interface ISede
     {
-        public Task<List<MdloDtos.Sede>> ListarSede();
+        public Task<List<MdloDtos.DTO.SedeDTO>> ListarSede();
 
-        public Task<List<MdloDtos.Sede>> FiltrarSedePorCompania(string Codigo);
+        public Task<List<MdloDtos.DTO.SedeDTO>> FiltrarSedePorCompania(string Codigo);
 
-        public Task<MdloDtos.Sede> IngresarSede(MdloDtos.Sede ObjSede);
+        public Task<dynamic> IngresarSede(MdloDtos.DTO.SedeDTO ObjSede);
 
-        public Task<MdloDtos.Sede> EditarSede(MdloDtos.Sede ObjSede);
+        public Task<MdloDtos.DTO.SedeDTO> EditarSede(MdloDtos.DTO.SedeDTO ObjSede);
 
-        public Task<List<MdloDtos.Sede>> FiltrarSedeGeneral(String Codigo);
-        public Task<List<MdloDtos.Sede>> FiltrarSedeEspecifico(String Codigo);
+        public Task<List<MdloDtos.DTO.SedeDTO>> FiltrarSedeGeneral(String Codigo);
+        public Task<List<MdloDtos.DTO.SedeDTO>> FiltrarSedeEspecifico(String Codigo);
 
-
-        public Task<MdloDtos.Sede> EliminarSede(int Codigo);
+        public Task<dynamic> EliminarSede(int Codigo);
 
     }
 }

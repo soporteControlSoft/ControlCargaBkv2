@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AccsoDtos.Mappings;
+using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,12 +13,27 @@ namespace VldcionDtos
     /// </summary>
     public class ValidacionEmpaque
     {
+        private readonly IMapper _mapper;
+        AccsoDtos.Parametrizacion.Empaque ObjEmpaque;
+        AccsoDtos.Parametrizacion.Compania ObjCompania;
 
-        AccsoDtos.Parametrizacion.Compania ObjCompania = new AccsoDtos.Parametrizacion.Compania(null);
-        AccsoDtos.Parametrizacion.Empaque ObjEmpaque = new AccsoDtos.Parametrizacion.Empaque();
+        public ValidacionEmpaque()
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
+
+            _mapper = configuration.CreateMapper();
+            ObjCompania = new AccsoDtos.Parametrizacion.Compania(_mapper);
+            ObjEmpaque = new AccsoDtos.Parametrizacion.Empaque(_mapper);
+        }
+
+        
+
 
         #region Validacion de Empaque , metodo Ingreso
-        public async Task<int> ValidarIngreso(MdloDtos.Empaque objEmpaque) {
+        public async Task<int> ValidarIngreso(MdloDtos.DTO.EmpaqueDTO objEmpaque) {
 
             int resultado = 0;
             try {
@@ -73,7 +90,7 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de Empaque , metodo Eliminar
-        public async Task<int> ValidarEliminar(MdloDtos.Empaque objEmpaque_)
+        public async Task<int> ValidarEliminar(MdloDtos.DTO.EmpaqueDTO objEmpaque_)
         {
             int resultado = 0;
             try
@@ -109,7 +126,7 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de Empaque , metodo Actualizar
-        public async Task<int> ValidarActualizacion(MdloDtos.Empaque objEmpaque)
+        public async Task<int> ValidarActualizacion(MdloDtos.DTO.EmpaqueDTO objEmpaque)
         {
             int resultado = 0;
             try

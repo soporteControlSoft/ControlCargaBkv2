@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AccsoDtos.Mappings;
+using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,11 +15,25 @@ namespace VldcionDtos
     /// </summary>
     public class ValidacionDepartamento
     {
-        AccsoDtos.Parametrizacion.Pais ObjPais = new AccsoDtos.Parametrizacion.Pais();
-        AccsoDtos.Parametrizacion.Departamento ObjDepartamento = new AccsoDtos.Parametrizacion.Departamento();
+
+        private readonly IMapper _mapper;
+        AccsoDtos.Parametrizacion.Pais ObjPais;
+        AccsoDtos.Parametrizacion.Departamento ObjDepartamento ;
+
+        public ValidacionDepartamento()
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
+
+            _mapper = configuration.CreateMapper();
+            ObjPais = new AccsoDtos.Parametrizacion.Pais(_mapper);
+            ObjDepartamento = new AccsoDtos.Parametrizacion.Departamento(_mapper);
+        }
 
         #region Validacion de departamentos , metodo Ingreso
-        public async Task<int> ValidarIngreso(MdloDtos.Departamento objDepartamento) {
+        public async Task<int> ValidarIngreso(MdloDtos.DTO.DepartamentoDTO objDepartamento) {
 
             int resultado = 0;
             try {
@@ -71,7 +87,7 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de departamentos , metodo Eliminar
-        public async Task<int> ValidarEliminar(MdloDtos.Departamento objDepartamento_)
+        public async Task<int> ValidarEliminar(MdloDtos.DTO.DepartamentoDTO objDepartamento_)
         {
 
             int resultado = 0;
@@ -112,7 +128,7 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de departamentos , metodo Actualizar
-        public async Task<int> ValidarActualizacion(MdloDtos.Departamento objDepartamento)
+        public async Task<int> ValidarActualizacion(MdloDtos.DTO.DepartamentoDTO objDepartamento)
         {
 
             int resultado = 0;

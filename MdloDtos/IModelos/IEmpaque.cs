@@ -8,16 +8,16 @@ namespace MdloDtos.IModelos
 {
     public interface IEmpaque
     {
-        public Task<List<MdloDtos.Empaque>> ListarEmpaque();
+        public Task<List<MdloDtos.DTO.EmpaqueDTO>> ListarEmpaque();
 
-        public Task<List<MdloDtos.Empaque>> FiltrarEmpaqueEspecifico(String Codigo);
+        public Task<List<MdloDtos.DTO.EmpaqueDTO>> FiltrarEmpaqueEspecifico(String Codigo);
 
-        public Task<List<MdloDtos.Empaque>> FiltrarEmpaqueGeneral(String Codigo);
+        public Task<List<MdloDtos.DTO.EmpaqueDTO>> FiltrarEmpaqueGeneral(String Codigo);
 
-        public Task<MdloDtos.Empaque> IngresarEmpaque(MdloDtos.Empaque ObjEmpaque);
+        public Task<dynamic> IngresarEmpaque(MdloDtos.DTO.EmpaqueDTO ObjEmpaque);
 
-        public Task<MdloDtos.Empaque> EditarEmpaque(MdloDtos.Empaque ObjEmpaque);
+        public Task<MdloDtos.DTO.EmpaqueDTO> EditarEmpaque(MdloDtos.DTO.EmpaqueDTO ObjEmpaque);
 
-        public Task<MdloDtos.Empaque> EliminarEmpaque(int RowId);
+        public Task<dynamic> EliminarEmpaque(int RowId);
     }
 }

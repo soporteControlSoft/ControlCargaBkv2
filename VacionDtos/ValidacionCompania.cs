@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AccsoDtos.Mappings;
+using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +13,19 @@ namespace VldcionDtos
     /// </summary>
     public class ValidacionCompania
     {
-        AccsoDtos.Parametrizacion.Compania ObjCompania = new AccsoDtos.Parametrizacion.Compania(null);
+        private readonly IMapper _mapper;
+        AccsoDtos.Parametrizacion.Compania ObjCompania;
+
+        public ValidacionCompania()
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
+
+            _mapper = configuration.CreateMapper();
+            ObjCompania = new AccsoDtos.Parametrizacion.Compania(_mapper);
+        }
 
         #region Validacion de AuditoriaMotivo , metodo Ingreso
         public async Task<int> ValidarIngreso(MdloDtos.DTO.companiaDTO objCompania)

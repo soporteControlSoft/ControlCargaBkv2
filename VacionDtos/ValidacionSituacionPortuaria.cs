@@ -25,7 +25,7 @@ namespace VldcionDtos
         //Objetos para hacer las validaciones de existencia
         AccsoDtos.Parametrizacion.Motonave ObjMotonave ;
         AccsoDtos.SituacionPortuaria.EstadosMotonave ObjEstadosMotonave;
-        AccsoDtos.Parametrizacion.Pais ObjPais = new AccsoDtos.Parametrizacion.Pais();
+        AccsoDtos.Parametrizacion.Pais ObjPais = new AccsoDtos.Parametrizacion.Pais(null);
         AccsoDtos.Parametrizacion.Usuario ObjUsuario = new AccsoDtos.Parametrizacion.Usuario();
 
 

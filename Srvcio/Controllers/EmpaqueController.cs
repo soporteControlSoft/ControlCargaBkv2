@@ -29,9 +29,9 @@ namespace Srvcio.Controllers
 
         #region Consultar empaques
         [HttpGet("listar-empaque")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Empaque>>> ListarEmpaque()
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.EmpaqueDTO>>> ListarEmpaque()
         { 
-            var ObjEmpaque = new List<MdloDtos.Empaque>();
+            var ObjEmpaque = new List<MdloDtos.DTO.EmpaqueDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
 
@@ -60,9 +60,9 @@ namespace Srvcio.Controllers
 
         #region Filtrar empaque por codigo general Nombre o Codigo (Like)
         [HttpGet("filtrar-empaque-general")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Empaque>>> FiltrarEmpaqueGeneral(string FiltroBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.EmpaqueDTO>>> FiltrarEmpaqueGeneral(string FiltroBusqueda)
         { 
-            var ObjEmpaqueExiste = new List<MdloDtos.Empaque>();
+            var ObjEmpaqueExiste = new List<MdloDtos.DTO.EmpaqueDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -109,9 +109,9 @@ namespace Srvcio.Controllers
 
         #region Filtrar empaque por codigo especifico
         [HttpGet("filtrar-empaque-especifico")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Empaque>>> FiltrarEmpaqueEspecifico( string CodigoBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.EmpaqueDTO>>> FiltrarEmpaqueEspecifico( string CodigoBusqueda)
         {
-            var ObjEmpaqueExiste = new List<MdloDtos.Empaque>();
+            var ObjEmpaqueExiste = new List<MdloDtos.DTO.EmpaqueDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -160,7 +160,7 @@ namespace Srvcio.Controllers
         #region Ingresa Empaque
 
         [HttpPost("ingresar-empaque")]
-        public async Task<ActionResult<dynamic>> IngresarEmpaque([FromBody] MdloDtos.Empaque objEmpaque)
+        public async Task<ActionResult<dynamic>> IngresarEmpaque([FromBody] MdloDtos.DTO.EmpaqueDTO objEmpaque)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -208,7 +208,7 @@ namespace Srvcio.Controllers
 
         #region Actualizar Empaque
         [HttpPut("actualizar-empaque")]
-        public async Task<ActionResult<dynamic>> EditarEmpaque([FromBody] MdloDtos.Empaque objEmpaque)
+        public async Task<ActionResult<dynamic>> EditarEmpaque([FromBody] MdloDtos.DTO.EmpaqueDTO objEmpaque)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Actualizacion);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -258,7 +258,7 @@ namespace Srvcio.Controllers
 
         #region Eliminar Empaque por RowId
         [HttpDelete("eliminar-empaque")]
-        public async Task<ActionResult<dynamic>> EliminarEmpaque([FromBody] MdloDtos.Empaque objEmpaque)
+        public async Task<ActionResult<dynamic>> EliminarEmpaque([FromBody] MdloDtos.DTO.EmpaqueDTO objEmpaque)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Eliminacion);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.

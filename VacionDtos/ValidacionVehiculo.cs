@@ -16,7 +16,7 @@ namespace VldcionDtos
         private readonly IMapper _mapper;
 
         AccsoDtos.Parametrizacion.ConfiguracionVehicular _ObjConfiguracionVehicular;
-        AccsoDtos.Parametrizacion.Vehiculo _ObjVehiculo = new AccsoDtos.Parametrizacion.Vehiculo();
+        AccsoDtos.Parametrizacion.Vehiculo _ObjVehiculo;
 
         public ValidacionVehiculo()
         {
@@ -27,12 +27,11 @@ namespace VldcionDtos
 
             _mapper = configuration.CreateMapper();
             _ObjConfiguracionVehicular = new AccsoDtos.Parametrizacion.ConfiguracionVehicular(_mapper);
+            _ObjVehiculo = new AccsoDtos.Parametrizacion.Vehiculo(_mapper);
         }
 
-
-
         #region Validacion de vehiculos , metodo Ingreso
-        public async Task<int> ValidarIngreso(MdloDtos.Vehiculo ObjVehiculo)
+        public async Task<int> ValidarIngreso(MdloDtos.DTO.VehiculoDTO ObjVehiculo)
         {
             int resultado = 0;
             try
@@ -83,7 +82,7 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de vehiculo , metodo Eliminar
-        public async Task<int> ValidarEliminar(MdloDtos.Vehiculo ObjVehiculo)
+        public async Task<int> ValidarEliminar(MdloDtos.DTO.VehiculoDTO ObjVehiculo)
         {
             int resultado = 0;
             try
@@ -121,7 +120,7 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de vehiculo , metodo Actualizar
-        public async Task<int> ValidarActualizacion(MdloDtos.Vehiculo ObjVehiculo)
+        public async Task<int> ValidarActualizacion(MdloDtos.DTO.VehiculoDTO ObjVehiculo)
         {
             int resultado = 0;
             try

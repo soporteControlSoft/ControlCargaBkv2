@@ -1,4 +1,5 @@
-﻿using MdloDtos.Utilidades;
+﻿using AutoMapper;
+using MdloDtos.Utilidades;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -15,16 +16,22 @@ namespace AccsoDtos.Parametrizacion
     /// 
     public class Empaque : MdloDtos.IModelos.IEmpaque
     {
-       
+        private readonly IMapper _mapper;
+
+        public Empaque(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
         #region ingreso de datos a la entidad Empaque
-        public async Task<MdloDtos.Empaque> IngresarEmpaque(MdloDtos.Empaque _Empaque)
+        public async Task<dynamic> IngresarEmpaque(MdloDtos.DTO.EmpaqueDTO _EmpaqueDTO)
         {
             var ObjEmpaque = new MdloDtos.Empaque();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 try
                 {
-                    var EmpaqueExiste = await this.VerificarEmpaque(_Empaque.EmCdgo);
+                    var EmpaqueExiste = await this.VerificarEmpaque(_EmpaqueDTO.EmCdgo);
                     if (EmpaqueExiste == true)
                     {
                         throw new Exception(MdloDtos.Utilidades.Mensajes.Error + " al momento de hacer un :" + MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
@@ -32,11 +39,11 @@ namespace AccsoDtos.Parametrizacion
                     else
                     {
 
-                        ObjEmpaque.EmCdgoCia = _Empaque.EmCdgoCia;
-                        ObjEmpaque.EmCdgo = _Empaque.EmCdgo;
-                        ObjEmpaque.EmNmbre = _Empaque.EmNmbre;
-                        ObjEmpaque.EmTra = _Empaque.EmTra;
-                        ObjEmpaque.EmActvo = _Empaque.EmActvo;
+                        ObjEmpaque.EmCdgoCia = _EmpaqueDTO.EmCdgoCia;
+                        ObjEmpaque.EmCdgo = _EmpaqueDTO.EmCdgo;
+                        ObjEmpaque.EmNmbre = _EmpaqueDTO.EmNmbre;
+                        ObjEmpaque.EmTra = _EmpaqueDTO.EmTra;
+                        ObjEmpaque.EmActvo = _EmpaqueDTO.EmActvo;
                         var res = await _dbContex.Empaques.AddAsync(ObjEmpaque);
                         await _dbContex.SaveChangesAsync();
                     }
@@ -53,9 +60,9 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Consulta los datos del empaque mediante un parámetro Codigo General
-        public async Task<List<MdloDtos.Empaque>> FiltrarEmpaqueGeneral(string Codigo)
+        public async Task<List<MdloDtos.DTO.EmpaqueDTO>> FiltrarEmpaqueGeneral(string Codigo)
         {
-            List<MdloDtos.Empaque> listadoEmpaque = new List<MdloDtos.Empaque>();
+            List<MdloDtos.DTO.EmpaqueDTO> listadoEmpaque = new List<MdloDtos.DTO.EmpaqueDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
 
@@ -83,7 +90,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Empaque para agregar a la lista
-                    MdloDtos.Empaque objEmpaque = new MdloDtos.Empaque(
+                    MdloDtos.DTO.EmpaqueDTO objEmpaque = new MdloDtos.DTO.EmpaqueDTO(
                                                                 //Atributos Empaque
                                                                 item.EmRowid != null ? item.EmRowid : 0,
                                                                 item.EmCdgoCia != null ? item.EmCdgoCia : String.Empty,
@@ -107,7 +114,7 @@ namespace AccsoDtos.Parametrizacion
 
         #region valida si existe un Empaque validando nombre y Compañia mediante un Objeto Empaque
 
-        public bool ValidacionEmpaqueNombreIngresar(MdloDtos.Empaque _Empaque)
+        public bool ValidacionEmpaqueNombreIngresar(MdloDtos.DTO.EmpaqueDTO _Empaque)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
@@ -131,7 +138,7 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region valida si existe un Empaque validando RowId, nombre y Compañia pasando como parámetro un Objeto Empaque
-        public bool ValidacionEmpaqueNombreActualizar(MdloDtos.Empaque _Empaque)
+        public bool ValidacionEmpaqueNombreActualizar(MdloDtos.DTO.EmpaqueDTO _Empaque)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
@@ -158,9 +165,9 @@ namespace AccsoDtos.Parametrizacion
 
 
         #region Consulta los datos del empaque mediante un parámetro Codigo Especifico
-        public async Task<List<MdloDtos.Empaque>> FiltrarEmpaqueEspecifico(string Codigo)
+        public async Task<List<MdloDtos.DTO.EmpaqueDTO>> FiltrarEmpaqueEspecifico(string Codigo)
         {
-            List<MdloDtos.Empaque> listadoEmpaque = new List<MdloDtos.Empaque>();
+            List<MdloDtos.DTO.EmpaqueDTO> listadoEmpaque = new List<MdloDtos.DTO.EmpaqueDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
 
@@ -188,7 +195,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Empaque para agregar a la lista
-                    MdloDtos.Empaque objEmpaque = new MdloDtos.Empaque(
+                    MdloDtos.DTO.EmpaqueDTO objEmpaque = new MdloDtos.DTO.EmpaqueDTO(
                                                                 //Atributos Empaque
                                                                 item.EmRowid != null ? item.EmRowid : 0,
                                                                 item.EmCdgoCia != null ? item.EmCdgoCia : String.Empty,
@@ -211,7 +218,7 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Actualiza un Empaque pasando un objeto _Motonave
-        public async Task<MdloDtos.Empaque> EditarEmpaque(MdloDtos.Empaque _Empaque)
+        public async Task<MdloDtos.DTO.EmpaqueDTO> EditarEmpaque(MdloDtos.DTO.EmpaqueDTO _Empaque)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
@@ -230,7 +237,7 @@ namespace AccsoDtos.Parametrizacion
                         await _dbContex.SaveChangesAsync();
                     }
                     _dbContex.Dispose();
-                    return EmpaqueExiste;
+                    return _Empaque;
                 }
                 catch (Exception ex)
                 {
@@ -241,9 +248,9 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Consulta todos los datos de los Empaques.
-        public async Task<List<MdloDtos.Empaque>> ListarEmpaque()
+        public async Task<List<MdloDtos.DTO.EmpaqueDTO>> ListarEmpaque()
         {
-            List<MdloDtos.Empaque> listadoEmpaque = new List<MdloDtos.Empaque>();
+            List<MdloDtos.DTO.EmpaqueDTO> listadoEmpaque = new List<MdloDtos.DTO.EmpaqueDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
 
@@ -270,7 +277,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Empaque para agregar a la lista
-                    MdloDtos.Empaque objEmpaque = new MdloDtos.Empaque(
+                    MdloDtos.DTO.EmpaqueDTO objEmpaque = new MdloDtos.DTO.EmpaqueDTO(
                                                                 //Atributos Empaque
                                                                 item.EmRowid != null ? item.EmRowid : 0,
                                                                 item.EmCdgoCia != null ? item.EmCdgoCia : String.Empty,
@@ -293,7 +300,7 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Elimina un Empaque pasando como parámetro Codigo
-        public async Task<MdloDtos.Empaque> EliminarEmpaque(int RowId)
+        public async Task<dynamic> EliminarEmpaque(int RowId)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {

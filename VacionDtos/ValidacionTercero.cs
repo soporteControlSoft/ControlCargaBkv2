@@ -1,4 +1,6 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using AccsoDtos.Mappings;
+using AutoMapper;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +14,23 @@ namespace VldcionDtos
     /// </summary>
     public class ValidacionTercero
     {
-        AccsoDtos.Parametrizacion.Tercero ObjTercero = new AccsoDtos.Parametrizacion.Tercero();
-        AccsoDtos.Parametrizacion.Compania ObjCompania = new AccsoDtos.Parametrizacion.Compania(null);
-       
+        private readonly IMapper _mapper;
+
+        AccsoDtos.Parametrizacion.Tercero ObjTercero ;
+        AccsoDtos.Parametrizacion.Compania ObjCompania ;
+
+        public ValidacionTercero()
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
+
+            _mapper = configuration.CreateMapper();
+            ObjCompania = new AccsoDtos.Parametrizacion.Compania(_mapper);
+        }
+
+
         #region Validacion de Tercero , metodo Ingreso
         public async Task<int> ValidarIngreso(MdloDtos.Tercero objTercero) {
             int resultado = 0;

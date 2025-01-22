@@ -106,6 +106,4 @@ public partial class SituacionPortuariaDetalle
         this.TerceroCodigo = TerceroCodigo;
         this.TerceroNombre = TerceroNombre;
     }
-
-
 }

@@ -1,4 +1,5 @@
-﻿using MdloDtos;
+﻿using AutoMapper;
+using MdloDtos;
 using MdloDtos.IModelos;
 using MdloDtos.Utilidades;
 using Microsoft.EntityFrameworkCore;
@@ -17,8 +18,16 @@ namespace AccsoDtos.Parametrizacion
         /// Daniel Alejandro Lopez
         /// </summary>
         /// 
+
+        private readonly IMapper _mapper;
+
+        public Departamento(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
         #region Ingresar datos a la entidad Departamento
-        public async Task<MdloDtos.Departamento> IngresarDepartamento(MdloDtos.Departamento _Departamento)
+        public async Task<dynamic> IngresarDepartamento(MdloDtos.DTO.DepartamentoDTO _Departamento)
         {
 
             var ObjDepartamento = new MdloDtos.Departamento();
@@ -41,7 +50,6 @@ namespace AccsoDtos.Parametrizacion
                         await _dbContex.SaveChangesAsync();
                     }
 
-                    
                 }
                 catch (Exception ex)
                 {
@@ -55,9 +63,9 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Consultar todos los datos de Departamento mediante un parametro Codigo de Pais
-        public async Task<List<MdloDtos.Departamento>> FiltrarDepartamentoPorPais(String CodigoPais)
+        public async Task<List<MdloDtos.DTO.DepartamentoDTO>> FiltrarDepartamentoPorPais(String CodigoPais)
         {
-            List<MdloDtos.Departamento> listadoDepartamento = new List<MdloDtos.Departamento>();
+            List<MdloDtos.DTO.DepartamentoDTO> listadoDepartamento = new List<MdloDtos.DTO.DepartamentoDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 MdloDtos.Pai PäisExiste = await _dbContex.Pais.FindAsync(CodigoPais);
@@ -88,7 +96,7 @@ namespace AccsoDtos.Parametrizacion
                     foreach (var item in lst)
                     {
                         //Creamos una entidad Sede para agregar a la lista
-                        MdloDtos.Departamento objDepartamento = new MdloDtos.Departamento(
+                        MdloDtos.DTO.DepartamentoDTO objDepartamento = new MdloDtos.DTO.DepartamentoDTO(
                                                                     //Atributos Departamento
                                                                     item.DeRowid != null ? item.DeRowid : 0,
                                                                     item.DeCdgo != null ? item.DeCdgo : String.Empty,
@@ -111,9 +119,9 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Listar todos los departamentos
-        public async Task<List<MdloDtos.Departamento>> ListarDepartamento()
+        public async Task<List<MdloDtos.DTO.DepartamentoDTO>> ListarDepartamento()
         {
-            List<MdloDtos.Departamento> listadoDepartamento = new List<MdloDtos.Departamento>();
+            List<MdloDtos.DTO.DepartamentoDTO> listadoDepartamento = new List<MdloDtos.DTO.DepartamentoDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 var lst = await (from departamento in _dbContex.Departamentos
@@ -137,7 +145,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Sede para agregar a la lista
-                    MdloDtos.Departamento objDepartamento = new MdloDtos.Departamento(
+                    MdloDtos.DTO.DepartamentoDTO objDepartamento = new MdloDtos.DTO.DepartamentoDTO(
                                                                 //Atributos Departamento
                                                                 item.DeRowid != null ? item.DeRowid : 0,
                                                                 item.DeCdgo != null ? item.DeCdgo : String.Empty,
@@ -159,7 +167,7 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Actualizar departamentos por el objeto _Departamento
-        public async Task<MdloDtos.Departamento> EditarDepartamento(MdloDtos.Departamento _Departamento)
+        public async Task<MdloDtos.DTO.DepartamentoDTO> EditarDepartamento(MdloDtos.DTO.DepartamentoDTO _Departamento)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
@@ -178,7 +186,7 @@ namespace AccsoDtos.Parametrizacion
 
                     }
                     _dbContex.Dispose();
-                    return DepartamentoExiste;
+                    return _Departamento;
                 }
                 catch (Exception ex)
                 {
@@ -189,9 +197,9 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Filtrar departamento por codigo General
-        public async Task<List<MdloDtos.Departamento>> FiltrarDepartamentoGeneral(string Codigo)
+        public async Task<List<MdloDtos.DTO.DepartamentoDTO>> FiltrarDepartamentoGeneral(string Codigo)
         {
-            List<MdloDtos.Departamento> listadoDepartamento = new List<MdloDtos.Departamento>();
+            List<MdloDtos.DTO.DepartamentoDTO> listadoDepartamento = new List<MdloDtos.DTO.DepartamentoDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 var lst = await (from departamento in _dbContex.Departamentos
@@ -218,7 +226,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Sede para agregar a la lista
-                    MdloDtos.Departamento objDepartamento = new MdloDtos.Departamento(
+                    MdloDtos.DTO.DepartamentoDTO objDepartamento = new MdloDtos.DTO.DepartamentoDTO(
                                                                 //Atributos Departamento
                                                                 item.DeRowid != null ? item.DeRowid : 0,
                                                                 item.DeCdgo != null ? item.DeCdgo : String.Empty,
@@ -240,9 +248,9 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Filtrar departamento por codigo y por Id
-        public async Task<List<MdloDtos.Departamento>> FiltrarDepartamentoIdCodigo(string Codigo,int? IdDepartamento)
+        public async Task<List<MdloDtos.DTO.DepartamentoDTO>> FiltrarDepartamentoIdCodigo(string Codigo,int? IdDepartamento)
         {
-            List<MdloDtos.Departamento> listadoDepartamento = new List<MdloDtos.Departamento>();
+            List<MdloDtos.DTO.DepartamentoDTO> listadoDepartamento = new List<MdloDtos.DTO.DepartamentoDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 var lst = await (from departamento in _dbContex.Departamentos
@@ -268,7 +276,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Sede para agregar a la lista
-                    MdloDtos.Departamento objDepartamento = new MdloDtos.Departamento(
+                    MdloDtos.DTO.DepartamentoDTO objDepartamento = new MdloDtos.DTO.DepartamentoDTO(
                                                                 //Atributos Departamento
                                                                 item.DeRowid != null ? item.DeRowid : 0,
                                                                 item.DeCdgo != null ? item.DeCdgo : String.Empty,
@@ -290,9 +298,9 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Filtrar departamento por codigo Especifico
-        public async Task<List<MdloDtos.Departamento>> FiltrarDepartamentoEspecifico(string Codigo)
+        public async Task<List<MdloDtos.DTO.DepartamentoDTO>> FiltrarDepartamentoEspecifico(string Codigo)
         {
-            List<MdloDtos.Departamento> listadoDepartamento = new List<MdloDtos.Departamento>();
+            List<MdloDtos.DTO.DepartamentoDTO> listadoDepartamento = new List<MdloDtos.DTO.DepartamentoDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 var lst = await (from departamento in _dbContex.Departamentos
@@ -318,7 +326,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Sede para agregar a la lista
-                    MdloDtos.Departamento objDepartamento = new MdloDtos.Departamento(
+                    MdloDtos.DTO.DepartamentoDTO objDepartamento = new MdloDtos.DTO.DepartamentoDTO(
                                                                 //Atributos Departamento
                                                                 item.DeRowid != null ? item.DeRowid : 0,
                                                                 item.DeCdgo != null ? item.DeCdgo : String.Empty,
@@ -340,7 +348,7 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Eliminar Departamento Por codigo.
-        public async Task<MdloDtos.Departamento> EliminarDepartamento(int Codigo)
+        public async Task<dynamic> EliminarDepartamento(int Codigo)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {

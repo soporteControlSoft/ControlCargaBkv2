@@ -1,4 +1,5 @@
-﻿using MdloDtos.Utilidades;
+﻿using AutoMapper;
+using MdloDtos.Utilidades;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,10 +14,19 @@ namespace AccsoDtos.Parametrizacion
     /// Daniel Alejandro Lopez
     /// </summary>
     /// 
+
+
     public class Sede:MdloDtos.IModelos.ISede
     {
+
+        private readonly IMapper _mapper;
+
+        public Sede(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
         #region Ingresar datos a la entidad Sede
-        public async Task<MdloDtos.Sede> IngresarSede(MdloDtos.Sede _Sede)
+        public async Task<dynamic> IngresarSede(MdloDtos.DTO.SedeDTO _Sede)
         {
             var ObjSede = new MdloDtos.Sede();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
@@ -55,9 +65,9 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Consultar todos los datos de Sede mediante un parametro Codigo de Compania
-        public async Task<List<MdloDtos.Sede>> FiltrarSedePorCompania(string Codigo)
+        public async Task<List<MdloDtos.DTO.SedeDTO>> FiltrarSedePorCompania(string Codigo)
         {
-            List<MdloDtos.Sede> listadoSede = new List<MdloDtos.Sede>();
+            List<MdloDtos.DTO.SedeDTO> listadoSede = new List<MdloDtos.DTO.SedeDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
 
@@ -87,7 +97,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Sede para agregar a la lista
-                    MdloDtos.Sede objSede = new MdloDtos.Sede(
+                    MdloDtos.DTO.SedeDTO objSede = new MdloDtos.DTO.SedeDTO(
                                                                 //Atributos Sede
                                                                 item.sedeRowId != null ? item.sedeRowId : 0,
                                                                 item.sedeCodigo != null ? item.sedeCodigo : String.Empty,
@@ -112,9 +122,9 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Listar todos las Sedes
-        public async Task<List<MdloDtos.Sede>> ListarSede()
+        public async Task<List<MdloDtos.DTO.SedeDTO>> ListarSede()
         {
-            List<MdloDtos.Sede> listadoSede = new List<MdloDtos.Sede>();
+            List<MdloDtos.DTO.SedeDTO> listadoSede = new List<MdloDtos.DTO.SedeDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
 
@@ -142,7 +152,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Sede para agregar a la lista
-                    MdloDtos.Sede objSede = new MdloDtos.Sede(
+                    MdloDtos.DTO.SedeDTO objSede = new MdloDtos.DTO.SedeDTO(
                                                                 //Atributos Sede
                                                                 item.sedeRowId != null ? item.sedeRowId : 0,
                                                                 item.sedeCodigo != null ? item.sedeCodigo : String.Empty,
@@ -166,7 +176,7 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Actualizar Sede por el objeto _Sede
-        public async Task<MdloDtos.Sede> EditarSede(MdloDtos.Sede _Sede)
+        public async Task<MdloDtos.DTO.SedeDTO> EditarSede(MdloDtos.DTO.SedeDTO _Sede)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
@@ -187,7 +197,7 @@ namespace AccsoDtos.Parametrizacion
 
                     }
                     _dbContex.Dispose();
-                    return SedeExiste;
+                    return _Sede;
                 }
                 catch (Exception ex)
                 {
@@ -198,9 +208,9 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Filtrar Sede por codigo general
-        public async Task<List<MdloDtos.Sede>> FiltrarSedeGeneral(string Codigo)
+        public async Task<List<MdloDtos.DTO.SedeDTO>> FiltrarSedeGeneral(string Codigo)
         {
-            List<MdloDtos.Sede> listadoSede = new List<MdloDtos.Sede>();
+            List<MdloDtos.DTO.SedeDTO> listadoSede = new List<MdloDtos.DTO.SedeDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
 
@@ -229,7 +239,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Sede para agregar a la lista
-                    MdloDtos.Sede objSede = new MdloDtos.Sede(
+                    MdloDtos.DTO.SedeDTO objSede = new MdloDtos.DTO.SedeDTO(
                                                                 //Atributos Sede
                                                                 item.sedeRowId != null ? item.sedeRowId : 0,
                                                                 item.sedeCodigo != null ? item.sedeCodigo : String.Empty,
@@ -253,9 +263,9 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Filtrar Sede por codigo especifico
-        public async Task<List<MdloDtos.Sede>> FiltrarSedeEspecifico(string Codigo)
+        public async Task<List<MdloDtos.DTO.SedeDTO>> FiltrarSedeEspecifico(string Codigo)
         {
-            List<MdloDtos.Sede> listadoSede = new List<MdloDtos.Sede>();
+            List<MdloDtos.DTO.SedeDTO> listadoSede = new List<MdloDtos.DTO.SedeDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 var lst = await (from sede in _dbContex.Sedes
@@ -282,7 +292,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Sede para agregar a la lista
-                    MdloDtos.Sede objSede = new MdloDtos.Sede(
+                    MdloDtos.DTO.SedeDTO objSede = new MdloDtos.DTO.SedeDTO(
                                                                 //Atributos Sede
                                                                 item.sedeRowId != null ? item.sedeRowId : 0,
                                                                 item.sedeCodigo != null ? item.sedeCodigo : String.Empty,
@@ -306,9 +316,9 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Filtrar Sede por Id especifico
-        public async Task<List<MdloDtos.Sede>> FiltrarSedeId(int SedeId)
+        public async Task<List<MdloDtos.DTO.SedeDTO>> FiltrarSedeId(int SedeId)
         {
-            List<MdloDtos.Sede> listadoSede = new List<MdloDtos.Sede>();
+            List<MdloDtos.DTO.SedeDTO> listadoSede = new List<MdloDtos.DTO.SedeDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 var lst = await (from sede in _dbContex.Sedes
@@ -335,7 +345,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Sede para agregar a la lista
-                    MdloDtos.Sede objSede = new MdloDtos.Sede(
+                    MdloDtos.DTO.SedeDTO objSede = new MdloDtos.DTO.SedeDTO(
                                                                 //Atributos Sede
                                                                 item.sedeRowId != null ? item.sedeRowId : 0,
                                                                 item.sedeCodigo != null ? item.sedeCodigo : String.Empty,
@@ -359,7 +369,7 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Eliminar Sede Por codigo.
-        public async Task<MdloDtos.Sede> EliminarSede(int Codigo)
+        public async Task<dynamic> EliminarSede(int Codigo)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
@@ -390,7 +400,7 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region valida si existe una sede validando nombre y compañia mediante un Objeto Sede
-        public bool ValidacionSedeNombreIngresar(MdloDtos.Sede objSede)
+        public bool ValidacionSedeNombreIngresar(MdloDtos.DTO.SedeDTO objSede)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
@@ -415,7 +425,7 @@ namespace AccsoDtos.Parametrizacion
 
 
         #region valida si existe una sede validando codigo, nombre y compañia pasando como parámetro un Objeto Sede
-        public bool ValidacionSedeNombreActualizar(MdloDtos.Sede objSede)
+        public bool ValidacionSedeNombreActualizar(MdloDtos.DTO.SedeDTO objSede)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {

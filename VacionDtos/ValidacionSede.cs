@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AccsoDtos.Mappings;
+using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,11 +14,25 @@ namespace VldcionDtos
     public class ValidacionSede
     {
 
-        AccsoDtos.Parametrizacion.Compania ObjCompania = new AccsoDtos.Parametrizacion.Compania(null);
-        AccsoDtos.Parametrizacion.Sede ObjSede = new AccsoDtos.Parametrizacion.Sede();
+        private readonly IMapper _mapper;
+
+        AccsoDtos.Parametrizacion.Compania ObjCompania;
+        AccsoDtos.Parametrizacion.Sede ObjSede;
+
+        public ValidacionSede()
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
+
+            _mapper = configuration.CreateMapper();
+            ObjSede = new AccsoDtos.Parametrizacion.Sede(_mapper);
+            ObjCompania = new AccsoDtos.Parametrizacion.Compania(_mapper);
+        }
 
         #region Validacion de Sede , metodo Ingreso
-        public async Task<int> ValidarIngreso(MdloDtos.Sede objSede) {
+        public async Task<int> ValidarIngreso(MdloDtos.DTO.SedeDTO objSede) {
 
             int resultado = 0;
             try {
@@ -110,7 +126,7 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de Sede , metodo Actualizar
-        public async Task<int> ValidarActualizacion(MdloDtos.Sede objSede)
+        public async Task<int> ValidarActualizacion(MdloDtos.DTO.SedeDTO objSede)
         {
             int resultado = 0;
             try
