@@ -1,4 +1,7 @@
-﻿using MdloDtos.Utilidades;
+﻿using AutoMapper;
+using MdloDtos;
+using MdloDtos.DTO;
+using MdloDtos.Utilidades;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -6,6 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace AccsoDtos.EstadoHechos
 {
@@ -16,8 +20,17 @@ namespace AccsoDtos.EstadoHechos
     /// 
     public class EstadoHecho : MdloDtos.IModelos.IEstadoHechos
     {
+        private readonly CcVenturaContext _dbContext;
+        private readonly IMapper _mapper;
+
+        public EstadoHecho(IMapper mapper, MdloDtos.CcVenturaContext dbContext)
+        {
+            _mapper = mapper;
+            _dbContext = dbContext;
+        }
+
         #region Ingresar datos a la entidad EstadoHecho
-        public async Task<MdloDtos.EstadoHecho> IngresarEstadoHecho(MdloDtos.EstadoHecho _EstadoHecho)
+        public async Task<dynamic> IngresarEstadoHecho(MdloDtos.DTO.EstadoHechoDTO _EstadoHecho)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
@@ -67,16 +80,17 @@ namespace AccsoDtos.EstadoHechos
         #endregion
 
         #region Listar todos las EstadoHecho
-        public async Task<List<MdloDtos.EstadoHecho>> ListarEstadoHecho()
+        public async Task<List<MdloDtos.DTO.EstadoHechoDTO>> ListarEstadoHecho()
         {
-            List<MdloDtos.EstadoHecho > listEstadoHecho = new List<MdloDtos.EstadoHecho>();
+
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
-                listEstadoHecho = await _dbContex.EstadoHechos.ToListAsync();
+                var query  = await _dbContex.EstadoHechos.ToListAsync();
                 _dbContex.Dispose();
                
+                var listEstadoHecho = _mapper.Map<List<MdloDtos.DTO.EstadoHechoDTO>>(query);
+                return listEstadoHecho;
             }
-            return listEstadoHecho;
         }
         #endregion
 
@@ -123,41 +137,41 @@ namespace AccsoDtos.EstadoHechos
         #endregion
 
         #region Filtrar Clasificacion por codigo general
-        public async Task<List<MdloDtos.EstadoHecho>> FiltrarEstadoHechoGeneral(string Codigo)
+        public async Task<List<MdloDtos.DTO.EstadoHechoDTO>> FiltrarEstadoHechoGeneral(string Codigo)
         {
-            List<MdloDtos.EstadoHecho> listCiudad = new List<MdloDtos.EstadoHecho>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
 
-                var lst = await (from EstadoHecho in _dbContex.EstadoHechos
+                var query = await (from EstadoHecho in _dbContex.EstadoHechos
                                  where EstadoHecho.EhRowid.ToString().Contains(Codigo) || EstadoHecho.EhObsrvcion.Contains(Codigo)
                                  select EstadoHecho).ToListAsync();
                 _dbContex.Dispose();
+                var lst = _mapper.Map<List<MdloDtos.DTO.EstadoHechoDTO>>(query);
                 return lst;
             }
         }
         #endregion
 
         #region Filtrar EstadoHecho por codigo Especifico EstadoHecho
-        public async Task<List<MdloDtos.EstadoHecho>> FiltrarEstadoHechoEspecifico(string Codigo)
+        public async Task<List<MdloDtos.DTO.EstadoHechoDTO>> FiltrarEstadoHechoEspecifico(string Codigo)
         {
             int codigoConvet = int.Parse(Codigo);
 
-            List<MdloDtos.EstadoHecho> listEstadoHecho = new List<MdloDtos.EstadoHecho>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
 
-                var lst = await (from EstadoHecho in _dbContex.EstadoHechos
+                var query = await (from EstadoHecho in _dbContex.EstadoHechos
                                  where EstadoHecho.EhRowid == codigoConvet
                                  select EstadoHecho).ToListAsync();
                 _dbContex.Dispose();
+                var lst = _mapper.Map<List<MdloDtos.DTO.EstadoHechoDTO>>(query);
                 return  lst;
             }
         }
         #endregion
 
         #region Modificar EstadoEstadoHecho EstadoHecho Por codigo.
-        public async Task<MdloDtos.EstadoHecho> ModificarEstadoEstadoHecho(MdloDtos.EstadoHecho _EstadoHecho)
+        public async Task<MdloDtos.DTO.EstadoHechoDTO> ModificarEstadoEstadoHecho(MdloDtos.DTO.EstadoHechoDTO _EstadoHecho)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
@@ -172,7 +186,7 @@ namespace AccsoDtos.EstadoHechos
                         await _dbContex.SaveChangesAsync();
                     }
                     _dbContex.Dispose();
-                    return EstadoHechoExiste;
+                    return _EstadoHecho;
                 }
                 catch (Exception ex)
                 {

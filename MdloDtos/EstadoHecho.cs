@@ -74,5 +74,4 @@ public partial class EstadoHecho
     [JsonIgnore]
     [NotMapped]
     public virtual ZonaCd? EhRowidZnaCdNavigation { get; set; } = null!;
-
 }

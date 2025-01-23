@@ -8,20 +8,19 @@ namespace MdloDtos.IModelos
 {
     public interface IEstadoHechos
     {
-        public Task<MdloDtos.EstadoHecho> IngresarEstadoHecho(MdloDtos.EstadoHecho ObjEstadoHecho);
-        public Task<List<MdloDtos.EstadoHecho>> ListarEstadoHecho();
+        public Task<dynamic> IngresarEstadoHecho(MdloDtos.DTO.EstadoHechoDTO ObjEstadoHecho);
+        public Task<List<MdloDtos.DTO.EstadoHechoDTO>> ListarEstadoHecho();
 
-        public Task<MdloDtos.EstadoHecho> EditarEstadoHecho(MdloDtos.EstadoHecho ObjEstadoHecho);
+        public Task<MdloDtos.DTO.EstadoHechoDTO> EditarEstadoHecho(MdloDtos.DTO.EstadoHechoDTO ObjEstadoHecho);
 
-        public Task<List<MdloDtos.EstadoHecho>> FiltrarEstadoHechoGeneral(String Codigo);
+        public Task<List<MdloDtos.DTO.EstadoHechoDTO>> FiltrarEstadoHechoGeneral(String Codigo);
 
-        public Task<List<MdloDtos.EstadoHecho>> FiltrarEstadoHechoEspecifico(String Codigo);
+        public Task<List<MdloDtos.DTO.EstadoHechoDTO>> FiltrarEstadoHechoEspecifico(String Codigo);
 
-        public Task<MdloDtos.EstadoHecho> ModificarEstadoEstadoHecho(MdloDtos.EstadoHecho ObjEstadoHecho);
+        public Task<MdloDtos.DTO.EstadoHechoDTO> ModificarEstadoEstadoHecho(MdloDtos.DTO.EstadoHechoDTO ObjEstadoHecho);
 
-        public Task<MdloDtos.EstadoHecho> CerrarOcancelarEstadoEstadoHecho(MdloDtos.EstadoHecho ObjEstadoHecho);
+        public Task<dynamic> CerrarOcancelarEstadoEstadoHecho(MdloDtos.DTO.EstadoHechoDTO ObjEstadoHecho);
 
         public Task<bool> VerificarEstadoHecho(int Codigo);
-
     }
 }
