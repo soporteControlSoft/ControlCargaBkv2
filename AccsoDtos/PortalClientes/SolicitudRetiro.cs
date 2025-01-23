@@ -112,10 +112,42 @@ namespace AccsoDtos.PortalClientes
                     int? sr_rowid_zna_cd = _SolicitudRetiro.SrRowidZnaCd;
                     bool? sr_entrgar_pso_excto = false;
 
-   
+
                     var res = await _dbContex.Ingresar_SolicitudRetiro(sr_cia, sr_cdgo, sr_rowid_dpsto, DeRowisr_rowid_cdaddTrcro, sr_plnta_dstno, sr_fcha_aprtra,
                        sr_autrzdo_klos, sr_autrzdo_cntdad, sr_dspchdo_klos, sr_dspchdo_cntdad, sr_actva, sr_entrga_sspndda,
                        sr_abrta, sr_obsrvcnes, sr_cmpo_prsnlzdo1, SrCmpoPrsnlzdo2, SrCmpoPrsnlzdo3, sr_rowid_zna_cd, sr_entrgar_pso_excto);
+
+
+
+
+                    var id = (from emp in _dbContex.SolicitudRetiros
+                              select emp.SrRowid).Max();
+                    var codigo =await (from emp in _dbContex.SolicitudRetiros
+                                  where emp.SrRowid == id
+                                  select emp.SrCdgo).FirstAsync();
+
+                    ObjSolicitudRetiro.SrRowid = id;
+                    ObjSolicitudRetiro.SrCia = _SolicitudRetiro.SrCia;
+                    ObjSolicitudRetiro.SrCdgo = codigo;
+                    ObjSolicitudRetiro.SrRowidDpsto = _SolicitudRetiro.SrRowidDpsto;
+                    ObjSolicitudRetiro.SrRowidCdad = _SolicitudRetiro.SrRowidCdad;
+                    ObjSolicitudRetiro.SrPlntaDstno = _SolicitudRetiro.SrPlntaDstno;
+                    ObjSolicitudRetiro.SrFchaAprtra = dat;
+                    ObjSolicitudRetiro.SrAutrzdoKlos = _SolicitudRetiro.SrAutrzdoKlos;
+                    ObjSolicitudRetiro.SrAutrzdoCntdad = _SolicitudRetiro.SrAutrzdoCntdad;
+                    ObjSolicitudRetiro.SrDspchdoKlos = 0;
+                    ObjSolicitudRetiro.SrDspchdoCntdad = 0;
+                    ObjSolicitudRetiro.SrActva = _SolicitudRetiro.SrActva;
+                    ObjSolicitudRetiro.SrEntrgarPsoExcto = false;
+                    ObjSolicitudRetiro.SrAbrta = _SolicitudRetiro.SrAbrta;
+                    ObjSolicitudRetiro.SrObsrvcnes = _SolicitudRetiro.SrObsrvcnes;
+                    ObjSolicitudRetiro.SrCmpoPrsnlzdo1 = _SolicitudRetiro.SrCmpoPrsnlzdo1;
+                    ObjSolicitudRetiro.SrCmpoPrsnlzdo2 = _SolicitudRetiro.SrCmpoPrsnlzdo2;
+                    ObjSolicitudRetiro.SrCmpoPrsnlzdo3 = _SolicitudRetiro.SrCmpoPrsnlzdo3;
+                    ObjSolicitudRetiro.SrRowidZnaCd = _SolicitudRetiro.SrRowidZnaCd;
+                    ObjSolicitudRetiro.SrEntrgarPsoExcto = false;
+
+
 
                 }
                 catch (Exception ex)
