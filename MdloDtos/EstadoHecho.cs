@@ -8,6 +8,8 @@ namespace MdloDtos;
 
 public partial class EstadoHecho
 {
+
+
     [Key]
     [JsonPropertyName("IdEstadohecho")]
     public int EhRowid { get; set; }
