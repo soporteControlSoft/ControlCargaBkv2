@@ -26,6 +26,5 @@ namespace MdloDtos.DTO
         [StringLength(3)]
         [DataType(DataType.Text)]
         public string? Naturaleza { get; set; }
-
     }
 }

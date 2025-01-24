@@ -1,4 +1,6 @@
-﻿using MdloDtos;
+﻿using AccsoDtos.Mappings;
+using AutoMapper;
+using MdloDtos;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -11,27 +13,44 @@ namespace VldcionDtos
 {
     public class ValidacionDeposito
     {
-        AccsoDtos.PortalClientes.Deposito _ObjDeposito = new AccsoDtos.PortalClientes.Deposito();
+        private readonly IMapper _mapper;
+
+        AccsoDtos.PortalClientes.Deposito _ObjDeposito;
         AccsoDtos.Parametrizacion.Compania _ObjCompania = new AccsoDtos.Parametrizacion.Compania(null);
         AccsoDtos.Parametrizacion.Tercero _ObjTercero = new AccsoDtos.Parametrizacion.Tercero();
         AccsoDtos.Parametrizacion.Producto _ObjProducto = new AccsoDtos.Parametrizacion.Producto(null);
         AccsoDtos.Parametrizacion.Usuario _ObjUsuario = new AccsoDtos.Parametrizacion.Usuario();
 
+
+
+        public ValidacionDeposito()
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
+
+            _mapper = configuration.CreateMapper();
+            _ObjDeposito = new AccsoDtos.PortalClientes.Deposito(_mapper);
+        }
+
+
+
         #region Validacion de creación Deposito , metodo Ingreso
-        public async Task<int> ValidarIngreso(MdloDtos.Deposito ObjDeposito)
+        public async Task<int> ValidarIngreso(MdloDtos.DTO.DepositoDTO ObjDeposito)
         {
             int resultado = 0;
             try
             {
                 //Validar los campos Obligatorios.
-                if (!string.IsNullOrEmpty(ObjDeposito.DeCia) && ObjDeposito.DeRowidTrcro > 0 &&
-                    !string.IsNullOrEmpty(ObjDeposito.DeCdgoPrdcto) && !string.IsNullOrEmpty(ObjDeposito.DeCdgoUsrioCrea))
+                if (!string.IsNullOrEmpty(ObjDeposito.CodigoCompania) && ObjDeposito.IdTercero > 0 &&
+                    !string.IsNullOrEmpty(ObjDeposito.CodigoProducto) && !string.IsNullOrEmpty(ObjDeposito.CodigoUsuarioCrea))
                 {
                     //Validar la llave relacional.
-                    var CompaniaExiste = await _ObjCompania.VerificarCompania(ObjDeposito.DeCia);
-                    var TerceroExiste = await _ObjTercero.VerificarTerceroPorId(ObjDeposito.DeRowidTrcro);
-                    var ProductoExiste = await _ObjProducto.VerificarProducto(ObjDeposito.DeCdgoPrdcto);
-                    var UsuarioExiste = await _ObjUsuario.VerificarUsuario(ObjDeposito.DeCdgoUsrioCrea);
+                    var CompaniaExiste = await _ObjCompania.VerificarCompania(ObjDeposito.CodigoCompania);
+                    var TerceroExiste = await _ObjTercero.VerificarTerceroPorId(ObjDeposito.IdTercero);
+                    var ProductoExiste = await _ObjProducto.VerificarProducto(ObjDeposito.CodigoProducto);
+                    var UsuarioExiste = await _ObjUsuario.VerificarUsuario(ObjDeposito.CodigoUsuarioCrea);
 
                     if (CompaniaExiste == false || TerceroExiste == false || ProductoExiste == false || UsuarioExiste == false)
                     {
@@ -40,7 +59,7 @@ namespace VldcionDtos
                     else 
                     {
                         //validamos que exista al menos un Bls para crear el deposito
-                        List<MdloDtos.DepositoBl> listaDepositoBl = (List<DepositoBl>)ObjDeposito.DepositoBls;
+                        List<MdloDtos.DepositoBl> listaDepositoBl = (List<DepositoBl>)ObjDeposito.ListaBLs;
                         if (listaDepositoBl != null)
                         {
                             bool validarDisponibilidad = await _ObjDeposito.validarDisponibilidadAsociacionBlsADeposito(listaDepositoBl);
@@ -87,18 +106,18 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de creación Deposito , metodo Ingreso
-        public async Task<int> ValidarIngresoDpstoCmun(MdloDtos.Deposito ObjDeposito)
+        public async Task<int> ValidarIngresoDpstoCmun(MdloDtos.DTO.DepositoDTO ObjDeposito)
         {
             try
             {
                 //Validar los campos Obligatorios.
-                if (!string.IsNullOrEmpty(ObjDeposito.DeCia)  &&
-                    !string.IsNullOrEmpty(ObjDeposito.DeCdgoPrdcto) && !string.IsNullOrEmpty(ObjDeposito.DeCdgoUsrioCrea))
+                if (!string.IsNullOrEmpty(ObjDeposito.CodigoCompania)  &&
+                    !string.IsNullOrEmpty(ObjDeposito.CodigoProducto) && !string.IsNullOrEmpty(ObjDeposito.CodigoUsuarioCrea))
                 {
                     //Validar la llave relacional.
-                    var CompaniaExiste = await _ObjCompania.VerificarCompania(ObjDeposito.DeCia);
-                    var ProductoExiste = await _ObjProducto.VerificarProducto(ObjDeposito.DeCdgoPrdcto);
-                    var UsuarioExiste = await _ObjUsuario.VerificarUsuario(ObjDeposito.DeCdgoUsrioCrea);
+                    var CompaniaExiste = await _ObjCompania.VerificarCompania(ObjDeposito.CodigoCompania);
+                    var ProductoExiste = await _ObjProducto.VerificarProducto(ObjDeposito.CodigoProducto);
+                    var UsuarioExiste = await _ObjUsuario.VerificarUsuario(ObjDeposito.CodigoUsuarioCrea);
 
                     if (CompaniaExiste == false  || ProductoExiste == false || UsuarioExiste == false)
                     {
@@ -323,13 +342,13 @@ namespace VldcionDtos
         #endregion
 
         #region valida que un deposito esté en estado de cargado
-        public async Task<int> ValidarEstadoDeposito(MdloDtos.Deposito objDeposito)
+        public async Task<int> ValidarEstadoDeposito(MdloDtos.DTO.DepositoDTO objDeposito)
         {
             try
             {
-                if (objDeposito.DeRowid > 0)
+                if (objDeposito.Id > 0)
                 {
-                    bool estadoCreacionDeposito = await _ObjDeposito.VerificarDepositoEnEstadoCreacion((int)objDeposito.DeRowid);
+                    bool estadoCreacionDeposito = await _ObjDeposito.VerificarDepositoEnEstadoCreacion((int)objDeposito.Id);
                     return estadoCreacionDeposito ?   (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa 
                                                     : (int)MdloDtos.Utilidades.Constantes.TipoMensaje.RelacionNoExiste; 
                 }
@@ -346,13 +365,13 @@ namespace VldcionDtos
         #endregion
 
         #region valida que un deposito esté en estado de cargado
-        public async Task<int> ValidarEstadoAprobadoDeposito(MdloDtos.Deposito objDeposito)
+        public async Task<int> ValidarEstadoAprobadoDeposito(MdloDtos.DTO.DepositoDTO objDeposito)
         {
             try
             {
-                if (objDeposito.DeRowid > 0)
+                if (objDeposito.Id > 0)
                 {
-                    bool estadoCreacionDeposito = await _ObjDeposito.VerificarDepositoEnEstadoAprobado((int)objDeposito.DeRowid);
+                    bool estadoCreacionDeposito = await _ObjDeposito.VerificarDepositoEnEstadoAprobado((int)objDeposito.Id);
                     return estadoCreacionDeposito ? (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa
                                                     : (int)MdloDtos.Utilidades.Constantes.TipoMensaje.RelacionNoExiste;
                 }
