@@ -19,12 +19,12 @@ namespace AccsoDtos.Mappings
         {
 
             CreateMap<Consecutivo, ConsecutivoDTO>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom((src, _) => src.CoRowid))
-                .ForMember(dest => dest.CodigoCompania, opt => opt.MapFrom((src, _) => src.CoCdgoCiaNavigation?.CiaCdgo))
-                .ForMember(dest => dest.NombreCompania, opt => opt.MapFrom((src, _) => src.CoCdgoCiaNavigation?.CiaNmbre))
-                .ForMember(dest => dest.Codigo, opt => opt.MapFrom((src, _) => src.CoCdgo))
-                .ForMember(dest => dest.Nombre, opt => opt.MapFrom((src, _) => src.CoNmbre))
-                .ForMember(dest => dest.Contador, opt => opt.MapFrom((src, _) => src.CoCntdor));
+               .ForMember(dest => dest.Id, opt => opt.MapFrom((src, _) => src.CoRowid))
+               .ForMember(dest => dest.CodigoCompania, opt => opt.MapFrom((src, _) => src.CoCdgoCiaNavigation?.CiaCdgo))
+               .ForMember(dest => dest.NombreCompania, opt => opt.MapFrom((src, _) => src.CoCdgoCiaNavigation?.CiaNmbre))
+               .ForMember(dest => dest.Codigo, opt => opt.MapFrom((src, _) => src.CoCdgo))
+               .ForMember(dest => dest.Nombre, opt => opt.MapFrom((src, _) => src.CoNmbre))
+               .ForMember(dest => dest.Contador, opt => opt.MapFrom((src, _) => src.CoCntdor));
 
             CreateMap<Parametro, ParametroDTO>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom((src, _) => src.PaId))
@@ -539,6 +539,7 @@ namespace AccsoDtos.Mappings
                .ForMember(dest => dest.Nombre, opt => opt.MapFrom((src, _) => src.TcNmbre))
                .ForMember(dest => dest.Naturaleza, opt => opt.MapFrom((src, _) => src.TcNtrlza));
 
+
             //Concepto Pejsaje
             CreateMap<ConceptoPesaje, ConceptoPesajeDTO>()
                 .ForMember(dest => dest.CodigoCompania, opt => opt.MapFrom((src, _) => src.CpCia))
@@ -578,7 +579,8 @@ namespace AccsoDtos.Mappings
                 .ForMember(dest => dest.Contador, opt => opt.MapFrom((src, _) => src.CpRowidCnsctvoNavigation?.CoCntdor))
                 .ForMember(dest => dest.NombreTipoConsecutivo, opt => opt.MapFrom((src, _) => src.CpCdgoTpoCncptoNavigation?.TcNmbre))
                 .ForMember(dest => dest.NaturalezaTipoConsecutivo, opt => opt.MapFrom((src, _) => src.CpCdgoTpoCncptoNavigation?.TcNtrlza))
-                .ForMember(dest => dest.NombreEmpresa, opt => opt.MapFrom((src, _) => src.CpRowidCnsctvoNavigation?.CoNmbre));
+                .ForMember(dest => dest.NombreCompania, opt => opt.MapFrom((src, _) => src.CpCiaNavigation?.CiaNmbre));
+
 
             CreateMap<SpMdloRsrvaDtlleSlctudRtro, SpMdloRsrvaDtlleSlctudRtroDTO>()
              .ForMember(dest => dest.IdDeposito, opt => opt.MapFrom((src, _) => src.de_rowid))
@@ -1061,6 +1063,51 @@ namespace AccsoDtos.Mappings
             .ForMember(dest => dest.ValorCIFDolar, opt => opt.MapFrom((src, _) => src.DeVlorCifUs))
             .ForMember(dest => dest.ValorCIFLocal, opt => opt.MapFrom((src, _) => src.DeVlorCifLo))
             .ForMember(dest => dest.ValorCIFCliente, opt => opt.MapFrom((src, _) => src.DeVlorCifClnte));
+
+            //Causal Cancelacion
+            CreateMap<CausalCancelacion, CausalCancelacionDTO>()
+               .ForMember(dest => dest.Codigo, opt => opt.MapFrom((src, _) => src.CcCdgo))
+               .ForMember(dest => dest.Descripcion, opt => opt.MapFrom((src, _) => src.CcDscrpcion))
+               .ForMember(dest => dest.Origen, opt => opt.MapFrom((src, _) => src.CcOrgen));
+
+            //grupo Tercero
+            CreateMap<GrupoTercero, GrupoTerceroDTO>()
+               .ForMember(dest => dest.Codigo, opt => opt.MapFrom((src, _) => src.GtCdgo))
+               .ForMember(dest => dest.Descripcion, opt => opt.MapFrom((src, _) => src.GtDscrpcion))
+               .ForMember(dest => dest.Estado, opt => opt.MapFrom((src, _) => src.GtActvo));
+
+
+            //grupo Tercero
+            CreateMap<TerminalMaritimo, TerminalMaritimoDTO>()
+               .ForMember(dest => dest.Codigo, opt => opt.MapFrom((src, _) => src.TmCdgo))
+               .ForMember(dest => dest.Descripcion, opt => opt.MapFrom((src, _) => src.TmDscrpcion))
+               .ForMember(dest => dest.Estado, opt => opt.MapFrom((src, _) => src.TmActvo));
+
+            //Auditoria Modulo
+            CreateMap<AuditoriaModulo, AuditoriaModuloDTO>()
+               .ForMember(dest => dest.Codigo, opt => opt.MapFrom((src, _) => src.AmCdgo))
+               .ForMember(dest => dest.Nombre, opt => opt.MapFrom((src, _) => src.AmNmbre));
+
+            CreateMap<EstadoHecho, EstadoHechoDTO>()
+               .ForMember(dest => dest.EhRowid, opt => opt.MapFrom((src, _) => src.EhRowid))
+               .ForMember(dest => dest.EhObsrvcion, opt => opt.MapFrom((src, _) => src.EhObsrvcion))
+               .ForMember(dest => dest.EhFchaCrcion, opt => opt.MapFrom((src, _) => src.EhFchaCrcion))
+               .ForMember(dest => dest.EhFchaIncio, opt => opt.MapFrom((src, _) => src.EhFchaIncio))
+               .ForMember(dest => dest.EhFchaFin, opt => opt.MapFrom((src, _) => src.EhFchaFin))
+               .ForMember(dest => dest.EhEsctlla, opt => opt.MapFrom((src, _) => src.EhEsctlla))
+               .ForMember(dest => dest.EhRowidEvnto, opt => opt.MapFrom((src, _) => src.EhRowidEvnto))
+               .ForMember(dest => dest.EhRowidEqpo, opt => opt.MapFrom((src, _) => src.EhRowidEqpo))
+               .ForMember(dest => dest.EhRowidSctor, opt => opt.MapFrom((src, _) => src.EhRowidSctor))
+               .ForMember(dest => dest.EhRowidZnaCd, opt => opt.MapFrom((src, _) => src.EhRowidZnaCd))
+               .ForMember(dest => dest.EhRowidVstaMtnve, opt => opt.MapFrom((src, _) => src.EhRowidVstaMtnve))
+               .ForMember(dest => dest.EhCdgoUsrio, opt => opt.MapFrom((src, _) => src.EhCdgoUsrio))
+               .ForMember(dest => dest.EhEstdo, opt => opt.MapFrom((src, _) => src.EhEstdo))
+               .ForMember(dest => dest.EhCdgoUsrioNavigation, opt => opt.MapFrom((src, _) => src.EhCdgoUsrioNavigation))
+               .ForMember(dest => dest.EhRowidEqpoNavigation, opt => opt.MapFrom((src, _) => src.EhRowidEqpoNavigation))
+               .ForMember(dest => dest.EhRowidEvntoNavigation, opt => opt.MapFrom((src, _) => src.EhRowidEvntoNavigation))
+               .ForMember(dest => dest.EhRowidSctorNavigation, opt => opt.MapFrom((src, _) => src.EhRowidSctorNavigation))
+               .ForMember(dest => dest.EhRowidVstaMtnveNavigation, opt => opt.MapFrom((src, _) => src.EhRowidVstaMtnveNavigation))
+               .ForMember(dest => dest.EhRowidZnaCdNavigation, opt => opt.MapFrom((src, _) => src.EhRowidZnaCdNavigation));
         }
         
     }

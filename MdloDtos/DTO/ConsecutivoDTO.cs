@@ -32,7 +32,7 @@ namespace MdloDtos.DTO
         [DataType(DataType.Text)]
         public string? Nombre { get; set; } = null!;
 
-        public Int32 Contador { get; set; }
+        public Int32 Contador { get; set; } = 0;
 
 
     }

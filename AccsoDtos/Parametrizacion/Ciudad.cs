@@ -17,7 +17,7 @@ namespace AccsoDtos.Parametrizacion
     public class Ciudad:MdloDtos.IModelos.ICiudad
     {
 
-        |private readonly IMapper _mapper;
+        private readonly IMapper _mapper;
 
         public Ciudad(IMapper mapper)
         {

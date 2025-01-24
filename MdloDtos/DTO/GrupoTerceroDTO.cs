@@ -1,31 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace MdloDtos.DTO
 {
     /// <summary>
-    /// DTO tipo de concepto , Control de pesaje
+    /// DTO grupo Tercero 
     /// Daniel Lopez
     /// </summary>
-    public class TipoConceptoDTO
+    public class GrupoTerceroDTO
     {
         [Key]
         [StringLength(15)]
-        [DataType(DataType.Text)]
         public string Codigo { get; set; } = null!;
 
-        [StringLength(30)]
-        [DataType(DataType.Text)]
-        public string? Nombre { get; set; }
+        [StringLength(40)]
+        public string? Descripcion { get; set; }
 
-
-        [StringLength(3)]
-        [DataType(DataType.Text)]
-        public string? Naturaleza { get; set; }
+        public bool? Estado { get; set; }
 
     }
 }

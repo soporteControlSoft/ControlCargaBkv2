@@ -28,10 +28,10 @@ namespace Srvcio.Controllers
 
         #region Consultar EstadoHecho
         [HttpGet("listar-estadoHecho")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.EstadoHecho>>> ListarEstadoHecho()
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.EstadoHechoDTO>>> ListarEstadoHecho()
         {
            
-            var ObjEstadoHecho = new List<MdloDtos.EstadoHecho>();
+            var ObjEstadoHecho = new List<MdloDtos.DTO.EstadoHechoDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             try
@@ -59,9 +59,9 @@ namespace Srvcio.Controllers
 
         #region Filtrar EstadoHecho por codigo
         [HttpGet("filtrar-estadoHecho-general")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.EstadoHecho>>> FiltrarEstadoHechoGeneral(string FiltroBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.EstadoHechoDTO>>> FiltrarEstadoHechoGeneral(string FiltroBusqueda)
         {
-            var ObjEstadoHecho = new List<MdloDtos.EstadoHecho>();
+            var ObjEstadoHecho = new List<MdloDtos.DTO.EstadoHechoDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -109,9 +109,9 @@ namespace Srvcio.Controllers
 
         #region Filtrar EstadoHecho especifica
         [HttpGet("filtrar-estadoHecho-especifico")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.EstadoHecho>>> FiltrarEstadoHechoEspecifico(string CodigoBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.EstadoHechoDTO>>> FiltrarEstadoHechoEspecifico(string CodigoBusqueda)
         {
-            var ObjEstadoHecho = new List<MdloDtos.EstadoHecho>();
+            var ObjEstadoHecho = new List<MdloDtos.DTO.EstadoHechoDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -160,7 +160,7 @@ namespace Srvcio.Controllers
 
         #region Ingresar EstadoHecho
         [HttpPost("ingresar-estadoHecho")]
-        public async Task<ActionResult<dynamic>> IngresarEstadoHecho([FromBody] MdloDtos.EstadoHecho objEstadoHecho)
+        public async Task<ActionResult<dynamic>> IngresarEstadoHecho([FromBody] MdloDtos.DTO.EstadoHechoDTO objEstadoHecho)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -206,7 +206,7 @@ namespace Srvcio.Controllers
 
         #region Actualizar EstadoHecho
         [HttpPut("actualizar-estadoHecho")]
-        public async Task<ActionResult<dynamic>> EditarEstadoHecho([FromBody] MdloDtos.EstadoHecho ObjEstadoHecho)
+        public async Task<ActionResult<dynamic>> EditarEstadoHecho([FromBody] MdloDtos.DTO.EstadoHechoDTO ObjEstadoHecho)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Actualizacion);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -252,7 +252,7 @@ namespace Srvcio.Controllers
 
         #region Modificar EstadoEstadoHecho EstadoHecho
         [HttpPut("Modificar-Estado-estadoHecho")]
-        public async Task<ActionResult<dynamic>> ModificarEstadoEstadoHecho([FromBody] MdloDtos.EstadoHecho ObjEstadoHecho)
+        public async Task<ActionResult<dynamic>> ModificarEstadoEstadoHecho([FromBody] MdloDtos.DTO.EstadoHechoDTO ObjEstadoHecho)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Actualizacion);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -298,7 +298,7 @@ namespace Srvcio.Controllers
 
         #region Cerrar o cancelar EstadoHecho
         [HttpPut("cerrar-o-cancelar-estado-hechos")]
-        public async Task<ActionResult<dynamic>> CerrarOcancelarEstadoHecho([FromBody] MdloDtos.EstadoHecho ObjEstadoHecho)
+        public async Task<ActionResult<dynamic>> CerrarOcancelarEstadoHecho([FromBody] MdloDtos.DTO.EstadoHechoDTO ObjEstadoHecho)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Actualizacion);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
