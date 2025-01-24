@@ -34,7 +34,6 @@ public partial class Deposito
     [JsonPropertyName("IdTerceroFacturacion")]
     public int? DeRowidTrcroFctrcion { get; set; }
 
-
     [JsonPropertyName("CodigoDepositoPadre")]
     [DataType(DataType.Text)]
     [StringLength(15)]
@@ -376,7 +375,7 @@ public partial class Deposito
 
     [JsonPropertyName("SubDepositos")]
     [NotMapped]
-    public List<MdloDtos.SpSubDeposito>? SubDepositos { get; set; }
+    public List<MdloDtos.DTO.SpSubDepositoDTO>? SubDepositos { get; set; }
 
 
     public Deposito() { }
