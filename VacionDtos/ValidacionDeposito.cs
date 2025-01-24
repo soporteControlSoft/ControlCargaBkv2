@@ -14,7 +14,7 @@ namespace VldcionDtos
     public class ValidacionDeposito
     {
         private readonly IMapper _mapper;
-        AccsoDtos.PortalClientes.Deposito _ObjDeposito = new AccsoDtos.PortalClientes.Deposito();
+        AccsoDtos.PortalClientes.Deposito _ObjDeposito;
         AccsoDtos.Parametrizacion.Compania _ObjCompania = new AccsoDtos.Parametrizacion.Compania(null);
         AccsoDtos.Parametrizacion.Tercero _ObjTercero;
         AccsoDtos.Parametrizacion.Producto _ObjProducto = new AccsoDtos.Parametrizacion.Producto(null);
@@ -28,6 +28,7 @@ namespace VldcionDtos
             });
 
             _mapper = configuration.CreateMapper();
+            _ObjDeposito = new AccsoDtos.PortalClientes.Deposito(_mapper);
             _ObjTercero = new AccsoDtos.Parametrizacion.Tercero(_mapper);
         }
 
