@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,7 +21,10 @@ namespace AccsoDtos.ControlPesajes;
 
 public class Consecutivo : MdloDtos.IModelos.IConsecutivo
 {
-
+    /// <summary>
+    /// Acceso a Datos Tabla consecutivos
+    /// Daniel Alejandro Lopez.
+    /// </summary>
     private readonly CcVenturaContext _dbContext;
     private readonly IMapper _mapper;
 
@@ -32,7 +36,7 @@ public class Consecutivo : MdloDtos.IModelos.IConsecutivo
     }
 
 
-    //Consultar toda la tabla
+    //Consultar toda la tabla consecutivo
     public async Task<List<ConsecutivoDTO>> ConsultarConsecutivo()
     {
         try
@@ -112,7 +116,22 @@ public class Consecutivo : MdloDtos.IModelos.IConsecutivo
                     ObjConsecutivoIng.CoCdgoCia = ObjConsecutivo.CodigoCompania;
                     ObjConsecutivoIng.CoNmbre = ObjConsecutivo.Nombre;
                     ObjConsecutivoIng.CoCdgo = ObjConsecutivo.Codigo;
-                    ObjConsecutivoIng.CoCntdor = ObjConsecutivo.Contador;
+
+                    int codigo = 0;
+                    var q =await (from p in _dbContex.Consecutivos
+                             where p.CoCdgoCia== ObjConsecutivoIng.CoCdgoCia
+                             select p.CoCntdor).ToListAsync();
+                    if (q.Count == 0)
+                    {
+
+                        codigo = 1;
+                    }
+                    else {
+
+                        codigo = q.Max()+1;
+                    }
+
+                    ObjConsecutivoIng.CoCntdor = codigo;
 
                     var res = await _dbContex.Consecutivos.AddAsync(ObjConsecutivoIng);
                     await _dbContex.SaveChangesAsync();
@@ -170,8 +189,9 @@ public class Consecutivo : MdloDtos.IModelos.IConsecutivo
                 {
                     ConsecutivoExiste.CoCdgoCia = ObjConsecutivo.CodigoCompania;
                     ConsecutivoExiste.CoNmbre = ObjConsecutivo.Nombre;
+
                     ConsecutivoExiste.CoCdgo = ObjConsecutivo.Codigo;
-                    ConsecutivoExiste.CoCntdor = ObjConsecutivo.Contador;
+                    //ConsecutivoExiste.CoCntdor = ObjConsecutivo.Contador;
 
                     _dbContex.Consecutivos.Update(ConsecutivoExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                     await _dbContex.SaveChangesAsync();

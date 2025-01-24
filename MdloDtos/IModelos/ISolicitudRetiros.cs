@@ -16,17 +16,20 @@ namespace MdloDtos.IModelos
         public Task<MdloDtos.SolicitudRetiro> IngresarSolicitudRetiros(MdloDtos.SolicitudRetiro _SolicitudRetiro);
 
 
-        public Task<MdloDtos.SolicitudRetiro> EditarSolicitudRetiro(MdloDtos.SolicitudRetiro _SolicitudRetiro);
+        public Task<dynamic> EditarSolicitudRetiro(MdloDtos.SolicitudRetiro _SolicitudRetiro);
 
         public Task<int> CerrarSolicitudRetiro(int sr_rowid);
 
-        public Task<MdloDtos.SolicitudRetiroAutorizacion> IngresarSolicitudRetirosAutorizacion(MdloDtos.SolicitudRetiroAutorizacion _SolicitudAutorizacion);
+        public Task<dynamic> IngresarSolicitudRetirosAutorizacionCerrada(MdloDtos.SolicitudRetiroAutorizacion _SolicitudAutorizacion);
+
+        public Task<dynamic> IngresarSolicitudRetirosAutorizacionAbierta(MdloDtos.SolicitudRetiroAutorizacion _SolicitudAutorizacion);
+
 
         public Task<List<MdloDtos.SolicitudRetiroAutorizacion>> ConsultarSolicitudRetiroAutorizacionIdRetiro(int IdSolicitudRetiro);
 
         public  Task<MdloDtos.SolicitudRetiroAutorizacionHistorial> IngresarSolicitudAutorizacionHistorial(MdloDtos.SolicitudRetiroAutorizacionHistorial _SolicitudRetiroAutorizacionHistorial);
 
-        public  Task<List<MdloDtos.SolicitudRetiroAutorizacion>> ConsultarSolicitudRetiroAutorizacionHistorialIdRetiro(int IdSolicitudRetiroAutorizacion);
+        public  Task<List<MdloDtos.SolicitudRetiroAutorizacion>> ConsultarSolicitudRetiroAutorizacionIdRetiroAutorizacion(int IdSolicitudRetiroAutorizacion);
 
         public  Task<MdloDtos.SolicitudRetiroTransportadora> IngresarSolicitudRetiroTrasnportadora(MdloDtos.SolicitudRetiroTransportadora _SolicitudRetiroTransportadora);
 
@@ -39,10 +42,11 @@ namespace MdloDtos.IModelos
 
         public Task<MdloDtos.SolicitudRetiroTransportadora> ActualizarSolicitudRetiroTrasnportadora(MdloDtos.SolicitudRetiroTransportadora _SolicitudRetiroTransportadora);
 
-        //Version 2
-        public Task<MdloDtos.SolicitudRetiroTransportadora> IngresarTrasnportadoraCerrada(MdloDtos.SolicitudRetiroTransportadora _SolicitudRetiroTransportadora);
 
-        public Task<MdloDtos.SolicitudRetiroTransportadora> IngresarTrasnportadoraAbierta(MdloDtos.SolicitudRetiroTransportadora _SolicitudRetiroTransportadora);
+        //Version 2
+        public Task<dynamic> IngresarTrasnportadoraCerrada(MdloDtos.SolicitudRetiroTransportadora _SolicitudRetiroTransportadora);
+
+        public Task<dynamic> IngresarTrasnportadoraAbierta(MdloDtos.SolicitudRetiroTransportadora _SolicitudRetiroTransportadora);
 
     }
 }
