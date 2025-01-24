@@ -16,20 +16,34 @@ namespace MdloDtos.DTO
     public class ClasificacionDTO
     {
         [Key]
-        public int Id { get; set; }
+        [JsonPropertyName("Id")]
+        public int ClRowid { get; set; }
 
         [StringLength(60)]
-        public string? Nombre { get; set; } = null!;
+        [JsonPropertyName("Nombre")]
+        public string? ClNmbre { get; set; } = null!;
 
         [StringLength(255)]
-        public string? Descripcion { get; set; } = null!;
+        [JsonPropertyName("Descripcion")]
+        public string? ClDscrpcion { get; set; } = null!;
 
-        public DateTime? FechaCreacion { get; set; }
+        [JsonPropertyName("FechaCreacion")]
+        public DateTime? ClFchaCrcion { get; set; }
 
         [StringLength(15)]
-        public string? CodigoUsuario { get; set; }
+        [JsonPropertyName("CodigoUsuario")]
+        public string? ClCdgoUsrio { get; set; }
 
-        public bool Estado { get; set; }
+        [JsonPropertyName("Estado")]
+        public bool ClActvo { get; set; }
+
+        [JsonIgnore]
+        [NotMapped]
+        public virtual Usuario? ClCdgoUsrioNavigation { get; set; }
+
+        [JsonIgnore]
+        [NotMapped]
+        public virtual ICollection<Evento> Eventos { get; set; } = new List<Evento>();
 
     }
 }

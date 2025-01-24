@@ -32,7 +32,7 @@ namespace VldcionDtos
 
 
         #region Validacion de Tercero , metodo Ingreso
-        public async Task<int> ValidarIngreso(MdloDtos.Tercero objTercero) {
+        public async Task<int> ValidarIngreso(MdloDtos.DTO.TerceroDTO objTercero) {
             int resultado = 0;
             try {
                 //Validar los campos Obligatorios.
@@ -114,7 +114,7 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de Tercero , metodo Actualizar
-        public async Task<int> ValidarActualizacion(MdloDtos.Tercero objTercero)
+        public async Task<int> ValidarActualizacion(MdloDtos.DTO.TerceroDTO objTercero)
         {
             int resultado = 0;
             try
@@ -247,11 +247,11 @@ namespace VldcionDtos
         #endregion
 
         #region verifica que un tercero exista
-        public async Task<MdloDtos.Tercero> ConsultarTerceroPorId(int IdTercero)
+        public async Task<MdloDtos.DTO.TerceroDTO> ConsultarTerceroPorId(int IdTercero)
         {
             try
             {
-                List<MdloDtos.Tercero> lista= await ObjTercero.FiltrarTerceroEspecificoPorId(IdTercero);
+                List<MdloDtos.DTO.TerceroDTO> lista= await ObjTercero.FiltrarTerceroEspecificoPorId(IdTercero);
                 return (lista != null && lista.Count() > 0) ? 
                       lista.First() : null;
             }

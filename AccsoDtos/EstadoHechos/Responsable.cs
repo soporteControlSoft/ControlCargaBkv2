@@ -35,7 +35,7 @@ namespace AccsoDtos.EstadoHechos
                 var ObjResponsable = new MdloDtos.Responsable();
                 try
                 {
-                    var ResponsableExiste = await this.VerificarResponsable(_ResponsableDTO.Id);
+                    var ResponsableExiste = await this.VerificarResponsable(_ResponsableDTO.ReRowid);
 
                     if (ResponsableExiste == true)
                     {
@@ -46,10 +46,10 @@ namespace AccsoDtos.EstadoHechos
 
                         DateTime fechaSistema = DateTime.Now;
 
-                        ObjResponsable.ReNmbre = _ResponsableDTO.Nombre;
-                        ObjResponsable.ReDscrpcion = _ResponsableDTO.Descripcion;
+                        ObjResponsable.ReNmbre = _ResponsableDTO.ReNmbre;
+                        ObjResponsable.ReDscrpcion = _ResponsableDTO.ReDscrpcion;
                         ObjResponsable.ReFchaCrcion = fechaSistema;
-                        ObjResponsable.ReCdgoUsrio = _ResponsableDTO.CodigoUsuario;
+                        ObjResponsable.ReCdgoUsrio = _ResponsableDTO.ReCdgoUsrio;
                         ObjResponsable.ReActvo = true;
 
 
@@ -94,13 +94,13 @@ namespace AccsoDtos.EstadoHechos
             {
                 try
                 {
-                    MdloDtos.Responsable ResponsableExiste = await _dbContex.Responsables.FindAsync(_ResponsableDTO.Id);
+                    MdloDtos.Responsable ResponsableExiste = await _dbContex.Responsables.FindAsync(_ResponsableDTO.ReRowid);
                     if (ResponsableExiste != null)
                     {
-                        ResponsableExiste.ReNmbre = _ResponsableDTO.Nombre;
-                        ResponsableExiste.ReDscrpcion = _ResponsableDTO.Descripcion;
-                        ResponsableExiste.ReCdgoUsrio = _ResponsableDTO.CodigoUsuario;
-                        ResponsableExiste.ReActvo = _ResponsableDTO.Estado;
+                        ResponsableExiste.ReNmbre = _ResponsableDTO.ReNmbre;
+                        ResponsableExiste.ReDscrpcion = _ResponsableDTO.ReDscrpcion;
+                        ResponsableExiste.ReCdgoUsrio = _ResponsableDTO.ReCdgoUsrio;
+                        ResponsableExiste.ReActvo = _ResponsableDTO.ReActvo;
 
 
                         _dbContex.Entry(ResponsableExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
@@ -163,10 +163,10 @@ namespace AccsoDtos.EstadoHechos
             {
                 try
                 {
-                    MdloDtos.Responsable ResponsableExiste = await _dbContex.Responsables.FindAsync(_ResponsableDTO.Id);
+                    MdloDtos.Responsable ResponsableExiste = await _dbContex.Responsables.FindAsync(_ResponsableDTO.ReRowid);
                     if (ResponsableExiste != null)
                     {
-                        ResponsableExiste.ReActvo = _ResponsableDTO.Estado;
+                        ResponsableExiste.ReActvo = _ResponsableDTO.ReActvo;
                         _dbContex.Entry(ResponsableExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                         await _dbContex.SaveChangesAsync();
                     }

@@ -35,7 +35,7 @@ namespace AccsoDtos.EstadoHechos
                 var ObjEquipo = new MdloDtos.Equipo();
                 try
                 {
-                    var EquipoExiste = await this.VerificarEquipo(_EquipoDto.Id);
+                    var EquipoExiste = await this.VerificarEquipo(_EquipoDto.EqRowid);
 
                     if (EquipoExiste == true)
                     {
@@ -46,11 +46,11 @@ namespace AccsoDtos.EstadoHechos
 
                         DateTime fechaSistema = DateTime.Now;
 
-                        ObjEquipo.EqNmbre = _EquipoDto.Nombre;
-                        ObjEquipo.EqDscrpcion = _EquipoDto.Descripcion;
+                        ObjEquipo.EqNmbre = _EquipoDto.EqNmbre;
+                        ObjEquipo.EqDscrpcion = _EquipoDto.EqDscrpcion;
                         ObjEquipo.EqFchaCrcion = fechaSistema;
-                        ObjEquipo.EqCdgoUsrio = _EquipoDto.CodigoUsuario;
-                        ObjEquipo.EqCdgo = _EquipoDto.codigoEquipo;
+                        ObjEquipo.EqCdgoUsrio = _EquipoDto.EqCdgoUsrio;
+                        ObjEquipo.EqCdgo = _EquipoDto.EqCdgo;
                         ObjEquipo.EqActvo = true;
 
 
@@ -95,14 +95,14 @@ namespace AccsoDtos.EstadoHechos
             {
                 try
                 {
-                    MdloDtos.Equipo EquipoExiste = await _dbContex.Equipos.FindAsync(_EquipoDTO.Id);
+                    MdloDtos.Equipo EquipoExiste = await _dbContex.Equipos.FindAsync(_EquipoDTO.EqRowid);
                     if (EquipoExiste != null)
                     {
-                        EquipoExiste.EqNmbre = _EquipoDTO.Nombre;
-                        EquipoExiste.EqDscrpcion = _EquipoDTO.Descripcion;
-                        EquipoExiste.EqCdgoUsrio = _EquipoDTO.CodigoUsuario;
-                        EquipoExiste.EqCdgo = _EquipoDTO.codigoEquipo;
-                        EquipoExiste.EqActvo = _EquipoDTO.Estado;
+                        EquipoExiste.EqNmbre = _EquipoDTO.EqNmbre;
+                        EquipoExiste.EqDscrpcion = _EquipoDTO.EqDscrpcion;
+                        EquipoExiste.EqCdgoUsrio = _EquipoDTO.EqCdgoUsrio;
+                        EquipoExiste.EqCdgo = _EquipoDTO.EqCdgo;
+                        EquipoExiste.EqActvo = _EquipoDTO.EqActvo;
               
                         _dbContex.Entry(EquipoExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                         await _dbContex.SaveChangesAsync();
@@ -163,10 +163,10 @@ namespace AccsoDtos.EstadoHechos
             {
                 try
                 {
-                    MdloDtos.Equipo EquipoExiste = await _dbContex.Equipos.FindAsync(_EquipoDTO.Id);
+                    MdloDtos.Equipo EquipoExiste = await _dbContex.Equipos.FindAsync(_EquipoDTO.EqRowid);
                     if (EquipoExiste != null)
                     {
-                        EquipoExiste.EqActvo = _EquipoDTO.Estado;
+                        EquipoExiste.EqActvo = _EquipoDTO.EqActvo;
 
                         _dbContex.Entry(EquipoExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                         await _dbContex.SaveChangesAsync();

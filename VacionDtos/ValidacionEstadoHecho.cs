@@ -12,15 +12,14 @@ namespace VldcionDtos
     /// </summary>
     public class ValidacionEstadoHecho
     {
-
-       
-        AccsoDtos.EstadoHechos.EstadoHecho ObjEstadoHecho = new AccsoDtos.EstadoHechos.EstadoHecho();
+               
+        AccsoDtos.EstadoHechos.EstadoHecho ObjEstadoHecho = new AccsoDtos.EstadoHechos.EstadoHecho(null, null);
         AccsoDtos.EstadoHechos.Evento _ObjEvento = new AccsoDtos.EstadoHechos.Evento(null, null);
         AccsoDtos.EstadoHechos.Sector _ObjSector = new AccsoDtos.EstadoHechos.Sector(null, null);
         AccsoDtos.Parametrizacion.Usuario _ObjUsuario = new AccsoDtos.Parametrizacion.Usuario();
 
         #region Validacion de EstsadoHecho , metodo Ingreso
-        public async Task<int> ValidarIngreso(MdloDtos.EstadoHecho objEstadoHecho) {
+        public async Task<int> ValidarIngreso(MdloDtos.DTO.EstadoHechoDTO objEstadoHecho) {
 
             int resultado = 0;
             try {
@@ -79,7 +78,7 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de estadoHechos , metodo modificar estado
-        public async Task<int> ValidarModificarEstadoEstadoHecho(MdloDtos.EstadoHecho objEstadoHecho)
+        public async Task<int> ValidarModificarEstadoEstadoHecho(MdloDtos.DTO.EstadoHechoDTO objEstadoHecho)
         {
            
             int resultado = 0;
@@ -116,7 +115,7 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de estadoHechos , metodo Cerrar
-        public async Task<int> ValidarCerrarOcancelarEstadoEstadoHecho(MdloDtos.EstadoHecho objEstadoHecho)
+        public async Task<int> ValidarCerrarOcancelarEstadoEstadoHecho(MdloDtos.DTO.EstadoHechoDTO objEstadoHecho)
         {
 
             int resultado = 0;
@@ -155,7 +154,7 @@ namespace VldcionDtos
         #endregion
 
         #region Validacion de estadoHechos , metodo Actualizar
-        public async Task<int> ValidarActualizacion(MdloDtos.EstadoHecho objEstadoHecho)
+        public async Task<int> ValidarActualizacion(MdloDtos.DTO.EstadoHechoDTO objEstadoHecho)
         {
             int resultado = 0;
             try

@@ -16,23 +16,42 @@ namespace MdloDtos.DTO
     public class EquipoDTO
     {
         [Key]
-        public int Id { get; set; }
+        [JsonPropertyName("Id")]
+        public int EqRowid { get; set; }
 
         [StringLength(40)]
-        public string? codigoEquipo { get; set; } = null!;
+        [JsonPropertyName("codigoEquipo")]
+        public string? EqCdgo { get; set; } = null!;
 
         [StringLength(60)]
-        public string? Nombre { get; set; } = null!;
+        [JsonPropertyName("Nombre")]
+        public string? EqNmbre { get; set; } = null!;
 
         [StringLength(255)]
-        public string? Descripcion { get; set; } = null!;
+        [JsonPropertyName("Descripcion")]
+        public string? EqDscrpcion { get; set; } = null!;
 
-        public DateTime? FechaCreacion { get; set; }
+        [JsonPropertyName("FechaCreacion")]
+        public DateTime? EqFchaCrcion { get; set; }
 
         [StringLength(15)]
-        public string? CodigoUsuario { get; set; }
+        [JsonPropertyName("CodigoUsuario")]
+        public string? EqCdgoUsrio { get; set; }
 
-        public bool Estado { get; set; }
+        [JsonPropertyName("Estado")]
+        public bool EqActvo { get; set; }
+
+        [JsonIgnore]
+        [NotMapped]
+        public virtual Usuario? EqCdgoUsrioNavigation { get; set; }
+
+        [JsonIgnore]
+        [NotMapped]
+        public virtual ICollection<EstadoHecho> EstadoHechoes { get; set; } = new List<EstadoHecho>();
+
+        [JsonIgnore]
+        [NotMapped]
+        public virtual ICollection<Evento> Eventos { get; set; } = new List<Evento>();
 
     }
 }

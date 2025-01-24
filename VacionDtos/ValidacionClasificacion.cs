@@ -24,12 +24,12 @@ namespace VldcionDtos
             {
                 //Validar los campos Obligatorios.
                 if (
-                    !string.IsNullOrEmpty(objClasificacion.Nombre) &&
-                    !string.IsNullOrEmpty(objClasificacion.Descripcion)
+                    !string.IsNullOrEmpty(objClasificacion.ClNmbre) &&
+                    !string.IsNullOrEmpty(objClasificacion.ClDscrpcion)
                    )
                 {
                     //Validar la llave relacional.
-                    var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objClasificacion.CodigoUsuario);
+                    var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objClasificacion.ClCdgoUsrio);
                     if (UsuarioExiste == false)
                     {
                         //Retorna valor del TipoMensaje: RelacionNoExiste
@@ -62,12 +62,12 @@ namespace VldcionDtos
             int resultado = 0;
             try
             {
-                var ClasificacionExiste = await ObjClasificacion.VerificarClasificacion(objClasificacionDTO.Id);
+                var ClasificacionExiste = await ObjClasificacion.VerificarClasificacion(objClasificacionDTO.ClRowid);
                 if (ClasificacionExiste == true)
                 {
                     //Validar los campos Obligatorios.
                     if (
-                        objClasificacionDTO.Estado == true || objClasificacionDTO.Estado == false
+                        objClasificacionDTO.ClActvo == true || objClasificacionDTO.ClActvo == false
                        )
                     {
                         resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
@@ -98,17 +98,17 @@ namespace VldcionDtos
             int resultado = 0;
             try
             {
-                var ClasificacionExiste = await ObjClasificacion.VerificarClasificacion(objClasificacionDTO.Id);
+                var ClasificacionExiste = await ObjClasificacion.VerificarClasificacion(objClasificacionDTO.ClRowid);
                 if (ClasificacionExiste == true)
                 {
                     //Validar los campos Obligatorios.
                     if (
-                        !string.IsNullOrEmpty(objClasificacionDTO.Nombre) &&
-                        !string.IsNullOrEmpty(objClasificacionDTO.Descripcion)
+                        !string.IsNullOrEmpty(objClasificacionDTO.ClNmbre) &&
+                        !string.IsNullOrEmpty(objClasificacionDTO.ClDscrpcion)
                        )
                     {
                         //Validar la llave relacional.
-                        var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objClasificacionDTO.CodigoUsuario);
+                        var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objClasificacionDTO.ClCdgoUsrio);
                         if (UsuarioExiste == false)
                         {
                             //Retorna valor del TipoMensaje: RelacionNoExiste

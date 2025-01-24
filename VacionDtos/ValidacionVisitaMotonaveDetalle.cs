@@ -1,4 +1,6 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using AccsoDtos.Mappings;
+using AutoMapper;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +14,22 @@ namespace VldcionDtos
     /// </summary>
     public class ValidacionVisitaMotonaveDetalle
     {
+        private readonly IMapper _mapper;
+
         AccsoDtos.VisitaMotonave.VisitaMotonaveDetalle ObjVisitaMotonaveDetalle = new AccsoDtos.VisitaMotonave.VisitaMotonaveDetalle();
         AccsoDtos.VisitaMotonave.VisitaMotonave ObjVisitaMotonave = new AccsoDtos.VisitaMotonave.VisitaMotonave();
-        AccsoDtos.Parametrizacion.Tercero ObjTercero = new AccsoDtos.Parametrizacion.Tercero();
+        AccsoDtos.Parametrizacion.Tercero ObjTercero;
+
+        public ValidacionVisitaMotonaveDetalle()
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
+
+            _mapper = configuration.CreateMapper();
+            ObjTercero = new AccsoDtos.Parametrizacion.Tercero(_mapper);
+        }
 
         #region Validacion de VisitaMotonaveDetalle , metodo Eliminar
         public async Task<int> ValidarEliminar(MdloDtos.VisitaMotonaveDetalle objVisitaMotonaveDetalle_)

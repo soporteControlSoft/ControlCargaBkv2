@@ -95,7 +95,7 @@ namespace AccsoDtos.EstadoHechos
         #endregion
 
         #region Actualizar _Clasificacion
-        public async Task<MdloDtos.EstadoHecho> EditarEstadoHecho(MdloDtos.EstadoHecho _EstadoHecho)
+        public async Task<MdloDtos.DTO.EstadoHechoDTO> EditarEstadoHecho(MdloDtos.DTO.EstadoHechoDTO _EstadoHecho)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
@@ -117,14 +117,12 @@ namespace AccsoDtos.EstadoHechos
                         EstadoHechoExiste.EhRowidVstaMtnve = _EstadoHecho.EhRowidVstaMtnve;
                         EstadoHechoExiste.EhCdgoUsrio = _EstadoHecho.EhCdgoUsrio;
                         EstadoHechoExiste.EhEstdo= _EstadoHecho.EhCdgoUsrio;
-
-
                         _dbContex.Entry(EstadoHechoExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                         await _dbContex.SaveChangesAsync();
 
                     }
                     _dbContex.Dispose();
-                    return EstadoHechoExiste;
+                    return _EstadoHecho; 
                 }
                 catch (Exception ex)
                 {
@@ -199,7 +197,7 @@ namespace AccsoDtos.EstadoHechos
         #endregion
 
         #region Modificar EstadoEstadoHecho EstadoHecho Por codigo.
-        public async Task<MdloDtos.EstadoHecho> CerrarOcancelarEstadoEstadoHecho(MdloDtos.EstadoHecho _EstadoHecho)
+        public async Task<dynamic> CerrarOcancelarEstadoEstadoHecho(MdloDtos.DTO.EstadoHechoDTO _EstadoHecho)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {

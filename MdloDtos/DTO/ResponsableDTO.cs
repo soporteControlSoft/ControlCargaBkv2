@@ -16,17 +16,24 @@ namespace MdloDtos.DTO
     public class ResponsableDTO
     {
         [Key]
-        public int Id { get; set; }
+        [JsonPropertyName("Id")]
+        public int ReRowid { get; set; }
 
         [StringLength(60)]
-        public string? Nombre { get; set; } = null!;
+        [JsonPropertyName("Nombre")]
+        public string? ReNmbre { get; set; } = null!;
 
-        public string? Descripcion { get; set; } = null!;
+        [JsonPropertyName("Descripcion")]
+        public string? ReDscrpcion { get; set; } = null!;
 
-        public DateTime FechaCreacion { get; set; }
+        [JsonPropertyName("FechaCreacion")]
+        public DateTime ReFchaCrcion { get; set; }
 
-        public string? CodigoUsuario { get; set; }
-        public bool Estado { get; set; }
+        [JsonPropertyName("CodigoUsuario")]
+        public string? ReCdgoUsrio { get; set; }
+
+        [JsonPropertyName("Estado")]
+        public bool ReActvo { get; set; }
 
         [JsonIgnore]
         [NotMapped]

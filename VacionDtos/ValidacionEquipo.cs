@@ -23,12 +23,12 @@ namespace VldcionDtos
             try {
                 //Validar los campos Obligatorios.
                 if (
-                    !string.IsNullOrEmpty(objEquipo.Nombre) &&
-                    !string.IsNullOrEmpty(objEquipo.Descripcion)
+                    !string.IsNullOrEmpty(objEquipo.EqNmbre) &&
+                    !string.IsNullOrEmpty(objEquipo.EqDscrpcion)
                    )
                 {
                     //Validar la llave relacional.
-                    var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objEquipo.CodigoUsuario);
+                    var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objEquipo.EqCdgoUsrio);
                     if (UsuarioExiste == false)
                     {
                         resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.RelacionNoExiste;
@@ -61,13 +61,13 @@ namespace VldcionDtos
             int resultado = 0;
             try
             {
-                var EquipoExiste = await ObjEquipo.VerificarEquipo(objEquipo.Id);
+                var EquipoExiste = await ObjEquipo.VerificarEquipo(objEquipo.EqRowid);
                 //Validar si existe el equipo
                 if (EquipoExiste == true)
                 {
                     //Validar los campos Obligatorios.
                     if (
-                         objEquipo.Estado == true || objEquipo.Estado == false
+                         objEquipo.EqActvo == true || objEquipo.EqActvo == false
                        )
                     {
                             resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
@@ -100,18 +100,18 @@ namespace VldcionDtos
             int resultado = 0;
             try
             {
-                var EquipoExiste = await ObjEquipo.VerificarEquipo(objEquipo.Id);
+                var EquipoExiste = await ObjEquipo.VerificarEquipo(objEquipo.EqRowid);
                 //Validar si existe el equipo
                 if (EquipoExiste == true)
                 {
                     //Validar los campos Obligatorios.
                     if (
-                        !string.IsNullOrEmpty(objEquipo.Nombre) &&
-                        !string.IsNullOrEmpty(objEquipo.Descripcion)
+                        !string.IsNullOrEmpty(objEquipo.EqNmbre) &&
+                        !string.IsNullOrEmpty(objEquipo.EqDscrpcion)
                        )
                     {
                         //Validar la llave relacional.
-                        var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objEquipo.CodigoUsuario);
+                        var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objEquipo.EqCdgoUsrio);
                         if (UsuarioExiste == false)
                         {
                             resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.RelacionNoExiste;

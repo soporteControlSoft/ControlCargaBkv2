@@ -1,4 +1,6 @@
-﻿using MdloDtos;
+﻿using AccsoDtos.Mappings;
+using AutoMapper;
+using MdloDtos;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -11,11 +13,23 @@ namespace VldcionDtos
 {
     public class ValidacionDeposito
     {
+        private readonly IMapper _mapper;
         AccsoDtos.PortalClientes.Deposito _ObjDeposito = new AccsoDtos.PortalClientes.Deposito();
         AccsoDtos.Parametrizacion.Compania _ObjCompania = new AccsoDtos.Parametrizacion.Compania(null);
-        AccsoDtos.Parametrizacion.Tercero _ObjTercero = new AccsoDtos.Parametrizacion.Tercero();
+        AccsoDtos.Parametrizacion.Tercero _ObjTercero;
         AccsoDtos.Parametrizacion.Producto _ObjProducto = new AccsoDtos.Parametrizacion.Producto(null);
         AccsoDtos.Parametrizacion.Usuario _ObjUsuario = new AccsoDtos.Parametrizacion.Usuario();
+
+        public ValidacionDeposito()
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
+
+            _mapper = configuration.CreateMapper();
+            _ObjTercero = new AccsoDtos.Parametrizacion.Tercero(_mapper);
+        }
 
         #region Validacion de creación Deposito , metodo Ingreso
         public async Task<int> ValidarIngreso(MdloDtos.Deposito ObjDeposito)

@@ -16,34 +16,48 @@ namespace MdloDtos.DTO
     public class EventoDTO
     {
         [Key]
-        public int IdEvento { get; set; }
+        [JsonPropertyName("IdEvento")]
+        public int EvRowid { get; set; }
 
+        [JsonPropertyName("Nombre")]
         [StringLength(60)]
-        public string? Nombre { get; set; } = null!;
+        public string? EvNmbre { get; set; } = null!;
 
+        [JsonPropertyName("Observacion")]
         [StringLength(2)]
-        public string? Observacion { get; set; } = null!;
-        public DateTime? FechaCreacion { get; set; }
+        public string? EvObsrvcion { get; set; } = null!;
 
+        [JsonPropertyName("FechaCreacion")]
+        public DateTime? EvFchaCrcion { get; set; }
+
+        [JsonPropertyName("FechaInicio")]
         [StringLength(2)]
-        public string? FechaInicio { get; set; } = null!;
+        public string? EvFchaIncio { get; set; } = null!;
 
+        [JsonPropertyName("FechaFin")]
         [StringLength(2)]
-        public string? FechaFin { get; set; } = null!;
+        public string? EvFchaFin { get; set; } = null!;
 
+        [JsonPropertyName("Escotilla")]
         [StringLength(2)]
-        public string? Escotilla { get; set; } = null!;
-        public int CodigoClasificacion { get; set; }
+        public string? EvEsctlla { get; set; } = null!;
 
-        public int CodigoResponsable { get; set; }
+        [JsonPropertyName("CodigoClasificacion")]
+        public int EvRowidClsfccion { get; set; }
 
+        [JsonPropertyName("CodigoResponsable")]
+        public int EvRowidRspnsble { get; set; }
+
+        [JsonPropertyName("Equipo")]
         [StringLength(2)]
-        public string? Equipo { get; set; } = null!;
+        public string? EvEqpo { get; set; } = null!;
 
         [StringLength(15)]
-        public string? CodigoUsuario { get; set; }
+        [JsonPropertyName("CodigoUsuario")]
+        public string? EvCdgoUsrio { get; set; }
 
-        public bool? Estado { get; set; }
+        [JsonPropertyName("Estado")]
+        public bool? EvActvo { get; set; }
 
         [JsonIgnore]
         [NotMapped]

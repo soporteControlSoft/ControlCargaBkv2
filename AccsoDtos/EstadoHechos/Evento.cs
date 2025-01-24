@@ -35,7 +35,7 @@ namespace AccsoDtos.EstadoHechos
                 var ObjEvento = new MdloDtos.Evento();
                 try
                 {
-                    var EvntoExiste = await this.VerificarEvento(_EventoDTO.IdEvento);
+                    var EvntoExiste = await this.VerificarEvento(_EventoDTO.EvRowid);
 
                     if (EvntoExiste == true)
                     {
@@ -45,16 +45,16 @@ namespace AccsoDtos.EstadoHechos
                     {
                         DateTime fechaSistema = DateTime.Now;
 
-                        ObjEvento.EvNmbre = _EventoDTO.Nombre;
-                        ObjEvento.EvObsrvcion = _EventoDTO.Observacion;
+                        ObjEvento.EvNmbre = _EventoDTO.EvNmbre;
+                        ObjEvento.EvObsrvcion = _EventoDTO.EvObsrvcion;
                         ObjEvento.EvFchaCrcion = fechaSistema;
-                        ObjEvento.EvFchaIncio = _EventoDTO.FechaInicio;
-                        ObjEvento.EvFchaFin = _EventoDTO.FechaFin;
-                        ObjEvento.EvEsctlla = _EventoDTO.Escotilla;
-                        ObjEvento.EvRowidClsfccion = _EventoDTO.CodigoClasificacion;
-                        ObjEvento.EvRowidRspnsble = _EventoDTO.CodigoResponsable;
-                        ObjEvento.EvEqpo = _EventoDTO.Equipo;
-                        ObjEvento.EvCdgoUsrio = _EventoDTO.CodigoUsuario;
+                        ObjEvento.EvFchaIncio = _EventoDTO.EvFchaIncio;
+                        ObjEvento.EvFchaFin = _EventoDTO.EvFchaFin;
+                        ObjEvento.EvEsctlla = _EventoDTO.EvEsctlla;
+                        ObjEvento.EvRowidClsfccion = _EventoDTO.EvRowidClsfccion;
+                        ObjEvento.EvRowidRspnsble = _EventoDTO.EvRowidRspnsble;
+                        ObjEvento.EvEqpo = _EventoDTO.EvEqpo;
+                        ObjEvento.EvCdgoUsrio = _EventoDTO.EvCdgoUsrio;
                         ObjEvento.EvActvo = true;
 
                         var res = await _dbContex.Eventos.AddAsync(ObjEvento);
@@ -99,20 +99,20 @@ namespace AccsoDtos.EstadoHechos
             {
                 try
                 {
-                    MdloDtos.Evento EventoExiste = await _dbContex.Eventos.FindAsync(_EventoDTO.IdEvento);
+                    MdloDtos.Evento EventoExiste = await _dbContex.Eventos.FindAsync(_EventoDTO.EvRowid);
                     if (EventoExiste != null)
                     {
 
-                        EventoExiste.EvNmbre = _EventoDTO.Nombre;
-                        EventoExiste.EvObsrvcion = _EventoDTO.Observacion;
-                        EventoExiste.EvFchaIncio = _EventoDTO.FechaInicio;
-                        EventoExiste.EvFchaFin = _EventoDTO.FechaFin;
-                        EventoExiste.EvEsctlla = _EventoDTO.Escotilla;
-                        EventoExiste.EvRowidClsfccion = _EventoDTO.CodigoClasificacion;
-                        EventoExiste.EvRowidRspnsble = _EventoDTO.CodigoResponsable;
-                        EventoExiste.EvEqpo = _EventoDTO.Equipo;
-                        EventoExiste.EvCdgoUsrio = _EventoDTO.CodigoUsuario;
-                        EventoExiste.EvActvo = _EventoDTO.Estado;
+                        EventoExiste.EvNmbre = _EventoDTO.EvNmbre;
+                        EventoExiste.EvObsrvcion = _EventoDTO.EvObsrvcion;
+                        EventoExiste.EvFchaIncio = _EventoDTO.EvFchaIncio;
+                        EventoExiste.EvFchaFin = _EventoDTO.EvFchaFin;
+                        EventoExiste.EvEsctlla = _EventoDTO.EvEsctlla;
+                        EventoExiste.EvRowidClsfccion = _EventoDTO.EvRowidClsfccion;
+                        EventoExiste.EvRowidRspnsble = _EventoDTO.EvRowidRspnsble;
+                        EventoExiste.EvEqpo = _EventoDTO.EvEqpo;
+                        EventoExiste.EvCdgoUsrio = _EventoDTO.EvCdgoUsrio;
+                        EventoExiste.EvActvo = _EventoDTO.EvActvo;
 
                         _dbContex.Entry(EventoExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                         await _dbContex.SaveChangesAsync();
@@ -176,10 +176,10 @@ namespace AccsoDtos.EstadoHechos
             {
                 try
                 {
-                    MdloDtos.Evento EventoExiste = await _dbContex.Eventos.FindAsync(_EventoDTO.IdEvento);
+                    MdloDtos.Evento EventoExiste = await _dbContex.Eventos.FindAsync(_EventoDTO.EvRowid);
                     if (EventoExiste != null)
                     {
-                        EventoExiste.EvActvo = _EventoDTO.Estado;
+                        EventoExiste.EvActvo = _EventoDTO.EvActvo;
 
                         _dbContex.Entry(EventoExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                         await _dbContex.SaveChangesAsync();

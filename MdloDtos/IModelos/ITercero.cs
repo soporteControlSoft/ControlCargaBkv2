@@ -8,20 +8,20 @@ namespace MdloDtos.IModelos
 {
     public interface ITercero
     {
-        public Task<List<MdloDtos.Tercero>> ListarTercero();
+        public Task<List<MdloDtos.DTO.TerceroDTO>> ListarTercero();
 
-        public Task<List<MdloDtos.Tercero>> FiltrarTerceroGeneral(String Codigo);
+        public Task<List<MdloDtos.DTO.TerceroDTO>> FiltrarTerceroGeneral(String Codigo);
 
-        public Task<List<MdloDtos.Tercero>> FiltrarTerceroEspecifico(String Codigo);
+        public Task<List<MdloDtos.DTO.TerceroDTO>> FiltrarTerceroEspecifico(String Codigo);
 
-        public Task<MdloDtos.Tercero> IngresarTercero(MdloDtos.Tercero ObjTercero);
+        public Task<dynamic> IngresarTercero(MdloDtos.DTO.TerceroDTO ObjTercero);
 
-        public Task<MdloDtos.Tercero> EditarTercero(MdloDtos.Tercero ObjTercero);
+        public Task<MdloDtos.DTO.TerceroDTO> EditarTercero(MdloDtos.DTO.TerceroDTO ObjTercero);
 
-        public Task<MdloDtos.Tercero> EliminarTercero(int Codigo);
+        public Task<dynamic> EliminarTercero(int Codigo);
 
-        public Task<List<MdloDtos.Tercero>> FiltrarTerceroPorTipo(int Codigo);
+        public Task<List<MdloDtos.DTO.TerceroDTO>> FiltrarTerceroPorTipo(int Codigo);
 
-        public Task<List<MdloDtos.Tercero>> FiltrarTerceroEspecificoPorId(int IdTercero);
+        public Task<List<MdloDtos.DTO.TerceroDTO>> FiltrarTerceroEspecificoPorId(int IdTercero);
     }
 }
