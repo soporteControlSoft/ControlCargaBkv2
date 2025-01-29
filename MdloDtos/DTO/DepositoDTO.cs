@@ -4,344 +4,344 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
-namespace MdloDtos;
+namespace MdloDtos.DTO;
 
 public partial class DepositoDTO
 {
     [Key]
     [JsonPropertyName("Id")]
-    public int? DeRowid { get; set; }
+    public int? Id { get; set; }
 
     [JsonPropertyName("CodigoCompania")]
-    public string? DeCia { get; set; } = null!;
+    public string? CodigoCompania { get; set; } = null!;
 
     [JsonPropertyName("Codigo")]
     [DataType(DataType.Text)]
     [StringLength(15)]
-    public string? DeCdgo { get; set; } = null!;
+    public string? Codigo { get; set; } = null!;
 
     [JsonPropertyName("Estado")]
     [DataType(DataType.Text)]
     [StringLength(15)]
-    public string? DeEstdo { get; set; } = null!;
+    public string? Estado { get; set; } = null!;
 
     [JsonPropertyName("IdTercero")]
-    public int? DeRowidTrcro { get; set; }
+    public int? IdTercero { get; set; }
 
     [JsonPropertyName("IdSedeDespacho")]
-    public int? DeRowidSdeDspcho { get; set; }
+    public int? IdSedeDespacho { get; set; }
 
     [JsonPropertyName("IdTerceroFacturacion")]
-    public int? DeRowidTrcroFctrcion { get; set; }
+    public int? IdTerceroFacturacion { get; set; }
 
 
     [JsonPropertyName("CodigoDepositoPadre")]
     [DataType(DataType.Text)]
     [StringLength(15)]
-    public string? DeCdgoDpstoPdre { get; set; } = null!;
+    public string? CodigoDepositoPadre { get; set; } = null!;
 
     [JsonPropertyName("CodigoProducto")]
     [DataType(DataType.Text)]
     [StringLength(15)]
 
-    public string? DeCdgoPrdcto { get; set; } = null!;
+    public string? CodigoProducto { get; set; } = null!;
 
     [JsonPropertyName("FechaAgrupacion")]
-    public DateTime? DeFchaAgrpcion { get; set; }
+    public DateTime? FechaAgrupacion { get; set; }
 
 
     [JsonPropertyName("CodigoUsuarioCrea")]
-    public string? DeCdgoUsrioCrea { get; set; } = null!;
+    public string? CodigoUsuarioCrea { get; set; } = null!;
 
     [JsonPropertyName("CodigoUsuarioAprueba")]
-    public string? DeCdgoUsrioAprba { get; set; } = null!;
+    public string? CodigoUsuarioAprueba { get; set; } = null!;
 
     [JsonPropertyName("Activo")]
-    public bool? DeActvo { get; set; }
+    public bool? Activo { get; set; }
 
     [JsonPropertyName("Aprobado")]
-    public bool? DeAprbdo { get; set; }
+    public bool? Aprobado { get; set; }
 
     [JsonPropertyName("EsSubdeposito")]
-    public bool? DeEsSubdpsto { get; set; }
+    public bool? EsSubdeposito { get; set; }
 
     [JsonPropertyName("Kilos")]
-    public int? DeKlos { get; set; }
+    public int? Kilos { get; set; }
 
     [JsonPropertyName("Cantidad")]
 
-    public int? DeCntdad { get; set; }
+    public int? Cantidad { get; set; }
 
     [JsonPropertyName("SeFactura")]
-    public bool? DeSeFctra { get; set; }
+    public bool? SeFactura { get; set; }
 
     [JsonPropertyName("CodigoCondicionFacturacion")]
-    public string? DeCdgoCndcionFctrcion { get; set; }
+    public string? CodigoCondicionFacturacion { get; set; }
 
     [JsonPropertyName("CodigoPeriodoFacturacion")]
-    public string? DeCdgoPrdoFctrcion { get; set; }
+    public string? CodigoPeriodoFacturacion { get; set; }
 
     [JsonPropertyName("DiasGracia")]
-    public short? DeDiasGrcia { get; set; }
+    public short? DiasGracia { get; set; }
 
     [JsonPropertyName("ValorFijoXTonelda")]
-    public decimal? DeVlorFjoXTnlda { get; set; }
+    public decimal? ValorFijoXTonelda { get; set; }
 
     [JsonPropertyName("DiasPeriodo")]
-    public byte? DeDiasPrdo { get; set; }
+    public byte? DiasPeriodo { get; set; }
 
     [JsonPropertyName("DiasCobro")]
-    public byte? DeDiasCbro { get; set; }
+    public byte? DiasCobro { get; set; }
 
     [JsonPropertyName("ModalidadFacturacion")]
-    public string? DeMdldadFctrcion { get; set; }
+    public string? ModalidadFacturacion { get; set; }
 
     [JsonPropertyName("LiquidarDolar")]
-    public bool? DeLqdaDlar { get; set; }
+    public bool? LiquidarDolar { get; set; }
 
     [JsonPropertyName("CondicionPago")]
-    public string? DeCndcionPgo { get; set; }
+    public string? CondicionPago { get; set; }
 
     [JsonPropertyName("FacturacionFinalizada")]
-    public bool? DeFctrcionFnlzda { get; set; }
+    public bool? FacturacionFinalizada { get; set; }
 
     [JsonPropertyName("TarifaPeriodo1")]
-    public decimal? DeTrfaPrdo1 { get; set; }
+    public decimal? TarifaPeriodo1 { get; set; }
 
     [JsonPropertyName("TarifaPeriodo2")]
-    public decimal? DeTrfaPrdo2 { get; set; }
+    public decimal? TarifaPeriodo2 { get; set; }
 
     [JsonPropertyName("TarifaPeriodo3")]
-    public decimal? DeTrfaPrdo3 { get; set; }
+    public decimal? TarifaPeriodo3 { get; set; }
 
     [JsonPropertyName("TarifaPeriodo4")]
-    public decimal? DeTrfaPrdo4 { get; set; }
+    public decimal? TarifaPeriodo4 { get; set; }
 
     [JsonPropertyName("TarifaPeriodo5")]
-    public decimal? DeTrfaPrdo5 { get; set; }
+    public decimal? TarifaPeriodo5 { get; set; }
 
     [JsonPropertyName("TarifaPeriodo6")]
-    public decimal? DeTrfaPrdo6 { get; set; }
+    public decimal? TarifaPeriodo6 { get; set; }
 
     [JsonPropertyName("FechaInicioFacturacion")]
-    public DateTime? DeFchaIncioFctrcion { get; set; }
+    public DateTime? FechaInicioFacturacion { get; set; }
 
     [JsonPropertyName("FechaUltimaFactura")]
-    public DateTime? DeFchaUltmaFctra { get; set; }
+    public DateTime? FechaUltimaFactura { get; set; }
 
     [JsonPropertyName("NumeroUltimaFactura")]
-    public string? DeNmroUltmaFctra { get; set; }
+    public string? NumeroUltimaFactura { get; set; }
 
     [JsonPropertyName("UltimoPeriodoFacturado")]
-    public short? DeUltmoPrdoFctrdo { get; set; }
+    public short? UltimoPeriodoFacturado { get; set; }
 
     [JsonPropertyName("FechaPrimerMovimiento")]
-    public DateTime? DeFchaPrmerMvmnto { get; set; }
+    public DateTime? FechaPrimerMovimiento { get; set; }
 
     [JsonPropertyName("ValorCIFDolar")]
-    public decimal? DeVlorCifUs { get; set; }
+    public decimal? ValorCIFDolar { get; set; }
 
     [JsonPropertyName("ValorCIFLocal")]
-    public decimal? DeVlorCifLo { get; set; }
+    public decimal? ValorCIFLocal { get; set; }
 
     [JsonPropertyName("ValorCIFCliente")]
-    public decimal? DeVlorCifClnte { get; set; }
+    public decimal? ValorCIFCliente { get; set; }
 
     [JsonPropertyName("CopiasTiquete")]
-    public short? DeCpiasTqte { get; set; }
+    public short? CopiasTiquete { get; set; }
 
     [JsonPropertyName("Observaciones")]
-    public string? DeObsrvcnes { get; set; }
+    public string? Observaciones { get; set; }
 
     [JsonPropertyName("Comentarios")]
-    public string? DeCmntrios { get; set; }
+    public string? Comentarios { get; set; }
 
     [JsonPropertyName("ValorUnitario")]
-    public decimal? DeVlorUntrio { get; set; }
+    public decimal? ValorUnitario { get; set; }
 
     [JsonPropertyName("PesoPromedio")]
-    public decimal? DePsoPrmdio { get; set; }
+    public decimal? PesoPromedio { get; set; }
 
     [JsonPropertyName("BLKilosOriginal")]
-    public int? DeBlKlosOrgnal { get; set; }
+    public int? BLKilosOriginal { get; set; }
 
     [JsonPropertyName("BLUnidadesOriginal")]
-    public int? DeBlUnddesOrgnal { get; set; }
+    public int? BLUnidadesOriginal { get; set; }
 
     [JsonPropertyName("BLKilos")]
-    public int? DeBlKlos { get; set; }
+    public int? BLKilos { get; set; }
 
     [JsonPropertyName("BLunidades")]
-    public int? DeBlUnddes { get; set; }
+    public int? BLunidades { get; set; }
 
     [JsonPropertyName("NacionalizadoKilos")]
-    public int? DeNcnlzdoKlos { get; set; }
+    public int? NacionalizadoKilos { get; set; }
 
     [JsonPropertyName("NacionalizadoUnidades")]
-    public int? DeNcnlzdoUnddes { get; set; }
+    public int? NacionalizadoUnidades { get; set; }
 
     [JsonPropertyName("RetenidoKilos")]
-    public int? DeRtndoKlos { get; set; }
+    public int? RetenidoKilos { get; set; }
 
     [JsonPropertyName("RetenidoUnidades")]
-    public string? DeRtndoUnddes { get; set; }
+    public string? RetenidoUnidades { get; set; }
 
     [JsonPropertyName("EntradasUnidades")]
-    public int? DeEntrdasUnddes { get; set; }
+    public int? EntradasUnidades { get; set; }
 
     [JsonPropertyName("SalidasUnidades")]
-    public int? DeSldasUnddes { get; set; }
+    public int? SalidasUnidades { get; set; }
 
     [JsonPropertyName("EntradasKilos")]
-    public int? DeEntrdasKlos { get; set; }
+    public int? EntradasKilos { get; set; }
 
     [JsonPropertyName("SalidasKilos")]
-    public int? DeSldasKlos { get; set; }
+    public int? SalidasKilos { get; set; }
 
     [JsonPropertyName("CampoCliente1")]
-    public string? DeCmpoClnte1 { get; set; }
+    public string? CampoCliente1 { get; set; }
 
     [JsonPropertyName("CampoCliente2")]
-    public string? DeCmpoClnte2 { get; set; }
+    public string? CampoCliente2 { get; set; }
 
     [JsonPropertyName("CampoCliente3")]
-    public string? DeCmpoClnte3 { get; set; }
+    public string? CampoCliente3 { get; set; }
 
     [JsonPropertyName("IdEmpaque")]
-    public int? DeRowidEmpque { get; set; }
+    public int? IdEmpaque { get; set; }
 
     [JsonPropertyName("ValorCIFPrimerPeriodo")]
-    public decimal? DeVlorCifPrmerPrdo { get; set; }
+    public decimal? ValorCIFPrimerPeriodo { get; set; }
 
     [JsonPropertyName("Comun")]
-    public bool? DeCmun { get; set; }
+    public bool? Comun { get; set; }
 
     [JsonPropertyName("ComprometidoKilos")]
-    public int? DeCmprmtdoKlos { get; set; }
+    public int? ComprometidoKilos { get; set; }
 
     [JsonPropertyName("ComprometidoUnidades")]
-    public int? DeCmprmtdoUnddes { get; set; }
+    public int? ComprometidoUnidades { get; set; }
 
     [JsonPropertyName("ControlUnidades")]
-    public bool? DeCntrolUnddes { get; set; }
+    public bool? ControlUnidades { get; set; }
 
     [JsonPropertyName("Suspendido")]
-    public bool? DeSspnddo { get; set; }
+    public bool? Suspendido { get; set; }
 
     [JsonPropertyName("CodigoUsuarioRechaza")]
-    public string? DeCdgoUsrioRchza { get; set; }
+    public string? CodigoUsuarioRechaza { get; set; }
 
     [JsonPropertyName("FechaAprobacionRechazo")]
-    public DateTime? DeFchaAprbcionRchzo { get; set; }
+    public DateTime? FechaAprobacionRechazo { get; set; }
 
     [JsonPropertyName("ComentarioRechazo")]
-    public string? DeCmntrioRchzo { get; set; }
+    public string? ComentarioRechazo { get; set; }
 
     [JsonPropertyName("IdVisitaMotonave")]
-    public int? DeRowidVstaMtnve { get; set; }
+    public int? IdVisitaMotonave { get; set; }
 
     [JsonPropertyName("CodigoCompaniaFacturacion")]
-    public string? DeCiaFctrcion { get; set; }
+    public string? CodigoCompaniaFacturacion { get; set; }
 
     [JsonPropertyName("IdSubDepositoFac1")]
-    public int? DeRowidSubdpstoFac1 { get; set; }
+    public int? IdSubDepositoFac1 { get; set; }
 
     [JsonPropertyName("IdSubDepositoFac2")]
-    public int? DeRowidSubdpstoFac2 { get; set; }
+    public int? IdSubDepositoFac2 { get; set; }
 
     [JsonPropertyName("IdSubDepositoFac3")]
-    public int? DeRowidSubdpstoFac3 { get; set; }
+    public int? IdSubDepositoFac3 { get; set; }
 
     [JsonPropertyName("TRM")]
-    public decimal? DeTrm { get; set; }
+    public decimal? TRM { get; set; }
 
 
 
     [JsonPropertyName("CondicionFacturacionNavegacion")]
     [NotMapped]
     [JsonIgnore]
-    public virtual CondicionFacturacion? DeCdgoCndcionFctrcionNavigation { get; set; }
+    public virtual CondicionFacturacion? CondicionFacturacionNavegacion { get; set; }
 
     [JsonPropertyName("ProductoNavegacion")]
     [NotMapped]
     [JsonIgnore]
-    public virtual Producto? DeCdgoPrdctoNavigation { get; set; } = null!;
+    public virtual Producto? ProductoNavegacion { get; set; } = null!;
 
 
     [JsonPropertyName("PeriodoFacturacionNavegacion")]
     [NotMapped]
     [JsonIgnore]
-    public virtual PeriodoFacturacion? DeCdgoPrdoFctrcionNavigation { get; set; }
+    public virtual PeriodoFacturacion? PeriodoFacturacionNavegacion { get; set; }
 
 
     [JsonPropertyName("UsuarioApruebaNavegacion")]
     [NotMapped]
     [JsonIgnore]
-    public virtual Usuario? DeCdgoUsrioAprbaNavigation { get; set; } = null!;
+    public virtual Usuario? UsuarioApruebaNavegacion { get; set; } = null!;
 
     [JsonPropertyName("UsuarioCreaNavegacion")]
     [NotMapped]
     //[JsonIgnore]
-    public virtual Usuario? DeCdgoUsrioCreaNavigation { get; set; } =   null!;
+    public virtual Usuario? UsuarioCreaNavegacion { get; set; } =   null!;
 
     [JsonPropertyName("CompaniaFacturacionNavegacion")]
     [NotMapped]
     //[JsonIgnore]
-    public virtual Companium? DeCiaFctrcionNavigation { get; set; }
+    public virtual Companium? CompaniaFacturacionNavegacion { get; set; }
 
 
     [JsonPropertyName("CompaniaNavegacion")]
     [NotMapped]
     //[JsonIgnore]
-    public virtual Companium? DeCiaNavigation { get; set; } = null!;
+    public virtual Companium? CompaniaNavegacion { get; set; } = null!;
 
 
     [JsonPropertyName("EmpaqueNavegacion")]
     [NotMapped]
     //[JsonIgnore]
-    public virtual Empaque? DeRowidEmpqueNavigation { get; set; }
+    public virtual Empaque? EmpaqueNavegacion { get; set; }
 
     [JsonPropertyName("SedeNavegacion")]
     [NotMapped]
     //[JsonIgnore]
-    public virtual Sede? DeRowidSdeDspchoNavigation { get; set; } = null!;
+    public virtual Sede? SedeNavegacion { get; set; } = null!;
 
     [JsonPropertyName("SubDepositoFacturacion1Navegacion")]
     [NotMapped]
     //[JsonIgnore]
-    public virtual Deposito? DeRowidSubdpstoFac1Navigation { get; set; }
+    public virtual Deposito? SubDepositoFacturacion1Navegacion { get; set; }
 
     [JsonPropertyName("SubDepositoFacturacion2Navegacion")]
     [NotMapped]
     //[JsonIgnore]
-    public virtual Deposito? DeRowidSubdpstoFac2Navigation { get; set; }
+    public virtual Deposito? SubDepositoFacturacion2Navegacion { get; set; }
 
     [JsonPropertyName("SubDepositoFacturacion3Navegacion")]
     [NotMapped]
     //[JsonIgnore]
-    public virtual Deposito? DeRowidSubdpstoFac3Navigation { get; set; }
+    public virtual Deposito? SubDepositoFacturacion3Navegacion { get; set; }
 
 
     [JsonPropertyName("TerceroFacturacionNavegacion")]
     [NotMapped]
     //[JsonIgnore]
-    public virtual Tercero? DeRowidTrcroFctrcionNavigation { get; set; }
+    public virtual Tercero? TerceroFacturacionNavegacion { get; set; }
 
     [JsonPropertyName("VisitaMotonaveNavegacion")]
     [NotMapped]
     //[JsonIgnore]
-    public virtual VisitaMotonave? DeRowidVstaMtnveNavigation { get; set; }
+    public virtual VisitaMotonave? VisitaMotonaveNavegacion { get; set; }
 
 
     [JsonPropertyName("TerceroNavegacion")]
     [NotMapped]
     //[JsonIgnore]
-    public virtual Tercero? DeRowidTrcroNavigation { get; set; } = null!;
+    public virtual Tercero? TerceroNavegacion { get; set; } = null!;
 
 
     [JsonPropertyName("ListaBLs")]
     [NotMapped]
-    public virtual ICollection<DepositoBl>? DepositoBls { get; set; } = new List<DepositoBl>();
+    public virtual ICollection<DepositoBl>? ListaBLs { get; set; } = new List<DepositoBl>();
 
 
     [NotMapped]
@@ -365,34 +365,34 @@ public partial class DepositoDTO
 
     [JsonPropertyName("SaldoKilos")]
     [NotMapped]
-    public int? DeSldoKlos { get; set; }
+    public int? SaldoKilos { get; set; }
 
 
 
     [JsonPropertyName("SaldoUnidades")]
     [NotMapped]
-    public int? DeSldoUnddes { get; set; }
+    public int? SaldoUnidades { get; set; }
 
 
     [JsonPropertyName("SubDepositos")]
     [NotMapped]
-    public List<MdloDtos.SpSubDeposito>? SubDepositos { get; set; }
-
-
+    //public List<MdloDtos.SpSubDeposito>? SubDepositos { get; set; }
+    public List<MdloDtos.DTO.SpSubDepositoDTO>? SubDepositos { get; set; }
+    
     public DepositoDTO() { }
 
     //contructor para el subdeposito
-    public DepositoDTO(string DeCia, int deRowidTrcro,int DeRowidSdeDspcho, string DeCdgoDpstoPdre, string DeCdgoPrdcto,
+    public DepositoDTO(string DeCia, int DeRowidTrcro,int DeRowidSdeDspcho, string DeCdgoDpstoPdre, string DeCdgoPrdcto,
         string DeCdgoUsrioCrea,int DeCntdad
         ) {
 
-        this.DeCia = DeCia;
-        this.DeRowidTrcro = DeRowidTrcro;
-        this.DeRowidSdeDspcho = DeRowidSdeDspcho;
-        this.DeCdgoDpstoPdre = DeCdgoDpstoPdre;
-        this.DeCdgoPrdcto = DeCdgoPrdcto;
-        this.DeCdgoUsrioCrea = DeCdgoUsrioCrea;
-        this.DeCntdad = DeCntdad;
+        this.CodigoCompania = DeCia;
+        this.IdTercero = DeRowidTrcro;
+        this.IdSedeDespacho = DeRowidSdeDspcho;
+        this.CodigoDepositoPadre = DeCdgoDpstoPdre;
+        this.CodigoProducto = DeCdgoPrdcto;
+        this.CodigoUsuarioCrea = DeCdgoUsrioCrea;
+        this.Cantidad = DeCntdad;
 
     }
 

@@ -18,6 +18,7 @@ namespace AccsoDtos.ControlPasajes
         /// </summary>
         private readonly CcVenturaContext _dbContext;
         private readonly IMapper _mapper;
+
         public ConceptosPesajes(IMapper mapper, MdloDtos.CcVenturaContext dbContext)
         {
             _mapper = mapper;
@@ -100,7 +101,7 @@ namespace AccsoDtos.ControlPasajes
             {
                 try
                 {
-                    var ConsecutivoExiste = await this.VerificarConsecutivo(ObjConceptosIng.CpCdgo, ObjConceptosIng.CpCia);
+                    var ConsecutivoExiste = await this.VerificarConsecutivo(ObjConceptosPesajes.CodigoConsecutivo, ObjConceptosPesajes.CodigoCompania);
 
                     if (ConsecutivoExiste == true)
                     {

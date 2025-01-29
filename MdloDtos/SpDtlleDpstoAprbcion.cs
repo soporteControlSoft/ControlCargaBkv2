@@ -14,11 +14,13 @@ public partial class SpDtlleDpstoAprbcion
 
     [JsonPropertyName("SituacionPortuaria_FechaArribo")]
     public DateTime? SpFchaArrbo { get; set; }
+
     [JsonPropertyName("SituacionPortuaria_FechaAtraque")]
     public DateTime? SpFchaAtrque { get; set; }
 
     [JsonPropertyName("SituacionPortuaria_FechaZarpe")]
     public DateTime? SpFchaZrpe { get; set; }
+
     [JsonPropertyName("SituacionPortuaria_FechaCreacion")]
     public DateTime? SpFchaCrcion { get; set; }
 

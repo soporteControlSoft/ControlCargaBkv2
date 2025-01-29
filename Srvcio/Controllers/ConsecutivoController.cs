@@ -6,7 +6,7 @@ using VldcionDtos;
 
 namespace Srvcio.Controllers
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
     [ApiController]
     public class ConsecutivoController : Controller
     {
@@ -26,11 +26,8 @@ namespace Srvcio.Controllers
         //validacion de datos.
         VldcionDtos.ValidacionCiudad validacionCiudad = new VldcionDtos.ValidacionCiudad();
 
-
-
-
         #region Lista de consectivos ( todos)
-        [HttpGet("listar-consecutivos")]
+        [HttpGet("listar-consecutivos-pesaje")]
         [ProducesResponseType<string>(StatusCodes.Status404NotFound)]
         public async Task<dynamic> ConsultarConsecutivo()
         {
@@ -59,8 +56,7 @@ namespace Srvcio.Controllers
         }
         #endregion
 
-
-        #region Lista de consectivos ( todos)
+        #region Lista de consectivos ( por compañia)
         [HttpGet("buscar-consecutivos-compania")]
         [ProducesResponseType<string>(StatusCodes.Status404NotFound)]
         public async Task<dynamic> FiltrarConsecutivoPorCompania(string CodigoCompania)
@@ -90,8 +86,7 @@ namespace Srvcio.Controllers
         }
         #endregion
 
-
-        #region Lista de consectivos ( todos)
+        #region Lista de consectivos ( por id)
         [HttpGet("buscar-consecutivos-id")]
         [ProducesResponseType<string>(StatusCodes.Status404NotFound)]
         public async Task<dynamic> FiltrarConsecutivoId(int Id)
@@ -120,7 +115,6 @@ namespace Srvcio.Controllers
             }
         }
         #endregion
-
 
         #region Ingresa consectivo
 

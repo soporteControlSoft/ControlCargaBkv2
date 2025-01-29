@@ -119,7 +119,7 @@ namespace MdloDtos.DTO
         [StringLength(80)]
         [DataType(DataType.Text)]
         //empresa
-        public string? NombreEmpresa { get; set; } = null!;
+        public string? NombreCompania { get; set; } = null!;
 
 
     }

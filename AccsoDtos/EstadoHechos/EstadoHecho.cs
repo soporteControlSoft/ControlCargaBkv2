@@ -23,10 +23,9 @@ namespace AccsoDtos.EstadoHechos
         private readonly CcVenturaContext _dbContext;
         private readonly IMapper _mapper;
 
-        public EstadoHecho(IMapper mapper, MdloDtos.CcVenturaContext dbContext)
+        public EstadoHecho(IMapper mapper)
         {
             _mapper = mapper;
-            _dbContext = dbContext;
         }
 
         #region Ingresar datos a la entidad EstadoHecho
@@ -61,12 +60,8 @@ namespace AccsoDtos.EstadoHechos
                         ObjEstadoHecho.EhEstdo = _EstadoHecho.EhEstdo;
 
                         var res = await _dbContex.EstadoHechos.AddAsync(ObjEstadoHecho);
-
-
                         await _dbContex.SaveChangesAsync();
                     }
-
-
                 }
                 catch (Exception ex)
                 {
@@ -82,7 +77,6 @@ namespace AccsoDtos.EstadoHechos
         #region Listar todos las EstadoHecho
         public async Task<List<MdloDtos.DTO.EstadoHechoDTO>> ListarEstadoHecho()
         {
-
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 var query  = await _dbContex.EstadoHechos.ToListAsync();
@@ -122,7 +116,8 @@ namespace AccsoDtos.EstadoHechos
 
                     }
                     _dbContex.Dispose();
-                    return _EstadoHecho; 
+
+                    return _mapper.Map<EstadoHechoDTO>(EstadoHechoExiste);
                 }
                 catch (Exception ex)
                 {
@@ -215,7 +210,7 @@ namespace AccsoDtos.EstadoHechos
                         await _dbContex.SaveChangesAsync();
                     }
                     _dbContex.Dispose();
-                    return EstadoHechoExiste;
+                    return _mapper.Map <EstadoHechoDTO> (EstadoHechoExiste);
                 }
                 catch (Exception ex)
                 {

@@ -1,4 +1,6 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using AccsoDtos.Mappings;
+using AutoMapper;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,11 +14,24 @@ namespace VldcionDtos
     /// </summary>
     public class ValidacionEstadoHecho
     {
-               
-        AccsoDtos.EstadoHechos.EstadoHecho ObjEstadoHecho = new AccsoDtos.EstadoHechos.EstadoHecho(null, null);
+        private readonly IMapper _mapper;
+
+        AccsoDtos.EstadoHechos.EstadoHecho ObjEstadoHecho;
         AccsoDtos.EstadoHechos.Evento _ObjEvento = new AccsoDtos.EstadoHechos.Evento(null, null);
         AccsoDtos.EstadoHechos.Sector _ObjSector = new AccsoDtos.EstadoHechos.Sector(null, null);
         AccsoDtos.Parametrizacion.Usuario _ObjUsuario = new AccsoDtos.Parametrizacion.Usuario();
+
+        public ValidacionEstadoHecho()
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
+
+            _mapper = configuration.CreateMapper();
+            ObjEstadoHecho = new AccsoDtos.EstadoHechos.EstadoHecho(_mapper);
+        }
+
 
         #region Validacion de EstsadoHecho , metodo Ingreso
         public async Task<int> ValidarIngreso(MdloDtos.DTO.EstadoHechoDTO objEstadoHecho) {
