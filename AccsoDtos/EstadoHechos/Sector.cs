@@ -37,7 +37,7 @@ namespace AccsoDtos.EstadoHechos
                 try
                 {
                     // Verifica si el sector ya existe
-                    var SectorExiste = await this.VerificarSector(_SectorDTO.IdSector);
+                    var SectorExiste = await this.VerificarSector(_SectorDTO.SeRowid);
 
                     if (SectorExiste == true)
                     {
@@ -61,7 +61,7 @@ namespace AccsoDtos.EstadoHechos
                         }
 
                         // Asignamos el nuevo código convertido a ObjSector.SeCdgo
-                        ObjSector.SeNmbre = _SectorDTO.IdNombreSector;
+                        ObjSector.SeNmbre = _SectorDTO.SeNmbre;
                         ObjSector.SeCdgo = nuevoCodigo.ToString();  // Convertimos de nuevo a string antes de asignarlo
 
                         // Agregar el nuevo sector y guardar los cambios

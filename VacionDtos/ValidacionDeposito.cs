@@ -14,14 +14,11 @@ namespace VldcionDtos
     public class ValidacionDeposito
     {
         private readonly IMapper _mapper;
-
         AccsoDtos.PortalClientes.Deposito _ObjDeposito;
         AccsoDtos.Parametrizacion.Compania _ObjCompania = new AccsoDtos.Parametrizacion.Compania(null);
-        AccsoDtos.Parametrizacion.Tercero _ObjTercero = new AccsoDtos.Parametrizacion.Tercero();
+        AccsoDtos.Parametrizacion.Tercero _ObjTercero;
         AccsoDtos.Parametrizacion.Producto _ObjProducto = new AccsoDtos.Parametrizacion.Producto(null);
         AccsoDtos.Parametrizacion.Usuario _ObjUsuario = new AccsoDtos.Parametrizacion.Usuario();
-
-
 
         public ValidacionDeposito()
         {
@@ -32,8 +29,10 @@ namespace VldcionDtos
 
             _mapper = configuration.CreateMapper();
             _ObjDeposito = new AccsoDtos.PortalClientes.Deposito(_mapper);
+            _ObjTercero = new AccsoDtos.Parametrizacion.Tercero(_mapper);
         }
 
+        }
 
 
         #region Validacion de creación Deposito , metodo Ingreso

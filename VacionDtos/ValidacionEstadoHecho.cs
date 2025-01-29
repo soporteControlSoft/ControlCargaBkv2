@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace VldcionDtos
 {
     /// <summary>
-    /// Clase para Validar las ciudades.
+    /// Clase para Validar las Estado de hechosos.
     /// </summary>
     public class ValidacionEstadoHecho
     {

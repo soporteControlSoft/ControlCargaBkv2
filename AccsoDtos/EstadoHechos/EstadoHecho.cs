@@ -111,13 +111,12 @@ namespace AccsoDtos.EstadoHechos
                         EstadoHechoExiste.EhRowidVstaMtnve = _EstadoHecho.EhRowidVstaMtnve;
                         EstadoHechoExiste.EhCdgoUsrio = _EstadoHecho.EhCdgoUsrio;
                         EstadoHechoExiste.EhEstdo= _EstadoHecho.EhCdgoUsrio;
-
-
                         _dbContex.Entry(EstadoHechoExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                         await _dbContex.SaveChangesAsync();
 
                     }
                     _dbContex.Dispose();
+
                     return _mapper.Map<EstadoHechoDTO>(EstadoHechoExiste);
                 }
                 catch (Exception ex)

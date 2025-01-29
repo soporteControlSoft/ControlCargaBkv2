@@ -23,12 +23,12 @@ namespace VldcionDtos
             try {
                 //Validar los campos Obligatorios.
                 if (
-                    !string.IsNullOrEmpty(objResponsable.Nombre) &&
-                    !string.IsNullOrEmpty(objResponsable.Descripcion)
+                    !string.IsNullOrEmpty(objResponsable.ReNmbre) &&
+                    !string.IsNullOrEmpty(objResponsable.ReDscrpcion)
                    )
                 {
                     //Validar la llave relacional.
-                    var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objResponsable.CodigoUsuario);
+                    var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objResponsable.ReCdgoUsrio);
                     if (UsuarioExiste == false)
                     {
                         resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.RelacionNoExiste;
@@ -63,12 +63,12 @@ namespace VldcionDtos
             try
             {
                 //Validar los campos Obligatorios.
-                var ResponsableExiste = await ObjResponsable.VerificarResponsable(objResponsable.Id);
+                var ResponsableExiste = await ObjResponsable.VerificarResponsable(objResponsable.ReRowid);
                 if (ResponsableExiste == true)
                 {
                     //Validar los campos Obligatorios.
                     if (
-                       objResponsable.Estado == true || objResponsable.Estado == false
+                       objResponsable.ReActvo == true || objResponsable.ReActvo == false
                    )
                     {
                         resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
@@ -102,17 +102,17 @@ namespace VldcionDtos
             try
             {
                 //Validar los campos Obligatorios.
-                var ResponsableExiste = await ObjResponsable.VerificarResponsable(objResponsable.Id);
+                var ResponsableExiste = await ObjResponsable.VerificarResponsable(objResponsable.ReRowid);
                 if (ResponsableExiste == true)
                 {
                     //Validar los campos Obligatorios.
                     if (
-                    !string.IsNullOrEmpty(objResponsable.Nombre) &&
-                    !string.IsNullOrEmpty(objResponsable.Descripcion)
+                    !string.IsNullOrEmpty(objResponsable.ReNmbre) &&
+                    !string.IsNullOrEmpty(objResponsable.ReDscrpcion)
                    )
                     {
                         //Validar la llave relacional.
-                        var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objResponsable.CodigoUsuario);
+                        var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objResponsable.ReCdgoUsrio);
                         if (UsuarioExiste == false)
                         {
                             //Retorna valor del TipoMensaje: RelacionNoExiste

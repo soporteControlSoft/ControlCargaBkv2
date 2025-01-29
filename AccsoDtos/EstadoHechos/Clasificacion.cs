@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using MdloDtos.DTO;
 using MdloDtos;
+using MdloDtos.DTO;
 using MdloDtos.Utilidades;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -16,7 +16,7 @@ namespace AccsoDtos.EstadoHechos
     /// Jesus Alberto Calzada
     /// </summary>
     /// 
-    public class Clasificacion:MdloDtos.IModelos.IClasificacion
+    public class Clasificacion : MdloDtos.IModelos.IClasificacion
     {
         private readonly CcVenturaContext _dbContext;
         private readonly IMapper _mapper;
@@ -35,7 +35,7 @@ namespace AccsoDtos.EstadoHechos
                 var ObjClasificacion = new MdloDtos.Clasificacion();
                 try
                 {
-                    var ClasificacionExiste = await this.VerificarClasificacion(_ClasificacionDTO.Id);
+                    var ClasificacionExiste = await this.VerificarClasificacion(_ClasificacionDTO.ClRowid);
 
                     if (ClasificacionExiste == true)
                     {
@@ -45,10 +45,10 @@ namespace AccsoDtos.EstadoHechos
                     {
                         DateTime fechaSistema = DateTime.Now;
 
-                        ObjClasificacion.ClNmbre = _ClasificacionDTO.Nombre;
-                        ObjClasificacion.ClDscrpcion = _ClasificacionDTO.Descripcion;
+                        ObjClasificacion.ClNmbre = _ClasificacionDTO.ClNmbre;
+                        ObjClasificacion.ClDscrpcion = _ClasificacionDTO.ClNmbre;
                         ObjClasificacion.ClFchaCrcion = fechaSistema;
-                        ObjClasificacion.ClCdgoUsrio = _ClasificacionDTO.CodigoUsuario;
+                        ObjClasificacion.ClCdgoUsrio = _ClasificacionDTO.ClCdgoUsrio;
                         ObjClasificacion.ClActvo = true;
 
                         var res = await _dbContex.Clasificacions.AddAsync(ObjClasificacion);
@@ -56,8 +56,6 @@ namespace AccsoDtos.EstadoHechos
 
                         await _dbContex.SaveChangesAsync();
                     }
-
-
                 }
                 catch (Exception ex)
                 {
@@ -66,7 +64,6 @@ namespace AccsoDtos.EstadoHechos
                 _dbContex.Dispose();
                 return _ClasificacionDTO;
             }
-
         }
         #endregion
 
@@ -94,14 +91,14 @@ namespace AccsoDtos.EstadoHechos
             {
                 try
                 {
-                    MdloDtos.Clasificacion ClasificacionExiste = await _dbContex.Clasificacions.FindAsync(_ClasificacionDTO.Id);
+                    MdloDtos.Clasificacion ClasificacionExiste = await _dbContex.Clasificacions.FindAsync(_ClasificacionDTO.ClRowid);
                     if (ClasificacionExiste != null)
                     {
 
-                        ClasificacionExiste.ClNmbre = _ClasificacionDTO.Nombre;
-                        ClasificacionExiste.ClDscrpcion = _ClasificacionDTO.Descripcion;
-                        ClasificacionExiste.ClCdgoUsrio = _ClasificacionDTO.CodigoUsuario;
-                        ClasificacionExiste.ClActvo = _ClasificacionDTO.Estado;
+                        ClasificacionExiste.ClNmbre = _ClasificacionDTO.ClNmbre;
+                        ClasificacionExiste.ClDscrpcion = _ClasificacionDTO.ClDscrpcion;
+                        ClasificacionExiste.ClCdgoUsrio = _ClasificacionDTO.ClCdgoUsrio;
+                        ClasificacionExiste.ClActvo = _ClasificacionDTO.ClActvo;
 
                         _dbContex.Entry(ClasificacionExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                         await _dbContex.SaveChangesAsync();
@@ -166,10 +163,10 @@ namespace AccsoDtos.EstadoHechos
             {
                 try
                 {
-                    MdloDtos.Clasificacion ClasificacionExiste = await _dbContex.Clasificacions.FindAsync(_ClasificacionDTO.Id);
+                    MdloDtos.Clasificacion ClasificacionExiste = await _dbContex.Clasificacions.FindAsync(_ClasificacionDTO.ClRowid);
                     if (ClasificacionExiste != null)
                     {
-                        ClasificacionExiste.ClActvo = _ClasificacionDTO.Estado;
+                        ClasificacionExiste.ClActvo = _ClasificacionDTO.ClActvo;
 
                         _dbContex.Entry(ClasificacionExiste).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                         await _dbContex.SaveChangesAsync();

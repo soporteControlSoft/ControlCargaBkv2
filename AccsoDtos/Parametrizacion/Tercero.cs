@@ -1,4 +1,6 @@
-﻿using MdloDtos;
+﻿using AutoMapper;
+using MdloDtos;
+using MdloDtos.DTO;
 using MdloDtos.Utilidades;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -6,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace AccsoDtos.Parametrizacion
 {
@@ -13,11 +16,17 @@ namespace AccsoDtos.Parametrizacion
     /// CRUD para el manejo de Tercero
     /// Daniel Alejandro Lopez
     /// </summary>
-    public class Tercero:MdloDtos.IModelos.ITercero
+    public class Tercero : MdloDtos.IModelos.ITercero
     {
+        private readonly IMapper _mapper;
+
+        public Tercero(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
 
         #region Ingresar datos a la entidad Tercero
-        public async Task<MdloDtos.Tercero> IngresarTercero(MdloDtos.Tercero _Tercero)
+        public async Task<dynamic> IngresarTercero(MdloDtos.DTO.TerceroDTO _Tercero)
         {
             var ObjTercero = new MdloDtos.Tercero();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
@@ -72,9 +81,9 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Consultar todos los datos de Tercero mediante un parametro Codigo general
-        public async Task<List<MdloDtos.Tercero>> FiltrarTerceroGeneral(String Codigo)
+        public async Task<List<MdloDtos.DTO.TerceroDTO>> FiltrarTerceroGeneral(String Codigo)
         {
-            List<MdloDtos.Tercero> listadoTercero = new List<MdloDtos.Tercero>();
+            List<MdloDtos.DTO.TerceroDTO> listadoTercero = new List<MdloDtos.DTO.TerceroDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 var lst = await (from tercero in _dbContex.Terceros
@@ -119,7 +128,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Tercero para agregar a la lista
-                    MdloDtos.Tercero objTercero = new MdloDtos.Tercero(
+                    MdloDtos.DTO.TerceroDTO objTercero = new MdloDtos.DTO.TerceroDTO(
                                                                     //Atributos Tercero
                                                                     item.TeRowid != null ? item.TeRowid : 0,
                                                                     item.TeCdgoCia != null ? item.TeCdgoCia : String.Empty,
@@ -160,9 +169,9 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Consultar todos los datos de Tercero mediante un parametro Codigo especifico
-        public async Task<List<MdloDtos.Tercero>> FiltrarTerceroEspecifico(String Codigo)
+        public async Task<List<MdloDtos.DTO.TerceroDTO>> FiltrarTerceroEspecifico(String Codigo)
         {
-            List<MdloDtos.Tercero> listadoTercero = new List<MdloDtos.Tercero>();
+            List<MdloDtos.DTO.TerceroDTO> listadoTercero = new List<MdloDtos.DTO.TerceroDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 var lst = await (from tercero in _dbContex.Terceros
@@ -207,7 +216,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Tercero para agregar a la lista
-                    MdloDtos.Tercero objTercero = new MdloDtos.Tercero(
+                    MdloDtos.DTO.TerceroDTO objTercero = new MdloDtos.DTO.TerceroDTO(
                                                                     //Atributos Tercero
                                                                     item.TeRowid != null ? item.TeRowid : 0,
                                                                     item.TeCdgoCia != null ? item.TeCdgoCia : String.Empty,
@@ -247,8 +256,9 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Consultar todos los datos de Tercero mediante un parametro Codigo que referencia al tipo de tercero
-        public async Task<List<MdloDtos.Tercero>> FiltrarTerceroPorTipo(int tipoTercero)
+        public async Task<List<MdloDtos.DTO.TerceroDTO>> FiltrarTerceroPorTipo(int tipoTercero)
         {
+            List<MdloDtos.DTO.TerceroDTO> listadoTercero = new List<MdloDtos.DTO.TerceroDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
 
@@ -256,88 +266,98 @@ namespace AccsoDtos.Parametrizacion
                 {
                     case 1: //Es Cliente
                     {
-                        var lst = await (from p in _dbContex.Terceros
+                        var query = await (from p in _dbContex.Terceros
                                             where p.TeClnte == true
-                                            select p).ToListAsync();
-                        _dbContex.Dispose();
-                        return lst;
+                                                select p).ToListAsync();
+                            _dbContex.Dispose();
+                            var lst = _mapper.Map<List<TerceroDTO>>(query);
+                            return lst;
                     }
                     case 2: //Es particular
                     {
-                        var lst = await (from p in _dbContex.Terceros
+                        var query = await (from p in _dbContex.Terceros
                                             where p.TePrtclar == true
                                             select p).ToListAsync();
-                        _dbContex.Dispose();
-                        return lst;
+                            _dbContex.Dispose();
+                            var lst = _mapper.Map<List<TerceroDTO>>(query);
+                            return lst;
                     }
                     case 3: //Es funcionario
                     {
-                        var lst = await (from p in _dbContex.Terceros
+                        var query = await (from p in _dbContex.Terceros
                                             where p.TeFncnrio == true
                                             select p).ToListAsync();
-                        _dbContex.Dispose();
-                        return lst;
-                    }
+                            _dbContex.Dispose();
+                            var lst = _mapper.Map<List<TerceroDTO>>(query);
+                            return lst;
+                        }
                     case 4: //Es transportadora
                     {
-                        var lst = await (from p in _dbContex.Terceros
+                        var query = await (from p in _dbContex.Terceros
                                             where p.TeTrnsprtdra == true
                                             select p).ToListAsync();
-                        _dbContex.Dispose();
-                        return lst;
-                    }
+                            _dbContex.Dispose();
+                            var lst = _mapper.Map<List<TerceroDTO>>(query);
+                            return lst;
+                        }
                     case 5: //Es agente marimito
                     {
-                        var lst = await (from p in _dbContex.Terceros
+                        var query = await (from p in _dbContex.Terceros
                                             where p.TeAgnteMrtmo == true
                                             select p).ToListAsync();
-                        _dbContex.Dispose();
-                        return lst;
-                    }
+                            _dbContex.Dispose();
+                            var lst = _mapper.Map<List<TerceroDTO>>(query);
+                            return lst;
+                        }
                     case 6: //Es vendedor
                     {
-                        var lst = await (from p in _dbContex.Terceros
+                        var query = await (from p in _dbContex.Terceros
                                             where p.TeVnddor == true
                                             select p).ToListAsync();
-                        _dbContex.Dispose();
-                        return lst;
-                    }
+                            _dbContex.Dispose();
+                            var lst = _mapper.Map<List<TerceroDTO>>(query);
+                            return lst;
+                        }
                     case 7: //Es Operador Portuario  Todos
                     {
-                        var lst = await (from p in _dbContex.Terceros
+                        var query = await (from p in _dbContex.Terceros
                                             where p.TeOprdorPrtrio == true 
                                             select p).ToListAsync();
-                        _dbContex.Dispose();
-                        return lst;
-                    }
+                            _dbContex.Dispose();
+                            var lst = _mapper.Map<List<TerceroDTO>>(query);
+                            return lst;
+                        }
                     case 8: //Es Operador Portuario manejo propio
                     {
-                        var lst = await (from p in _dbContex.Terceros
+                        var query = await (from p in _dbContex.Terceros
                                             where p.TeOprdorPrtrio == true  && p.TeMnjoPrpio == true 
                                             select p).ToListAsync();
-                        _dbContex.Dispose();
-                        return lst;
-                    }
+                            _dbContex.Dispose();
+                            var lst = _mapper.Map<List<TerceroDTO>>(query);
+                            return lst;
+                        }
                     case 9: //Es Agencia de Aduanas
                         {
-                            var lst = await (from p in _dbContex.Terceros
+                            var query = await (from p in _dbContex.Terceros
                                              where p.TeAgnciaAdna == true
                                              select p).ToListAsync();
                             _dbContex.Dispose();
+                            var lst = _mapper.Map<List<TerceroDTO>>(query);
                             return lst;
                         }
                     case 10: //Es Operador Secundario
                         {
-                            var lst = await (from p in _dbContex.Terceros
+                            var query = await (from p in _dbContex.Terceros
                                              where p.TeOprdorScndrio == true
                                              select p).ToListAsync();
                             _dbContex.Dispose();
+                            var lst = _mapper.Map<List<TerceroDTO>>(query);
                             return lst;
                         }
                     default: 
                     {
                         _dbContex.Dispose();
-                        return new List<MdloDtos.Tercero>();
+                        return new List<MdloDtos.DTO.TerceroDTO>();
                     }
 
                 }
@@ -349,7 +369,7 @@ namespace AccsoDtos.Parametrizacion
 
         #region valida si existe un Tercero validando nombre y Compañia mediante un Objeto Tercero
 
-        public bool ValidacionTerceroNombreIngresar(MdloDtos.Tercero _Tercero)
+        public bool ValidacionTerceroNombreIngresar(MdloDtos.DTO.TerceroDTO _Tercero)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
@@ -374,7 +394,7 @@ namespace AccsoDtos.Parametrizacion
 
         #region valida si existe un Tercero validando RowId, nombre y Compañia pasando como parámetro un Objeto Tercero
 
-        public bool ValidacionTerceroNombreActualizar(MdloDtos.Tercero _Tercero)
+        public bool ValidacionTerceroNombreActualizar(MdloDtos.DTO.TerceroDTO _Tercero)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
@@ -400,7 +420,7 @@ namespace AccsoDtos.Parametrizacion
 
 
         #region Actualizar Tercero pasando el objeto _Tercero
-        public async Task<MdloDtos.Tercero> EditarTercero(MdloDtos.Tercero _Tercero)
+        public async Task<MdloDtos.DTO.TerceroDTO> EditarTercero(MdloDtos.DTO.TerceroDTO _Tercero)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
@@ -437,7 +457,7 @@ namespace AccsoDtos.Parametrizacion
 
                     }
                     _dbContex.Dispose();
-                    return TerceroExiste;
+                    return _Tercero;
                 }
                 catch (Exception ex)
                 {
@@ -449,9 +469,9 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Consultar todos los datos de Tercero
-        public async Task<List<MdloDtos.Tercero>> ListarTercero()
+        public async Task<List<MdloDtos.DTO.TerceroDTO>> ListarTercero()
         {
-            List<MdloDtos.Tercero> listadoTercero = new List<MdloDtos.Tercero>();
+            List<MdloDtos.DTO.TerceroDTO> listadoTercero = new List<MdloDtos.DTO.TerceroDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 var lst = await (from tercero in _dbContex.Terceros
@@ -494,7 +514,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Tercero para agregar a la lista
-                    MdloDtos.Tercero objTercero = new MdloDtos.Tercero(
+                    MdloDtos.DTO.TerceroDTO objTercero = new MdloDtos.DTO.TerceroDTO(
                                                                     //Atributos Tercero
                                                                     item.TeRowid != null ? item.TeRowid : 0,
                                                                     item.TeCdgoCia != null ? item.TeCdgoCia : String.Empty,
@@ -535,7 +555,7 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Eliminar Tercero
-        public async Task<MdloDtos.Tercero> EliminarTercero(int Codigo)
+        public async Task<dynamic> EliminarTercero(int Codigo)
         {
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
@@ -692,9 +712,9 @@ namespace AccsoDtos.Parametrizacion
         #endregion
 
         #region Consultar todos los datos de Tercero mediante un parametro Codigo especifico
-        public async Task<List<MdloDtos.Tercero>> FiltrarTerceroEspecificoPorId(int IdTercero)
+        public async Task<List<MdloDtos.DTO.TerceroDTO>> FiltrarTerceroEspecificoPorId(int IdTercero)
         {
-            List<MdloDtos.Tercero> listadoTercero = new List<MdloDtos.Tercero>();
+            List<MdloDtos.DTO.TerceroDTO> listadoTercero = new List<MdloDtos.DTO.TerceroDTO>();
             using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())
             {
                 var lst = await (from tercero in _dbContex.Terceros
@@ -739,7 +759,7 @@ namespace AccsoDtos.Parametrizacion
                 foreach (var item in lst)
                 {
                     //Creamos una entidad Tercero para agregar a la lista
-                    MdloDtos.Tercero objTercero = new MdloDtos.Tercero(
+                    MdloDtos.DTO.TerceroDTO objTercero = new MdloDtos.DTO.TerceroDTO(
                                                                     //Atributos Tercero
                                                                     item.TeRowid != null ? item.TeRowid : 0,
                                                                     item.TeCdgoCia != null ? item.TeCdgoCia : String.Empty,

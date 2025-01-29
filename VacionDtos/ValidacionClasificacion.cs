@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace VldcionDtos
 {
     /// <summary>
-    /// Clase para Validar las ciudades.
+    /// Clase para Validar las Clasificaciones.
     /// </summary>
     public class ValidacionClasificacion
     {
@@ -18,7 +18,6 @@ namespace VldcionDtos
         #region Validacion de Clasificacion , metodo Ingreso
         public async Task<int> ValidarIngreso(MdloDtos.DTO.ClasificacionDTO objClasificacion)
         {
-
             int resultado = 0;
             try
             {
@@ -62,12 +61,12 @@ namespace VldcionDtos
             int resultado = 0;
             try
             {
-                var ClasificacionExiste = await ObjClasificacion.VerificarClasificacion(objClasificacionDTO.Id);
+                var ClasificacionExiste = await ObjClasificacion.VerificarClasificacion(objClasificacionDTO.ClRowid);
                 if (ClasificacionExiste == true)
                 {
                     //Validar los campos Obligatorios.
                     if (
-                        objClasificacionDTO.Estado == true || objClasificacionDTO.Estado == false
+                        objClasificacionDTO.ClActvo == true || objClasificacionDTO.ClActvo == false
                        )
                     {
                         resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
@@ -98,17 +97,18 @@ namespace VldcionDtos
             int resultado = 0;
             try
             {
-                var ClasificacionExiste = await ObjClasificacion.VerificarClasificacion(objClasificacionDTO.Id);
+                var ClasificacionExiste = await ObjClasificacion.VerificarClasificacion(objClasificacionDTO.ClRowid);
+
                 if (ClasificacionExiste == true)
                 {
                     //Validar los campos Obligatorios.
                     if (
-                        !string.IsNullOrEmpty(objClasificacionDTO.Nombre) &&
-                        !string.IsNullOrEmpty(objClasificacionDTO.Descripcion)
+                        !string.IsNullOrEmpty(objClasificacionDTO.ClNmbre) &&
+                        !string.IsNullOrEmpty(objClasificacionDTO.ClDscrpcion)
                        )
                     {
                         //Validar la llave relacional.
-                        var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objClasificacionDTO.CodigoUsuario);
+                        var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objClasificacionDTO.ClCdgoUsrio);
                         if (UsuarioExiste == false)
                         {
                             //Retorna valor del TipoMensaje: RelacionNoExiste
