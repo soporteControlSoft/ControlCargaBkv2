@@ -46,6 +46,7 @@ namespace AccsoDtos.Mappings
                 .ForMember(dest => dest.SaldoBajoDeposito, opt => opt.MapFrom((src, _) => src.PaSldoBjoDpsto))
                 .ForMember(dest => dest.SaldoBajoSolicitudRetiro, opt => opt.MapFrom((src, _) => src.PaSldoBjoSlctudRtro))
                 .ForMember(dest => dest.PesoMaximoCargar, opt => opt.MapFrom((src, _) => src.PaPsoMxmoACrgar))
+<<<<<<< Updated upstream
                 .ForMember(dest => dest.MinutosVigenciaReserva, opt => opt.MapFrom((src, _) => src.PaMntosVgnviaRsrva)).ReverseMap();
 
             CreateMap<Clasificacion, ClasificacionDTO>()
@@ -611,6 +612,17 @@ namespace AccsoDtos.Mappings
               .ForMember(dest => dest.EhRowidZnaCdNavigation, opt => opt.MapFrom((src, _) => src.EhRowidZnaCdNavigation));
 
 
+=======
+               .ForMember(dest => dest.MinutosVigenciaReserva, opt => opt.MapFrom((src, _) => src.PaMntosVgnviaRsrva)).ReverseMap();
+
+            CreateMap<Clasificacion, ClasificacionDTO>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom((src, _) => src.ClRowid))
+                .ForMember(dest => dest.Nombre, opt => opt.MapFrom((src, _) => src.ClNmbre))
+                .ForMember(dest => dest.Descripcion, opt => opt.MapFrom((src, _) => src.ClDscrpcion))
+                .ForMember(dest => dest.FechaCreacion, opt => opt.MapFrom((src, _) => src.ClFchaCrcion))
+                .ForMember(dest => dest.CodigoUsuario, opt => opt.MapFrom((src, _) => src.ClCdgoUsrio))
+                .ForMember(dest => dest.Estado, opt => opt.MapFrom((src, _) => src.ClActvo));
+>>>>>>> Stashed changes
         }
     }
 }

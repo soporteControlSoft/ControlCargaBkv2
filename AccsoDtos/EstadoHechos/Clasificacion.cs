@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using MdloDtos.DTO;
 using MdloDtos;
+using MdloDtos.DTO;
 using MdloDtos.Utilidades;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -16,7 +16,7 @@ namespace AccsoDtos.EstadoHechos
     /// Jesus Alberto Calzada
     /// </summary>
     /// 
-    public class Clasificacion:MdloDtos.IModelos.IClasificacion
+    public class Clasificacion : MdloDtos.IModelos.IClasificacion
     {
         private readonly CcVenturaContext _dbContext;
         private readonly IMapper _mapper;
@@ -56,8 +56,6 @@ namespace AccsoDtos.EstadoHechos
 
                         await _dbContex.SaveChangesAsync();
                     }
-
-
                 }
                 catch (Exception ex)
                 {
@@ -66,7 +64,6 @@ namespace AccsoDtos.EstadoHechos
                 _dbContex.Dispose();
                 return _ClasificacionDTO;
             }
-
         }
         #endregion
 

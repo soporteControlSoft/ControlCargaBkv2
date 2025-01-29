@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace VldcionDtos
 {
     /// <summary>
-    /// Clase para Validar las ciudades.
+    /// Clase para Validar las Clasificaciones.
     /// </summary>
     public class ValidacionClasificacion
     {
@@ -18,18 +18,17 @@ namespace VldcionDtos
         #region Validacion de Clasificacion , metodo Ingreso
         public async Task<int> ValidarIngreso(MdloDtos.DTO.ClasificacionDTO objClasificacion)
         {
-
             int resultado = 0;
             try
             {
                 //Validar los campos Obligatorios.
                 if (
-                    !string.IsNullOrEmpty(objClasificacion.ClNmbre) &&
-                    !string.IsNullOrEmpty(objClasificacion.ClDscrpcion)
+                    !string.IsNullOrEmpty(objClasificacion.Nombre) &&
+                    !string.IsNullOrEmpty(objClasificacion.Descripcion)
                    )
                 {
                     //Validar la llave relacional.
-                    var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objClasificacion.ClCdgoUsrio);
+                    var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objClasificacion.CodigoUsuario);
                     if (UsuarioExiste == false)
                     {
                         //Retorna valor del TipoMensaje: RelacionNoExiste
@@ -99,6 +98,7 @@ namespace VldcionDtos
             try
             {
                 var ClasificacionExiste = await ObjClasificacion.VerificarClasificacion(objClasificacionDTO.ClRowid);
+
                 if (ClasificacionExiste == true)
                 {
                     //Validar los campos Obligatorios.
