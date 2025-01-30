@@ -632,7 +632,7 @@ namespace AccsoDtos.Parametrizacion
                                  }).ToListAsync();
 
                 // Crear la lista de retorno con los atributos adicionales de `Sede`
-                var listadoZonaCd = lst.Select(item => new MdloDtos.ZonaCd
+                var listadoZonaCd = lst.Select(item => new MdloDtos.DTO.ZonaCdDTO
                 (
                     item.ZcdRowid ?? 0,
                     item.ZcdCdgo ?? string.Empty,
@@ -651,11 +651,7 @@ namespace AccsoDtos.Parametrizacion
                     item.SeNmbre
                 )).ToList();
 
-                //return listadoZonaCd;
-                var result = (listadoZonaCd.Count > 0) ? 
-                        _mapper.Map<List<MdloDtos.DTO.ZonaCdDTO>>(lst) : 
-                        new List<MdloDtos.DTO.ZonaCdDTO>();
-                return result;
+                return listadoZonaCd;
             }
         }
 
@@ -721,7 +717,7 @@ namespace AccsoDtos.Parametrizacion
                                  }).ToListAsync();
 
                 // Crear la lista de retorno con los atributos adicionales de `Sede`
-                var listadoZonaCd = lst.Select(item => new MdloDtos.ZonaCd
+                var listadoZonaCd = lst.Select(item => new MdloDtos.DTO.ZonaCdDTO
                 (
                     item.ZcdRowid ?? 0,
                     item.ZcdCdgo ?? string.Empty,
@@ -740,11 +736,7 @@ namespace AccsoDtos.Parametrizacion
                     item.SeNmbre
                 )).ToList();
 
-                //return listadoZonaCd;
-                var result = (listadoZonaCd.Count > 0) ?
-                        _mapper.Map<List<MdloDtos.DTO.ZonaCdDTO>>(lst) :
-                        new List<MdloDtos.DTO.ZonaCdDTO>();
-                return result;
+                return listadoZonaCd;
             }
         }
 
