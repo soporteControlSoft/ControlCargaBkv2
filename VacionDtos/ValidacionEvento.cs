@@ -27,13 +27,13 @@ namespace VldcionDtos
             try {
                 //Validar los campos Obligatorios.
                 if (
-                    !string.IsNullOrEmpty(objEvento.Nombre) &&
-                    !string.IsNullOrEmpty(objEvento.Observacion) &&
-                    !string.IsNullOrEmpty(objEvento.FechaInicio)
+                    !string.IsNullOrEmpty(objEvento.EvNmbre) &&
+                    !string.IsNullOrEmpty(objEvento.EvObsrvcion) &&
+                    !string.IsNullOrEmpty(objEvento.EvFchaIncio)
                    )
                 {
                     //Validar la llave relacional con el usuario.
-                    var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objEvento.CodigoUsuario);
+                    var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objEvento.EvCdgoUsrio);
                     if (UsuarioExiste == false)
                     {
                         //Retorna valor del TipoMensaje: RelacionNoExiste
@@ -41,7 +41,7 @@ namespace VldcionDtos
                     }
                     else
                     {   //Validar la llave relacional con la clasificacion.
-                        var ClasificacionExiste = await _ObjClasificacion.VerificarClasificacion(objEvento.CodigoClasificacion);
+                        var ClasificacionExiste = await _ObjClasificacion.VerificarClasificacion(objEvento.EvRowidClsfccion);
                         if (ClasificacionExiste == false)
                         {
                             //Retorna valor del TipoMensaje: RelacionNoExiste
@@ -49,7 +49,7 @@ namespace VldcionDtos
                         }
                         else
                         {   //Validar la llave relacional con la Responsable.
-                            var ResponsableExiste = await _ObjResponsable.VerificarResponsable(objEvento.CodigoResponsable);
+                            var ResponsableExiste = await _ObjResponsable.VerificarResponsable(objEvento.EvRowidRspnsble);
                             if (ResponsableExiste == false)
                             {
                                 //Retorna valor del TipoMensaje: RelacionNoExiste
@@ -83,11 +83,11 @@ namespace VldcionDtos
             int resultado = 0;
             try
             {
-                var EventoExiste = await ObjEvento.VerificarEvento (objEvento.IdEvento);
+                var EventoExiste = await ObjEvento.VerificarEvento (objEvento.EvRowid);
                 if (EventoExiste == true)
                 {
                     if (
-                        objEvento.Estado == true || objEvento.Estado == false
+                        objEvento.EvActvo == true || objEvento.EvActvo == false
                    )
                     {
                         resultado = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionExitosa;
@@ -121,17 +121,17 @@ namespace VldcionDtos
             int resultado = 0;
             try
             {
-                var EventoExiste = await ObjEvento.VerificarEvento(objEvento.IdEvento);
+                var EventoExiste = await ObjEvento.VerificarEvento(objEvento.EvRowid);
                 if (EventoExiste == true)
                 {
                     if (
-                        !string.IsNullOrEmpty(objEvento.Nombre) &&
-                        !string.IsNullOrEmpty(objEvento.Observacion) &&
-                        !string.IsNullOrEmpty(objEvento.FechaInicio) 
+                        !string.IsNullOrEmpty(objEvento.EvNmbre) &&
+                        !string.IsNullOrEmpty(objEvento.EvObsrvcion) &&
+                        !string.IsNullOrEmpty(objEvento.EvFchaIncio) 
                    )
                     {
                         //Validar la llave relacional con el usuario.
-                        var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objEvento.CodigoUsuario);
+                        var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objEvento.EvCdgoUsrio);
                         if (UsuarioExiste == false)
                         {
                             //Retorna valor del TipoMensaje: RelacionNoExiste
@@ -139,7 +139,7 @@ namespace VldcionDtos
                         }
                         else
                         {   //Validar la llave relacional con la clasificacion.
-                            var ClasificacionExiste = await _ObjClasificacion.VerificarClasificacion(objEvento.CodigoClasificacion);
+                            var ClasificacionExiste = await _ObjClasificacion.VerificarClasificacion(objEvento.EvRowidClsfccion);
                             if (ClasificacionExiste == false)
                             {
                                 //Retorna valor del TipoMensaje: RelacionNoExiste
@@ -147,7 +147,7 @@ namespace VldcionDtos
                             }
                             else
                             {   //Validar la llave relacional con la Responsable.
-                                var ResponsableExiste = await _ObjResponsable.VerificarResponsable(objEvento.CodigoResponsable);
+                                var ResponsableExiste = await _ObjResponsable.VerificarResponsable(objEvento.EvRowidRspnsble);
                                 if (ResponsableExiste == false)
                                 {
                                     //Retorna valor del TipoMensaje: RelacionNoExiste

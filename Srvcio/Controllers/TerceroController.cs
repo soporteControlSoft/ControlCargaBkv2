@@ -26,10 +26,10 @@ namespace Srvcio.Controllers
 
         #region Consultar Tercero
         [HttpGet("listar-tercero")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Tercero>>> ListarTercero()
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.TerceroDTO>>> ListarTercero()
         {
             
-            var ObTercero = new List<MdloDtos.Tercero>();
+            var ObTercero = new List<MdloDtos.DTO.TerceroDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = (int)MdloDtos.Utilidades.Constantes.TipoMensaje.TransaccionIncorrecta;
             try
@@ -57,10 +57,10 @@ namespace Srvcio.Controllers
 
         #region Filtrar  Tercero por codigo general
         [HttpGet("filtrar-tercero-general")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Tercero>>> FiltrarTerceroGeneral(string FiltroBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.TerceroDTO>>> FiltrarTerceroGeneral(string FiltroBusqueda)
         {
             
-            var ObTercero = new List<MdloDtos.Tercero>();
+            var ObTercero = new List<MdloDtos.DTO.TerceroDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -107,10 +107,10 @@ namespace Srvcio.Controllers
 
         #region Filtrar  Tercero por codigo especifico
         [HttpGet("filtrar-tercero-especifico")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Tercero>>> FiltrarTerceroEspecifico(string CodigoBusqueda)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.TerceroDTO>>> FiltrarTerceroEspecifico(string CodigoBusqueda)
         {
 
-            var ObTercero = new List<MdloDtos.Tercero>();
+            var ObTercero = new List<MdloDtos.DTO.TerceroDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -159,10 +159,10 @@ namespace Srvcio.Controllers
 
         #region Filtrar  Tercero por codigo especifico
         [HttpGet("filtrar-tercero-tipo")]
-        public async Task<ActionResult<IEnumerable<MdloDtos.Tercero>>> FiltrarTerceroPorTipo(int tipo)
+        public async Task<ActionResult<IEnumerable<MdloDtos.DTO.TerceroDTO>>> FiltrarTerceroPorTipo(int tipo)
         {
 
-            var ObTercero = new List<MdloDtos.Tercero>();
+            var ObTercero = new List<MdloDtos.DTO.TerceroDTO>();
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Consulta);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
             try
@@ -211,7 +211,7 @@ namespace Srvcio.Controllers
 
         #region Ingresar  Tercero
         [HttpPost("ingresar-tercero")]
-        public async Task<ActionResult<dynamic>> IngresarTercero([FromBody] MdloDtos.Tercero objTercero)
+        public async Task<ActionResult<dynamic>> IngresarTercero([FromBody] MdloDtos.DTO.TerceroDTO objTercero)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Ingreso);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.
@@ -261,7 +261,7 @@ namespace Srvcio.Controllers
 
         #region Actualizar Tercero
         [HttpPut("actualizar-tercero")]
-        public async Task<ActionResult<dynamic>> EditarGrupoTercero([FromBody] MdloDtos.Tercero objTercero)
+        public async Task<ActionResult<dynamic>> EditarGrupoTercero([FromBody] MdloDtos.DTO.TerceroDTO objTercero)
         {
             int operacion = Convert.ToInt32(MdloDtos.Utilidades.Constantes.TipoOperacion.Actualizacion);
             int validacion = 0; // para sacar el mensaje de la operacion del crud.

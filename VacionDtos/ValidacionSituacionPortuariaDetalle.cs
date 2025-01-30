@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AccsoDtos.Mappings;
+using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,9 +13,22 @@ namespace VldcionDtos
     /// </summary>
     public class ValidacionSituacionPortuariaDetalle
     {
+        private readonly IMapper _mapper;
         AccsoDtos.SituacionPortuaria.SituacionPortuariaDetalle ObjSituacionPortuariaDetalle = new AccsoDtos.SituacionPortuaria.SituacionPortuariaDetalle();
         AccsoDtos.SituacionPortuaria.SituacionPortuaria ObjSituacionPortuaria = new AccsoDtos.SituacionPortuaria.SituacionPortuaria();
-        AccsoDtos.Parametrizacion.Tercero ObjTercero = new AccsoDtos.Parametrizacion.Tercero();
+        AccsoDtos.Parametrizacion.Tercero ObjTercero;
+
+        public ValidacionSituacionPortuariaDetalle()
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
+
+            _mapper = configuration.CreateMapper();
+            ObjTercero = new AccsoDtos.Parametrizacion.Tercero(_mapper);
+        }
+
 
         #region Validacion de SituacionPortuariaDetalle , metodo Ingreso
         public async Task<int> ValidarIngreso(MdloDtos.SituacionPortuariaDetalle objSituacionPortuariaDetalle)

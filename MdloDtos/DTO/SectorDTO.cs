@@ -16,14 +16,23 @@ namespace MdloDtos.DTO
     public class SectorDTO
     {
         [Key]
-        public int IdSector { get; set; }
+        [JsonPropertyName("IdSector")]
+        public int SeRowid { get; set; }
 
+        [JsonPropertyName("IdCodigoSector")]
         [StringLength(15)]
-        public string IdCodigoSector { get; set; } = null!;
+        public string SeCdgo { get; set; } = null!;
 
+        [JsonPropertyName("IdNombreSector")]
         [StringLength(20)]
-        public string IdNombreSector { get; set; } = null!;
+        public string SeNmbre { get; set; } = null!;
 
+        [JsonIgnore]
+        [NotMapped]
+        public virtual ICollection<EstadoHecho> EstadoHechoes { get; set; } = new List<EstadoHecho>();
 
+        [JsonIgnore]
+        [NotMapped]
+        public virtual ICollection<SectorEvento> SectorEventos { get; set; } = new List<SectorEvento>();
     }
 }

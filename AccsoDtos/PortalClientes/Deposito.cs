@@ -34,6 +34,13 @@ namespace AccsoDtos.PortalClientes
 
         AccsoDtos.VisitaMotonave.VisitaMotonaveBl ObjVisitaMotonaveBl = new AccsoDtos.VisitaMotonave.VisitaMotonaveBl();
 
+        private readonly IMapper _mapper;
+
+        public Deposito(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
         #region verifica la existencia de un producto pasando como parámetro Codigo
         public async Task<List<MdloDtos.VwMdloDpstoLstarPrdctoPorVstaMtnve>> ConsultarProductosPorVisitaMotonave(int IdVisitaMotonave)
         {

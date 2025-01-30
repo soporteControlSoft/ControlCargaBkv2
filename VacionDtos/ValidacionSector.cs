@@ -21,7 +21,7 @@ namespace VldcionDtos
             try {
                 //Validar los campos Obligatorios.
                 if (
-                    !string.IsNullOrEmpty(objSector.IdNombreSector) 
+                    !string.IsNullOrEmpty(objSector.SeNmbre) 
                    )
                 {
                     //Validar la llave exitosa.

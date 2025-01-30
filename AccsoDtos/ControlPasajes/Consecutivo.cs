@@ -175,9 +175,6 @@ public class Consecutivo : MdloDtos.IModelos.IConsecutivo
         }
     }
 
-
-
-    //Actualizar consecutivo
     public async Task<dynamic> EditarConsecutivo(ConsecutivoDTO ObjConsecutivo)
     {
         using (MdloDtos.CcVenturaContext _dbContex = new MdloDtos.CcVenturaContext())

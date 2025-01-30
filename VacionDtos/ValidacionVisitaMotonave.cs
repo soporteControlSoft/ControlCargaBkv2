@@ -17,7 +17,7 @@ namespace VldcionDtos
         AccsoDtos.VisitaMotonave.VisitaMotonave _ObjVisitaMotonave = new AccsoDtos.VisitaMotonave.VisitaMotonave();
         AccsoDtos.Parametrizacion.Compania _ObjCompania = new AccsoDtos.Parametrizacion.Compania(null);
         AccsoDtos.Parametrizacion.Motonave _ObjMotonave;
-        AccsoDtos.Parametrizacion.Tercero _ObjTercero = new AccsoDtos.Parametrizacion.Tercero();
+        AccsoDtos.Parametrizacion.Tercero _ObjTercero;
         AccsoDtos.Parametrizacion.PuertoOrigen _ObjPuertoOrigen = new AccsoDtos.Parametrizacion.PuertoOrigen(null);
         AccsoDtos.Parametrizacion.TerminalMaritimo _ObjTerminalMaritimo = new AccsoDtos.Parametrizacion.TerminalMaritimo();
         AccsoDtos.SituacionPortuaria.SituacionPortuaria _ObjSituacionPortuaria = new AccsoDtos.SituacionPortuaria.SituacionPortuaria();
@@ -33,6 +33,7 @@ namespace VldcionDtos
             _mapper = configuration.CreateMapper();
             _ObjMotonave = new AccsoDtos.Parametrizacion.Motonave(_mapper);
             _ObjZona = new AccsoDtos.Parametrizacion.ZonaCd(_mapper);
+            _ObjTercero = new AccsoDtos.Parametrizacion.Tercero(_mapper);
         }
 
 
