@@ -25,13 +25,6 @@ namespace AccsoDtos.PortalClientes
     public class Deposito : MdloDtos.IModelos.IDeposito
     {
 
-        private readonly IMapper _mapper;
-
-        public Deposito(IMapper mapper)
-        {
-            _mapper = mapper;
-        }
-
         AccsoDtos.VisitaMotonave.VisitaMotonaveBl ObjVisitaMotonaveBl = new AccsoDtos.VisitaMotonave.VisitaMotonaveBl();
 
         private readonly IMapper _mapper;

@@ -588,7 +588,7 @@ namespace AccsoDtos.Mappings
                 .ForMember(dest => dest.Contador, opt => opt.MapFrom((src, _) => src.CpRowidCnsctvoNavigation?.CoCntdor))
                 .ForMember(dest => dest.NombreTipoConsecutivo, opt => opt.MapFrom((src, _) => src.CpCdgoTpoCncptoNavigation?.TcNmbre))
                 .ForMember(dest => dest.NaturalezaTipoConsecutivo, opt => opt.MapFrom((src, _) => src.CpCdgoTpoCncptoNavigation?.TcNtrlza))
-                .ForMember(dest => dest.NombreEmpresa, opt => opt.MapFrom((src, _) => src.CpRowidCnsctvoNavigation?.CoNmbre));
+                .ForMember(dest => dest.NombreCompania, opt => opt.MapFrom((src, _) => src.CpCiaNavigation?.CiaNmbre));
 
             CreateMap<EstadoHecho, EstadoHechoDTO>()
               .ForMember(dest => dest.EhRowid, opt => opt.MapFrom((src, _) => src.EhRowid))
@@ -610,16 +610,6 @@ namespace AccsoDtos.Mappings
               .ForMember(dest => dest.EhRowidSctorNavigation, opt => opt.MapFrom((src, _) => src.EhRowidSctorNavigation))
               .ForMember(dest => dest.EhRowidVstaMtnveNavigation, opt => opt.MapFrom((src, _) => src.EhRowidVstaMtnveNavigation))
               .ForMember(dest => dest.EhRowidZnaCdNavigation, opt => opt.MapFrom((src, _) => src.EhRowidZnaCdNavigation));
-               .ForMember(dest => dest.MinutosVigenciaReserva, opt => opt.MapFrom((src, _) => src.PaMntosVgnviaRsrva)).ReverseMap();
-
-            CreateMap<Clasificacion, ClasificacionDTO>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom((src, _) => src.ClRowid))
-                .ForMember(dest => dest.Nombre, opt => opt.MapFrom((src, _) => src.ClNmbre))
-                .ForMember(dest => dest.Descripcion, opt => opt.MapFrom((src, _) => src.ClDscrpcion))
-                .ForMember(dest => dest.FechaCreacion, opt => opt.MapFrom((src, _) => src.ClFchaCrcion))
-                .ForMember(dest => dest.CodigoUsuario, opt => opt.MapFrom((src, _) => src.ClCdgoUsrio))
-                .ForMember(dest => dest.Estado, opt => opt.MapFrom((src, _) => src.ClActvo));
-                .ForMember(dest => dest.NombreCompania, opt => opt.MapFrom((src, _) => src.CpCiaNavigation?.CiaNmbre));
 
 
             CreateMap<SpMdloRsrvaDtlleSlctudRtro, SpMdloRsrvaDtlleSlctudRtroDTO>()

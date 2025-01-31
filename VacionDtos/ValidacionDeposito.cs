@@ -32,9 +32,6 @@ namespace VldcionDtos
             _ObjTercero = new AccsoDtos.Parametrizacion.Tercero(_mapper);
         }
 
-        }
-
-
         #region Validacion de creación Deposito , metodo Ingreso
         public async Task<int> ValidarIngreso(MdloDtos.DTO.DepositoDTO ObjDeposito)
         {

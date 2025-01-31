@@ -23,12 +23,12 @@ namespace VldcionDtos
             {
                 //Validar los campos Obligatorios.
                 if (
-                    !string.IsNullOrEmpty(objClasificacion.Nombre) &&
-                    !string.IsNullOrEmpty(objClasificacion.Descripcion)
+                    !string.IsNullOrEmpty(objClasificacion.ClNmbre) &&
+                    !string.IsNullOrEmpty(objClasificacion.ClDscrpcion)
                    )
                 {
                     //Validar la llave relacional.
-                    var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objClasificacion.CodigoUsuario);
+                    var UsuarioExiste = await _ObjUsuario.VerificarUsuario(objClasificacion.ClCdgoUsrio);
                     if (UsuarioExiste == false)
                     {
                         //Retorna valor del TipoMensaje: RelacionNoExiste
